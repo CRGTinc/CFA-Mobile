@@ -1,0 +1,100 @@
+{
+    "name": "cfa",
+    "js": [
+		{
+			"path": "lib/cordova-1.7.0.js",					
+		},
+        {
+            "path": "sdk/sencha-touch.js"
+        },
+		{
+			"path": "lib/deft.js"			
+		},
+        {
+            "path": "app.js",            
+        }
+    ],
+    "css": [
+        {
+            "path": "resources/css/application.css",            
+        },
+        {
+            "path": "resources/css/application-retina.css",            
+        }
+    ],
+    "appCache": {
+        "cache": [			
+            "index.html",								
+			"contact.html",
+			"app.js",
+			"app.json",
+			"sdk/sencha-touch.js",
+			"lib/cordova-1.7.0.js",
+			"lib/deft.js",			
+			"resources/css/application.css",
+			"resources/css/application-retina.css",
+			"resources/icons/case.png",
+			"resources/icons/contact.png",
+			"resources/icons/event.png",
+			"resources/icons/reference.png",
+			"resources/icons/report.png",
+			"resources/icons/setting.png",
+			"resources/icons/Icon.png",
+			"resources/icons/Icon@2x.png",
+			"resources/icons/Icon~ipad.png",
+			"resources/icons/Icon~ipad.png",
+			"resources/icons/Icon~ipad.png",
+			"resources/icons/Icon~ipad@2x.png",
+			"resources/icons/icon-spot~ipad.png",
+			"resources/icons/iTunesArtwork.png",
+			"resources/images/back.png",
+			"resources/images/back-button.png",
+			"resources/images/bg.jpg",
+			"resources/images/bg2x.jpg",
+			"resources/images/icon-examples.png",
+			"resources/images/loading.gif",
+			"resources/images/toolbar.png",
+			"resources/images/toolbar2x.png",				
+			"resources/loading/Default.png",
+			"resources/loading/Default@2x.png",
+			"resources/loading/Default~ipad.png",
+			"resources/loading/Default-Landscape~ipad.png",
+			"resources/loading/Default-LandscapeLeft~ipad.png",
+			"resources/loading/Default-LandscapeRight~ipad.png",
+			"resources/loading/Default-Portrait~ipad.png",
+			"resources/loading/Default-PortraitUpsideDown~ipad.png",
+			"resources/loading/iTunesArtwork.png",
+			"resources/startup/320x460.jpg",
+			"resources/startup/640x920.png",
+			"resources/startup/748x1024.png",
+			"resources/startup/768x1004.png",
+			"resources/startup/1496x2048.png",
+			"resources/startup/1536x2008.png"			
+        ],
+        "network": ["*"],
+        "fallback": []
+    },
+    "extras": [
+        "resources/images",
+        "resources/icons",
+        "resources/loading",
+		"resources/startup",        
+		"web.config",
+		"contact.html"
+		
+    ],
+    "archivePath": "archive",
+    "buildPaths": {
+        "testing": "deploy/testing/cfa",
+        "production": "deploy/production/cfa",
+        "package": "deploy/package/cfa",
+        "native": "deploy/native/cfa"
+    },
+    "buildOptions": {
+        "product": "touch",
+        "minVersion": 3,
+        "debug": false,
+        "logger": "no"
+    },
+    "id": "3a867610-670a-11e1-a90e-4318029d18bb"
+}
