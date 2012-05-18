@@ -21,7 +21,7 @@
 //  AppDelegate.m
 //  cfa
 //
-//  Created by Vu Than Hoai on 5/9/12.
+//  Created by Tin Thai on 5/18/12.
 //  Copyright __MyCompanyName__ 2012. All rights reserved.
 //
 
