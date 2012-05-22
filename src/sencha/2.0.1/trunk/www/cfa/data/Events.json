@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "title": "Event title 1",
+        "date": "Tue, 15 May 1973 13:37:23 GMT",
+        "time": "14:30",
+        "description": "Event description"
+    },
+    {
+        "id": 2,
+        "title": "Event title 1",
+        "date": "Wed, 07 Jan 2004 07:22:02 GMT",
+        "time": "14:30",
+        "description": "Event description"
+    },
+    {
+        "id": 3,
+        "title": "Event title 1",
+        "date": "Sat, 03 Oct 1992 13:41:50 GMT",
+        "time": "14:30",
+        "description": "Event description"
+    },
+    {
+        "id": 4,
+        "title": "Event title 1",
+        "date": "Wed, 14 Jul 1982 13:07:09 GMT",
+        "time": "14:30",
+        "description": "Event description"
+    },
+    {
+        "id": 5,
+        "title": "Event title 1",
+        "date": "Wed, 13 Nov 1991 19:08:14 GMT",
+        "time": "14:30",
+        "description": "Event description"
+    }
+]
