@@ -1,5 +1,5 @@
 Ext.define('cfa.model.Event',{
-	extend: 'Ext.data.model',
+	extend: 'Ext.data.Model',
 	
 	config:{
 		idProperty: 'id',
