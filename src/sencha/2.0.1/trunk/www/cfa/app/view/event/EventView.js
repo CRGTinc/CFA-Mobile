@@ -16,7 +16,7 @@ Ext.define("cfa.view.event.EventView", {
 			flex: 1,
 			store: Ext.getStore("Events"),
 			listeners:{
-				itemtap : {fn:this.onEventSelected, scope:this}
+				select : {fn:this.onEventSelected, scope:this}
         	}	
 		};
 		
@@ -29,7 +29,8 @@ Ext.define("cfa.view.event.EventView", {
 		this.add([eventsList,eventDetail])		
 	},
 		
-	onEventSelected: function(list, index ,target,record, evt, opt){
+	onEventSelected: function(list,record,opt){
+		console.log(record);
 		this.fireEvent('displayEventInfo',this,record);
 	}   
 	
