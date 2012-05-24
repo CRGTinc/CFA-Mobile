@@ -3,11 +3,11 @@ Ext.define('cfa.view.event.EventsList',{
 	alias: 'widget.eventslist',
 	
 	
-	config: {
-	        loadingText: "Loading Notes...",
-	        onItemDisclosure: true,
-	        itemTpl: '</pre>	<div class="list-item-title">{title}</div><pre>',
-				
-    }
+		
+	config: {					
+		loadingText: "Loading Notes...",
+	    itemTpl: '</pre>	<div class="list-item-title">{title}</div><pre>'			
+    },
+
 	
 })

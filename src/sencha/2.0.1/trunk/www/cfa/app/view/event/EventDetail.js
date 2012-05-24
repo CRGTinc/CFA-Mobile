@@ -2,9 +2,7 @@ Ext.define('cfa.view.event.EventDetail',{
 	extend: 'Ext.form.Panel',
 	alias: 'widget.eventdetail',
 	requires:['Ext.form.FieldSet'],
-	
 
-	
 	initialize: function(){
 		console.log("init detail");
 		console.log(this.getRecord());
@@ -13,30 +11,35 @@ Ext.define('cfa.view.event.EventDetail',{
 			xtype: 'textfield',
 			name: 'title',
 			label: 'Title',
+			disabled: true
 		};
 		
 		var eventDate = {
 			xtype: 'textfield',
 			name: 'date',
 			label: 'Date',
+			disabled: true
 		}
 		
 		var eventTime = {
 			xtype: 'textfield',
 			name: 'time',
 			label: 'Time',
+			disabled: true
 		}
 		
 		var eventLocation = {
 			xtype: 'textfield',
 			name: 'location',
 			label: 'Location',
+			disabled: true
 		}
 		
 		var eventDescription = {
 			xtype: 'textfield',
 			name: 'description',
 			label: 'Description',
+			disabled: true
 		}
 		
 		this.add(

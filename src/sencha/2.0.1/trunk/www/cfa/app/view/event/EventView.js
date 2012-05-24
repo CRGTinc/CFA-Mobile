@@ -8,16 +8,48 @@ Ext.define("cfa.view.event.EventView", {
 		layout: 'hbox',
 	},
 	
+	
+	
 	initialize: function() {
 		this.callParent(arguments);
+		
+		var topTitle = {
+			xtype:'toolbar',
+			title:"Events",
+			docked:'top',
 			
+		};
+		
+		var bottombar = {
+			xtype:'toolbar',
+			items:[
+				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh'},
+				{xtype:'spacer'},
+				{xtype:'button',text:"Month",align:'right'},
+				{xtype:'button',text:"office",align:'right'},
+				
+			],
+			docked:'bottom',
+		};
+		
 		var eventsList = {
 			xtype: 'eventslist',
-			flex: 1,
+			//flex: 1,
 			store: Ext.getStore("Events"),
 			listeners:{
 				select : {fn:this.onEventSelected, scope:this}
-        	}	
+        	}
+		};
+		
+		var leftPanel = {
+			xtype:'panel',
+			layout:'fit',
+			flex:1,
+			items:[
+				topTitle,
+				eventsList,
+				bottombar
+			]			
 		};
 		
 		var eventDetail = {
@@ -26,7 +58,7 @@ Ext.define("cfa.view.event.EventView", {
 			flex: 2
 		}
 		
-		this.add([eventsList,eventDetail])		
+		this.add([leftPanel,eventDetail])		
 	},
 		
 	onEventSelected: function(list,record,opt){
