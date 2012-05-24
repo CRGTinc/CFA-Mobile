@@ -29,10 +29,11 @@ Ext.define('cfa.controller.event.EventController',{
 	},
 	
 	displayEventInfo: function(list,record){
+		console.log("Display event detail");
 		var eventViewer = this.getEventDetailViewer();
+		var _eventsContainer = this.getEventsContainer();
 		eventViewer.setRecord(record);
-		var eventsContainer = this.getEventsContainer();
-		eventsContainer.getLayout().setItemFlex(eventViewer,2);		
+		_eventsContainer.getLayout().setItemFlex(eventViewer,2);	
 	},
 	
 	launch: function(app){
