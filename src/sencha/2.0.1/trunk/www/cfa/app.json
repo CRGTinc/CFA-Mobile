@@ -131,7 +131,8 @@
         "resources/images",
         "resources/icons",
         "resources/startup",
-		"contact.html"
+		"contact.html",
+		"data/Events.json"
     ],
 
     /**
