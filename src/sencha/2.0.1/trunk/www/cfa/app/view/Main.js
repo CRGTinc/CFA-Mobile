@@ -17,8 +17,6 @@ Ext.define('cfa.view.Main', {
         
         fullscreen: true,
         
-        autoDestroy: false,
-        
         navigationBar: {
             backButton: {
                 iconCls: 'back'
