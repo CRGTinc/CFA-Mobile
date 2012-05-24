@@ -65,13 +65,9 @@
      */
     "css": [
         {
-            "path": "resources/css/application.css",
+            "path": "resources/css/app.css",
             "update": "delta"
-        },
-		 {
-            "path": "resources/css/application-retina.css",
-            "update": "delta"
-        }		
+        }	
     ],
 
     /**

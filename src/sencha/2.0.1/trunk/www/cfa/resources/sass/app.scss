@@ -1,19 +1,123 @@
-@import 'sencha-touch/default/all';
+$body-bg-color: #000;
+$base-color:#333;
+$base-gradient: 'matte';
+$active-color: #069169;
+$tabs-dark-active-color: #069169;
+$tabs-light-active:#069169;
+$tabs-dark:#069169;
+$tabs-light-active:#069169;
+$tabs-light:#069169;
+$tabs-dark: #069169;
+$tabs-light: #555;
+$tabs-bottom-radius: .4em;
+$tabs-bottom-gradient: 'bevel';
+$tabs-bar-gradient: 'matte';
+$tabs-bottom-active-gradient:'recessed';
+$toolbar-gradient: 'glossy'; 
 
-// You may remove any of the following modules that you
-// do not use in order to create a smaller css file.
+@import 'sencha-touch/default/all';
 @include sencha-panel;
 @include sencha-buttons;
 @include sencha-sheet;
 @include sencha-picker;
+@include sencha-toolbar-forms;
 @include sencha-tabs;
 @include sencha-toolbar;
-@include sencha-toolbar-forms;
+@include sencha-carousel;
 @include sencha-indexbar;
 @include sencha-list;
 @include sencha-layout;
-@include sencha-carousel;
 @include sencha-form;
-@include sencha-msgbox;
+@include sencha-sheet; 
 
-// Your custom code goes here...
+.x-toolbar .x-toolbar-title {
+    color: saturate(lighten($active-color, 10%), 20%);
+}
+.x-tabbar.x-docked-bottom .x-tab {
+    .x-tab-active {
+        -webkit-box-shadow: inset rgba(#000, .8) 0 0 5px !important;
+    }
+}
+
+// dashboards list
+.dashboards-list {
+    text-align: center;
+
+    .dashboards-list-container {
+        max-width: 1024px;
+        margin: 0 auto;
+    }
+
+    .dashboards-list-item {
+        background: rgba(38, 38, 38, .5);
+        border: 1px solid rgba(67, 67, 67, .5);
+        height: 180px;
+        -webkit-transition: background .2s ease-in, border-color .2s ease-in;
+
+        body.x-phone & {
+            margin: 0 20px;
+            margin-top: 20px;
+            padding: 30px;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+        body:not(.x-phone) & {
+            display: inline-block;
+            padding: 30px 50px;
+        }
+
+        .image {            
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 75px;
+            max-width: 212px;
+
+            body.x-phone & {
+                margin: 0 auto;
+            }
+
+            body:not(.x-phone) & {
+                width: 212px;
+            }
+        }
+
+        .name {
+            padding-top: 20px;
+            font-size: 20px;
+            text-shadow: 0 1px 0 #000;
+            color: #fff;            
+        }
+
+        .x-landscape & {
+            margin: 10px;
+        }
+
+        .x-portrait & {
+            margin: 20px;
+        }
+    }
+
+    .x-item-pressed {
+        background: rgba(0, 53, 41, .7);
+        border-color: rgba(0, 53, 41, .8);
+    }
+
+    .dashboards-list-inner {
+		background-image: url(../images/bg.jpg);
+        background-position: top center;
+        background-repeat: repeat;
+        line-height: 10px;
+
+        .x-landscape & {
+            padding-top: 10px;
+        }
+
+        .x-portrait & {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+    }	   
+}
