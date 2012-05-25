@@ -7,11 +7,6 @@ Ext.define('cfa.controller.Dashboard', {
 			homebtn: '#home-btn'
         },
 
-        before: {
-            showRootDashboard: 'ensureStoreLoad',
-            showDashboardById: 'ensureStoreLoad'
-        },
-
         control: {
             dashboards: {
                 itemtap: 'onDashboardItemTap'

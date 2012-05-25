@@ -26,22 +26,26 @@ Ext.define('cfa.view.Main', {
 					xtype: 'button',
 					text: 'Home',
 					ui: 'action',
-					id: 'home-btn'
+					id: 'home-btn',
+					align:'right'
                 }, {
 					xtype: 'button',
 					text: 'Basics Help',
 					ui: 'action',
-					id: 'basic-btn'
+					id: 'basic-btn',
+					align:'right'
 				}, {
 					xtype: 'button',
 					text: 'Feedback',
 					ui: 'action',
-					id: 'fed-btn'
+					id: 'fed-btn',
+					align:'right'
 				}, {
 					xtype: 'button',
 					text: 'About',
 					ui: 'action',
-					id: 'about-btn'
+					id: 'about-btn',
+					align:'right'
 				}
             ]			
         }
