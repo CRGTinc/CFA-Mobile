@@ -1,6 +1,6 @@
 Ext.define('cfa.view.event.EventDetail',{
 	extend: 'Ext.form.Panel',
-	alias: 'widget.eventdetail',
+	alias: 'widget.event_detail',
 	requires:['Ext.form.FieldSet'],
 
 	initialize: function(){

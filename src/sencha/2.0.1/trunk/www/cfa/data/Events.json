@@ -1,42 +1,43 @@
 [
     {
         "id": 1,
-        "title": "Event title 1",
-        "date": "Tue, 15 May 1973 13:37:23 GMT",
-        "time": "14:30",
-		"location" : "unknown",
-        "description": "Event description"
+        "title": "Monthly Meeting",
+        "date": "Thus, 24 May",
+        "time": "3pm to 4pm",
+		"location" : "DC office room 5813",
+        "description": "Monthly wrap-up meeting"
     },
     {
         "id": 2,
-        "title": "Event title 2",
-        "date": "Wed, 07 Jan 2004 07:22:02 GMT",
-        "time": "14:30",
-		"location" : "unknown",
-        "description": "Event description"
+        "title": "Training section",
+        "date": "Thus, 24 May",
+        "time": "3pm to 4pm",
+		"location" : "DC office room 5813",
+        "description": "Training newcommers"
     },
     {
         "id": 3,
-        "title": "Event title 3",
-        "date": "Sat, 03 Oct 1992 13:41:50 GMT",
-        "time": "14:30",
-		"location" : "unknown",
-        "description": "Event description"
+        "title": "Insurance information",
+        "date": "Thus, 24 May",
+        "time": "3pm to 4pm",
+		"location" : "DC office room 7156",
+        "description": "Insurance contract"
     },
     {
         "id": 4,
-        "title": "Event title 4",
-        "date": "Wed, 14 Jul 1982 13:07:09 GMT",
-        "time": "14:30",
-		"location" : "unknown",
-        "description": "Event description"
+        "title": "Happy Hour",
+        "date": "Fri, 8 Jun",
+        "time": "3pm to 4pm",
+		"location" : "DC office room 3113",
+        "description": "Happy hour"
     },
     {
         "id": 5,
-        "title": "Event title 5",
-        "date": "Wed, 13 Nov 1991 19:08:14 GMT",
-        "time": "14:30",
-		"location" : "unknown",
-        "description": "Event description"
-    }
+        "title": "Customer call Conference",
+        "date": "Sat, 30 Jun",
+        "time": "9am to 10am",
+		"location" : "DC office room 7156",
+        "description": "Calling conference with customer"
+    },
+	
 ]

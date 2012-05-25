@@ -9,17 +9,18 @@ Ext.define('cfa.controller.event.EventController',{
 
         refs: {
             main: 'main',
-			eventsContainer: 'eventcontainer',
-			eventDetailViewer: 'eventdetail'
+			eventsContainer: 'event_view_container',
+			eventDetailViewer: 'event_detail'
         },
 		
-		control: {
-			
+		control: {			
 			eventsContainer:{
-				displayEventInfo : 'displayEventInfo'	
+				displayEventDetailCommand : 'displayEventDetail',
+				reloadDataCommand : 'reloadData',
+				groupByOfficeCommand : 'groupByOffice',
+				groupByMonthCommand : 'groupByMonth'				
 			},
-		}
-		
+		}		
     },
 	
 	showEventPage: function(){
@@ -28,25 +29,41 @@ Ext.define('cfa.controller.event.EventController',{
 		this.getMain().push(caseView);        						
 	},
 	
-	displayEventInfo: function(list,record){
+	displayEventDetail: function(list,record){
 		console.log("Display event detail");
 		var eventViewer = this.getEventDetailViewer();
-		var _eventsContainer = this.getEventsContainer();
-		eventViewer.setRecord(record);
-		_eventsContainer.getLayout().setItemFlex(eventViewer,2);	
+		eventViewer.setRecord(record);		
 	},
 	
-	launch: function(app){
-		this.callParent(arguments);
-		console.log("Load event");
-		Ext.getStore("Events").load();	
+	reloadData: function(){
+		console.log("reset data");
+		Ext.getStore("Events").load();					
 	},
 	
-	init: function(){
-		this.callParent(arguments);
-		console.log("init");
+	groupByMonth: function(){
+		console.log("Month group");
+		var store  = Ext.getStore("Events");
+		store.setSorters(['date']);
+		var grouper = {
+			groupFn: function(record) {
+				return record.get('date');
+			}	
+		};
+		store.setGrouper(grouper);		
+		Ext.getStore("Events").load();		
+	},
+	
+	groupByOffice: function(){
+		console.log("Location group");
+		var store  = Ext.getStore("Events");
+		store.setSorters(['location']);
+		var grouper = {
+			groupFn: function(record) {
+				return record.get('location');
+			}	
+		};
+		store.setGrouper(grouper);		
+		Ext.getStore("Events").load();
 	}
-	
-	
 			
 })

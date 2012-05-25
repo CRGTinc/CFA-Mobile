@@ -1,6 +1,6 @@
 Ext.define("cfa.view.event.EventView", {
     extend: 'Ext.Container',
-	alias: 'widget.eventcontainer',
+	alias: 'widget.event_view_container',
 	
 	requires:['cfa.view.event.EventsList','cfa.model.Event', 'cfa.view.event.EventDetail'],	
 	
@@ -23,21 +23,21 @@ Ext.define("cfa.view.event.EventView", {
 		var bottombar = {
 			xtype:'toolbar',
 			items:[
-				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh'},
+				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh',handler:this.onRefreshClick, scope:this},
 				{xtype:'spacer'},
-				{xtype:'button',text:"Month",align:'right'},
-				{xtype:'button',text:"office",align:'right'},
+				{xtype:'button',text:"Month",align:'right', handler:this.monthGroupClick, scope:this},
+				{xtype:'button',text:"Office",align:'right', handler:this.officeGroupClick, scope:this},
 				
 			],
 			docked:'bottom',
 		};
 		
 		var eventsList = {
-			xtype: 'eventslist',
+			xtype: 'events_list',
 			//flex: 1,
-			store: Ext.getStore("Events"),
+			store: Ext.getStore("Events").load(),
 			listeners:{
-				select : {fn:this.onEventSelected, scope:this}
+				select : {fn:this.onItemSelected, scope:this}
         	}
 		};
 		
@@ -53,17 +53,28 @@ Ext.define("cfa.view.event.EventView", {
 		};
 		
 		var eventDetail = {
-			xtype: 'eventdetail',
-			store: Ext.getStore("Events"),
+			xtype: 'event_detail',
 			flex: 2
 		}
 		
 		this.add([leftPanel,eventDetail])		
 	},
 		
-	onEventSelected: function(list,record,opt){
-		console.log(record);
-		this.fireEvent('displayEventInfo',this,record);
-	}   
+	onItemSelected: function(list,record,opt){
+		this.fireEvent('displayEventDetailCommand',this,record);
+	},
+	
+	onRefreshClick: function(){
+		this.fireEvent('reloadDataCommand',this);		
+	},
+	
+	monthGroupClick: function(){
+		this.fireEvent('groupByMonthCommand',this);		
+	},
+	
+	officeGroupClick: function(){
+		this.fireEvent('groupByOfficeCommand',this);
+	}
+	 
 	
 });
