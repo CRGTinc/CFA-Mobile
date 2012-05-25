@@ -7,10 +7,12 @@ Ext.define("cfa.store.Events",{
 			type: "ajax",
 			url : "/data/Events.json",						
 		},
-		sorters: 'location',
+		sorters: 'date',
 		grouper: {			
 			groupFn: function(record) {
-				return record.get('location');
+				var date = record.get('date');
+				var monthNames = [ "January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ];
+				return monthNames[date.getMonth()];
 			}
 		},
 	}	
