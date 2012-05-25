@@ -2,7 +2,7 @@ Ext.application({
     name: 'cfa',
 
 	profiles: ['Tablet', 'Phone'],
-    stores: ['Dashboards', 'Events'],
+    stores: ['Dashboards', 'Events', 'Cases'],
 	
     requires: [
         'Ext.MessageBox'

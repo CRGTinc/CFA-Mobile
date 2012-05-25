@@ -1,11 +1,38 @@
 Ext.define("cfa.view.case.CaseView", {
-    extend: 'Ext.Panel',
+    extend: 'Ext.Container',
 	xtype: 'case',
 	
-	
-    config: {	
+    config: {
+        fullscreen: true,
+        
 		items:[{
-		  html:  '<font color="white">' + "This is cases page"  + '</font>'
-		}]
+                xtype: 'container',
+                width: 300,
+                docked: 'left',
+                items: [{
+                        xtype: 'nestedlist',
+                        title: 'Cases',
+                        id: 'caseslist',
+                        height: 400,
+                        store: 'Cases'
+                    }
+                ]
+            }, {
+                xtype: 'container',
+                items: [{
+                        xtype: 'container',
+                        id: 'casecontextpanel',
+                        docked: 'top',
+                        layout: 'fit',
+                        height: 100,
+                        html: '<center>Context Information</center>'
+                    }, {
+                        xtype: 'container',
+                        id: 'casecontentpanel',
+                        html: '<center>Content</center>'
+                    }
+                ]
+            }
+        ]
     }
 });
