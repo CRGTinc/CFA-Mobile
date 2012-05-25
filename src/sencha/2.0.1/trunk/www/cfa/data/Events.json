@@ -2,7 +2,7 @@
     {
         "id": 1,
         "title": "Monthly Meeting",
-        "date": "Thus, 24 May",
+        "date": "Sun, 01 Oct 2012",
         "time": "3pm to 4pm",
 		"location" : "DC office room 5813",
         "description": "Monthly wrap-up meeting"
@@ -10,7 +10,7 @@
     {
         "id": 2,
         "title": "Training section",
-        "date": "Thus, 24 May",
+        "date": "Thu, 19 Aug 2012",
         "time": "3pm to 4pm",
 		"location" : "DC office room 5813",
         "description": "Training newcommers"
@@ -18,7 +18,7 @@
     {
         "id": 3,
         "title": "Insurance information",
-        "date": "Thus, 24 May",
+        "date": "Wed, 18 Apr 2012",
         "time": "3pm to 4pm",
 		"location" : "DC office room 7156",
         "description": "Insurance contract"
@@ -26,7 +26,7 @@
     {
         "id": 4,
         "title": "Happy Hour",
-        "date": "Fri, 8 Jun",
+        "date": "Fri, 17 Oct 2012",
         "time": "3pm to 4pm",
 		"location" : "DC office room 3113",
         "description": "Happy hour"
@@ -34,7 +34,7 @@
     {
         "id": 5,
         "title": "Customer call Conference",
-        "date": "Sat, 30 Jun",
+        "date": "Sat, 17 Feb 2012",
         "time": "9am to 10am",
 		"location" : "DC office room 7156",
         "description": "Calling conference with customer"
