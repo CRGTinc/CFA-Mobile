@@ -3,34 +3,44 @@ Ext.define("cfa.view.case.CaseView", {
 	xtype: 'case',
 	
     config: {
-        fullscreen: true,
-        
+		layout: 'hbox',        
 		items:[{
-                xtype: 'container',
-                width: 300,
-                docked: 'left',
+                xtype: 'panel',
+				layout: 'fit',
+				flex: 1,
                 items: [{
                         xtype: 'nestedlist',
                         title: 'Cases',
-                        id: 'caseslist',
-                        height: 400,
+                        id: 'caseslist',                        
                         store: 'Cases'
                     }
                 ]
             }, {
-                xtype: 'container',
-                items: [{
-                        xtype: 'container',
-                        id: 'casecontextpanel',
-                        docked: 'top',
-                        layout: 'fit',
-                        height: 100,
-                        html: '<center>Context Information</center>'
-                    }, {
-                        xtype: 'container',
-                        id: 'casecontentpanel',
-                        html: '<center>Content</center>'
-                    }
+                xtype: 'panel',
+				flex:2,
+				layout: 'fit',
+                items: [
+					{
+						xtype:'panel',
+						layout: 'vbox',
+						items:[
+							{
+								xtype: 'panel',
+								id: 'casecontextpanel',
+								docked: 'top',
+								layout: 'fit',
+								flex: 1,
+								html: '<center>Context Information</center>'
+							}, {
+								xtype: 'panel',
+								layout: 'fit',
+								flex: 2,
+								id: 'casecontentpanel',
+								html: '<center>Content</center>'
+							}
+						
+						]	
+					}
                 ]
             }
         ]
