@@ -30,11 +30,13 @@ Ext.define("cfa.view.case.CaseView", {
 								docked: 'top',
 								layout: 'fit',
 								flex: 1,
+								minHeight: 100,
 								html: '<center>Context Information</center>'
 							}, {
 								xtype: 'panel',
 								layout: 'fit',
 								flex: 2,
+								minHeight: 200,
 								id: 'casecontentpanel',
 								html: '<center>Content</center>'
 							}
