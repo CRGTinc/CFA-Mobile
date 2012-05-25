@@ -46,7 +46,9 @@ Ext.define('cfa.controller.event.EventController',{
 		store.setSorters(['date']);
 		var grouper = {
 			groupFn: function(record) {
-				return record.get('date');
+				var date = record.get('date');
+				var monthNames = [ "January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ];
+				return monthNames[date.getMonth()];
 			}	
 		};
 		store.setGrouper(grouper);		
@@ -59,7 +61,8 @@ Ext.define('cfa.controller.event.EventController',{
 		store.setSorters(['location']);
 		var grouper = {
 			groupFn: function(record) {
-				return record.get('location');
+				 var location = record.get('location').split(" ");
+				 return location[3];
 			}	
 		};
 		store.setGrouper(grouper);		
