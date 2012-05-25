@@ -128,7 +128,8 @@
         "resources/icons",
         "resources/startup",
 		"contact.html",
-		"data/Events.json"
+		"data/Events.json",
+		"data/Contacts.json"
     ],
 
     /**
