@@ -1,10 +1,67 @@
 Ext.define("cfa.view.contact.ContactView", {
-    extend: 'cfa.view.contact.HTMLPanel',
-	xtype: 'contact',
+    extend: 'Ext.Container',
+	alias: 'widget.contact_view_container',
+	
+	requires:['cfa.view.contact.ContactsList','cfa.model.Contact', 'cfa.view.contact.ContactDetail'],	
+	
+	config: {
+		layout: 'hbox',
+	},
 	
 	
-    config: {	
-		 scrollable : "vertical",
-		 url : "contact.html"
-    }
+	
+	initialize: function() {
+		this.callParent(arguments);
+		
+		var topTitle = {
+			xtype:'toolbar',
+			title:"Contacts",
+			docked:'top',
+			
+		};
+		
+		var bottombar = {
+			xtype:'toolbar',
+			items:[
+				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh'},
+				{xtype:'spacer'},
+				{xtype:'button',text:"SAC",align:'right'},
+				{xtype:'button',text:"RAC",align:'right'},
+				
+			],
+			docked:'bottom',
+		};
+		
+		var eventsList = {
+			xtype: 'contact_list',
+			//flex: 1,
+			store: Ext.getStore("Contacts").load(),
+			listeners:{
+				select : {fn:this.onItemSelected, scope:this}
+        	}
+		};
+		
+		var leftPanel = {
+			xtype:'panel',
+			layout:'fit',
+			flex:1,
+			items:[
+				topTitle,
+				eventsList,
+				bottombar
+			]			
+		};
+		
+		var eventDetail = {
+			xtype: 'contact_detail',
+			flex: 2
+		}
+		
+		this.add([leftPanel,eventDetail])		
+	},
+		
+	onItemSelected: function(list,record,opt){
+		this.fireEvent('contactDetailCommand',this,record);
+	}   
+	
 });

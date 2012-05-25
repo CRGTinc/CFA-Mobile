@@ -6,6 +6,12 @@ Ext.define("cfa.store.Events",{
 		proxy : {
 			type: "ajax",
 			url : "/data/Events.json",						
-		}		
+		},
+		sorters: 'location',
+		grouper: {			
+			groupFn: function(record) {
+				return record.get('location');
+			}
+		},
 	}	
 })

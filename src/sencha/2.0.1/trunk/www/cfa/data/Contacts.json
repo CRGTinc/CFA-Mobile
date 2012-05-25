@@ -1,0 +1,36 @@
+[
+  	{
+        "id": 1,
+        "firstname": "Tom",
+        "lastname": "Sawyer",
+        "email": "tom_sawyer@fakemail.com",
+        "office_phone": "1159",
+        "cell": "198756432",
+        "sac": "Great Britain",
+        "rac": "",
+        "address": "4478 Long Run Rd Loganton, PA 17747 151 ft SW"
+    },
+    {
+        "id": 2,
+        "firstname": "Diana",
+        "lastname": "Chan",
+        "email": "diana@fakemail.com",
+        "office_phone": "5689",
+        "cell": "77746688",
+        "sac": "Great Britain",
+        "rac": "",
+        "address": "4478 Long Run Rd Loganton, PA 17747 151 ft SW"
+    },
+	{
+        "id": 3,
+        "firstname": "Boby",
+        "lastname": "Brain",
+        "email": "bobybrain@fakemail.com",
+        "office_phone": "3312",
+        "cell": "4455789",
+        "sac": "Great Britain",
+        "rac": "",
+        "address": "4478 Long Run Rd Loganton, PA 17747 151 ft SW"
+    },
+	
+]
