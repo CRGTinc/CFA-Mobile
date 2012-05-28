@@ -2,7 +2,7 @@ Ext.define("cfa.view.contact.ContactView", {
     extend: 'Ext.Container',
 	alias: 'widget.contact_view_container',
 	
-	requires:['cfa.view.contact.ContactsList','cfa.model.Contact', 'cfa.view.contact.ContactDetail'],	
+	requires:['cfa.view.contact.ContactsList','cfa.model.Contact', 'cfa.view.contact.ContactDetail','cfa.reader.Csv'],	
 	
 	config: {
 		layout: 'hbox',
