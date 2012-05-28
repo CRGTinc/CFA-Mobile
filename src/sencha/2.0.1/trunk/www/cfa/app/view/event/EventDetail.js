@@ -15,7 +15,7 @@ Ext.define('cfa.view.event.EventDetail',{
 		};
 		
 		var eventDate = {
-			xtype: 'textfield',
+			xtype: 'datepickerfield',
 			name: 'date',
 			label: 'Date',
 			disabled: true

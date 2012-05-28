@@ -23,10 +23,10 @@ Ext.define("cfa.view.contact.ContactView", {
 		var bottombar = {
 			xtype:'toolbar',
 			items:[
-				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh'},
+				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh', handler: this.reloadContactClick, scope: this},
 				{xtype:'spacer'},
-				{xtype:'button',text:"SAC",align:'right'},
-				{xtype:'button',text:"RAC",align:'right'},
+				{xtype:'button',text:"SAC",align:'right',handler: this.sacGroupClick, scope: this},
+				{xtype:'button',text:"RAC",align:'right', handler: this.racGroupClick, scope: this},
 				
 			],
 			docked:'bottom',
@@ -62,6 +62,21 @@ Ext.define("cfa.view.contact.ContactView", {
 		
 	onItemSelected: function(list,record,opt){
 		this.fireEvent('contactDetailCommand',this,record);
-	}   
+	},
+	
+	reloadContactClick: function(){
+		this.fireEvent('reloadContactCommand',this);		
+	},
+	
+	sacGroupClick: function(){
+		this.fireEvent('groupBySACCommand', this);		
+	},
+	
+	racGroupClick: function(){
+		console.log("Fire contac group by RAC");
+		this.fireEvent('groupByRACCommand',this);
+		
+	},
+	 
 	
 });

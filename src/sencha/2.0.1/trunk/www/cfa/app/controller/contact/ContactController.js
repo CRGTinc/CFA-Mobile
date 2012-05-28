@@ -15,7 +15,10 @@ Ext.define('cfa.controller.contact.ContactController',{
 		
 		control:{
 			contactContainer:{
-				contactDetailCommand : 'displayContactDetail'
+				contactDetailCommand : 'displayContactDetail',
+				reloadContactCommand : 'reloadContact',
+				groupBySACCommand : 'groupContactBySAC',
+				groupByRACCommand : 'groupContactByRAC'
 			}
 			
 		}
@@ -25,6 +28,35 @@ Ext.define('cfa.controller.contact.ContactController',{
 		
 		var contactDetail = this.getContactDetailView();
 		contactDetail.setRecord(record);
+	},
+	
+	reloadContact: function(){
+		Ext.getStore("Contacts").load();			
+	},
+	
+	groupContactBySAC: function(){
+		var store  = Ext.getStore("Contacts");
+		store.setSorters(['sac']);
+		var grouper = {
+			groupFn: function(record) {
+				 return record.get('sac');
+			}	
+		};
+		store.setGrouper(grouper);		
+		Ext.getStore("Contacts").load();	
+		
+	},
+	
+	groupContactByRAC: function(){
+		var store  = Ext.getStore("Contacts");
+		store.setSorters(['rac']);
+		var grouper = {
+			groupFn: function(record) {
+				 return record.get('rac');
+			}	
+		};
+		store.setGrouper(grouper);		
+		Ext.getStore("Contacts").load();
 	},
 	
 	showContactPage: function(){

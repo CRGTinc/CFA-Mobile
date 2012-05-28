@@ -15,7 +15,7 @@ Ext.define('cfa.view.contact.ContactDetail',{
 		};
 		
 		var contactEmail = {
-			xtype: 'textfield',
+			xtype: 'urlfield',
 			name: 'email',
 			label: 'Email',
 			disabled: true
