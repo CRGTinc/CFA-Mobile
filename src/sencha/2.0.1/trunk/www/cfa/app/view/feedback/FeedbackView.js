@@ -1,37 +1,32 @@
-Ext.define('cfa.view.setting.SettingView', {
+Ext.define('cfa.view.feedback.FeedbackView', {
     extend: 'Ext.Panel',
-	xtype: 'setting',
+	xtype: 'feedback',
 	
     config: {
-        title: 'Settings',
+        title: 'Feedback',
         layout: 'fit',
 		items:[{
                 xtype: 'formpanel',
                 items: [{
                         xtype: 'fieldset',
-                        title: 'General Information',
+                        title: 'Please enter your feedback below, then hit send button:',
                         defaults: {
+                            required: true,
                             labelWidth: '20%'
                         },
                         items: [{
-                                xtype: 'textfield',
-                                name: 'firstname',
-                                label: 'First Name',
-                                autoCapitalize: true
-                            }, {
-                                xtype: 'textfield',
-                                name: 'lastname',
-                                label: 'Last Name',
-                                autoCapitalize: true
+                                xtype: 'textareafield',
+                                name: 'feedbacktext',
+                                maxRows: 10
                             }
                         ]
                     }, {
                         xtype: 'panel',
                         items: [{
                                 xtype: 'button',
-                                id: 'resetdatabtn',
+                                id: 'sendfeedbackbtn',
                                 width: 200,
-                                text: 'Reset Data'
+                                text: 'Send'
                             }
                         ]
                     }
