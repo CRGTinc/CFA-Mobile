@@ -1,3 +1,7 @@
-1,Tom,Sawyer,tom_sawyer@fakemail.com,1159,198756432,Great Britain,,4478 Long Run Rd Loganton PA 17747 151 ft SW
-2,Diana,Chan,diana@fakemail.com,5689,77746688,Great Britain,,4478 Long Run Rd Loganton PA 17747 151 ft SW
-3,Boby,Brain,bobybrain@fakemail.com,3312,4455789,Great Britain,,4478 Long Run Rd Loganton PA 17747 151 ft SW        
+"id","firstname","lastname","email","office_phone","cell","sac","rac","address"
+1,"Tom","Sawyer","tom_sawyer@fakemail.com",1159,112255789,"Great Britain",,"4478 Long Run Rd Loganton, PA 17747 151 ft SW"
+2,"Diana","Chan","diana@fakemail.com",5858,223356844,"Great Britain",,"4478 Long Run Rd Loganton, PA 17747 151 ft SW"
+3,"Boby","Brain","bobybrain@fakemail.com",4626,774775568,"Great Britain",,"4478 Long Run Rd Loganton, PA 17747 151 ft SW"
+4,"Jasmine",,,,,"USA",,"1475-1499 Lakewood AveBrick, NJ 08724 16 ft B "
+5,"Abby",,,,,"USA",,"1439 Forest AveBrick"
+6,"Jackeline",,,,,"USA",,"150 Carlton Ave SLakewood "

@@ -6,7 +6,7 @@ Ext.define('cfa.view.contact.ContactsList',{
 		
 	config: {					
 		loadingText: "Loading contacts...",
-	    itemTpl: '</pre>	<div class="list-item-title">{firstname}, {lastname}</div><pre>',
+	    itemTpl: '</pre>	<div>{firstname} {lastname}</div><pre>',
 		grouped:true,			
     },
 
