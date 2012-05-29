@@ -1,6 +1,8 @@
 Ext.define('cfa.controller.Master', {
    extend: 'Ext.app.Controller',
-      
+   
+   requires: ['cfa.view.feedback.FeedbackView'],
+   
    config:{
         refs:{
 			main: 'main',			
@@ -20,7 +22,7 @@ Ext.define('cfa.controller.Master', {
 			   tap: 'goToFed'
 			},	
 		}	
-    },	
+    },
 	
 	goToAbout: function(){
 	  this.getMain().push({
@@ -35,9 +37,6 @@ Ext.define('cfa.controller.Master', {
                 });
 	},		
 	goToFed: function(){
-	  this.getMain().push({
-                    title: 'Feedback Page',
-                    html:  '<font color="white">Feedback Page</font>'
-                });
+        this.redirectTo('feedback');
 	},		
 });
