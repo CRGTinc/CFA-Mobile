@@ -32,16 +32,17 @@ Ext.define('cfa.controller.feedback.FeedbackController',{
     
     sendFeedback: function() {
         if (this.getFeedbackTextArea().getValue() == '') {
-            Ext.Msg.alert('Feedback', 'Please enter your feedback before sending.', Ext.emptyFn);            
+            Ext.Msg.alert('Feedback', 'Please enter your feedback before sending.', Ext.emptyFn, this);            
         } else {
-            Ext.Msg.alert('Feedback', 'Thank you for your feedback.', sentFeedback);
+            Ext.Msg.alert('Feedback', 'Thank you for your feedback.', this.sentFeedback, this);
         }
     },
     
+    sentFeedback: function() {
+        this.feedbackView.hide();
+        this.getFeedbackTextArea().setValue('');
+    }
+
 })
 
-function sentFeedback() {
-    Ext.getCmp('feedbackview').hide();
-    Ext.getCmp('feedbacktext').setValue('');
-}
 

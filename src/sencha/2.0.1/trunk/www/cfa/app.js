@@ -8,8 +8,6 @@ Ext.application({
         'Ext.MessageBox'
     ],
     
-    version: new Ext.Version('0.1.0'),
-
     icon: {
         '57': 'resources/icons/Icon.png',
         '72': 'resources/icons/Icon~ipad.png',

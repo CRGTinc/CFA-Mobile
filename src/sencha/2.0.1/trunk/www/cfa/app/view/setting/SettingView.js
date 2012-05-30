@@ -34,7 +34,7 @@ Ext.define('cfa.view.setting.SettingView', {
                         items: [{
                                 xtype: 'textfield',
                                 label: 'Version',
-                                value: cfa.app.version,
+                                value: '0.1.0',
                                 readOnly: true
                             }
                         ]
