@@ -46,9 +46,10 @@ Ext.define('cfa.controller.event.EventController',{
 		store.setSorters(['date']);
 		var grouper = {
 			groupFn: function(record) {
-				var date = record.get('date');
+				return date = record.get('date').getMonth();
+				var day =["Monday", "Tuesday", "Webnesday", "Thusday","Friday","Statuday", "Sunday"]
 				var monthNames = [ "January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ];
-				return monthNames[date.getMonth()];
+				return day[date.getDay()]+","+ date.getDate()+"-"+ monthNames[date.getMonth()];
 			}	
 		};
 		store.setGrouper(grouper);		

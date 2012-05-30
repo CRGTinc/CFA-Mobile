@@ -6,7 +6,7 @@ Ext.define('cfa.view.event.EventsList',{
 		
 	config: {					
 		loadingText: "Loading events...",
-	    itemTpl: '</pre>	<div class="list-item-title">{title}</div><pre>',
+	    itemTpl: '</pre>	<div class="list-item-title">{event_name}</div><pre>',
 		grouped: true,		
     },
 

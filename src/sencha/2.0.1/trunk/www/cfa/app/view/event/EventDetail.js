@@ -9,7 +9,7 @@ Ext.define('cfa.view.event.EventDetail',{
 
 		var eventTitle = {
 			xtype: 'textfield',
-			name: 'title',
+			name: 'event_name',
 			label: 'Title',
 			disabled: true
 		};
@@ -37,7 +37,7 @@ Ext.define('cfa.view.event.EventDetail',{
 		
 		var eventDescription = {
 			xtype: 'textfield',
-			name: 'description',
+			name: 'event_description',
 			label: 'Description',
 			disabled: true
 		}

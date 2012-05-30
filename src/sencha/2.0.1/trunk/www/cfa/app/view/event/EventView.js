@@ -2,9 +2,10 @@ Ext.define("cfa.view.event.EventView", {
     extend: 'Ext.Container',
 	alias: 'widget.event_view_container',
 	
-	requires:['cfa.view.event.EventsList','cfa.model.Event', 'cfa.view.event.EventDetail'],	
+	requires:['cfa.view.event.EventsList','cfa.model.Event', 'cfa.view.event.EventDetail','cfa.reader.Csv'],	
 	
 	config: {
+		title:'Events',
 		layout: 'hbox',
 	},
 	
