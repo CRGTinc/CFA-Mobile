@@ -1,21 +1,6 @@
-$body-bg-color: #000;
-$base-color:#333;
-$base-gradient: 'matte';
-$active-color: #069169;
-$tabs-dark-active-color: #069169;
-$tabs-light-active:#069169;
-$tabs-dark:#069169;
-$tabs-light-active:#069169;
-$tabs-light:#069169;
-$tabs-dark: #069169;
-$tabs-light: #555;
-$tabs-bottom-radius: .4em;
-$tabs-bottom-gradient: 'bevel';
-$tabs-bar-gradient: 'matte';
-$tabs-bottom-active-gradient:'recessed';
-$toolbar-gradient: 'glossy'; 
-
 @import 'sencha-touch/default/all';
+
+@inlcude sencha-touch-all;
 @include sencha-panel;
 @include sencha-buttons;
 @include sencha-sheet;
@@ -29,15 +14,6 @@ $toolbar-gradient: 'glossy';
 @include sencha-layout;
 @include sencha-form;
 @include sencha-sheet; 
-
-.x-toolbar .x-toolbar-title {
-    color: saturate(lighten($active-color, 10%), 20%);
-}
-.x-tabbar.x-docked-bottom .x-tab {
-    .x-tab-active {
-        -webkit-box-shadow: inset rgba(#000, .8) 0 0 5px !important;
-    }
-}
 
 // dashboards list
 .dashboards-list {
