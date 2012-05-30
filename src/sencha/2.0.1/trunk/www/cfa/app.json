@@ -109,7 +109,11 @@
 			"resources/startup/748x1024.png",
 			"resources/startup/768x1004.png",
 			"resources/startup/1496x2048.png",
-			"resources/startup/1536x2008.png"		
+			"resources/startup/1536x2008.png",
+			"data/Contacts.csv",
+			"data/References.csv",
+			"data/Events.csv",
+			"data/Cases.json"
 			
         ],
         /**
@@ -136,7 +140,8 @@
 		"data/Contacts.json",
 		"data/Contacts.csv",
 		"data/References.csv",
-		"data/Events.csv"
+		"data/Events.csv",
+		"data/Cases.json"
     ],
 
     /**

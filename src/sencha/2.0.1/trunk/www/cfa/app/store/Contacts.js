@@ -9,6 +9,8 @@ Ext.define("cfa.store.Contacts",{
 			reader : {
 				type:"csv"
 			},
+			enablePagingParams : false,
+			noCache: false
 		},
 		sorters: 'lastname',
 		grouper: {			

@@ -9,6 +9,8 @@ Ext.define("cfa.store.References",{
 			reader : {
 				type:"csv"
 			},
+			enablePagingParams : false,
+			noCache: false
 		},
 		sorters: 'title',
 		grouper: {			
