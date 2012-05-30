@@ -2,9 +2,10 @@ Ext.define("cfa.view.contact.ContactView", {
     extend: 'Ext.Container',
 	alias: 'widget.contact_view_container',
 	
-	requires:['cfa.view.contact.ContactsList','cfa.model.Contact', 'cfa.view.contact.ContactDetail'],	
+	requires:['cfa.view.contact.ContactsList','cfa.model.Contact', 'cfa.view.contact.ContactDetail','cfa.reader.Csv'],	
 	
 	config: {
+		title:'Contacts',
 		layout: 'hbox',
 	},
 	
@@ -23,11 +24,7 @@ Ext.define("cfa.view.contact.ContactView", {
 		var bottombar = {
 			xtype:'toolbar',
 			items:[
-				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh', handler: this.reloadContactClick, scope: this},
-				{xtype:'spacer'},
-				{xtype:'button',text:"SAC",align:'right',handler: this.sacGroupClick, scope: this},
-				{xtype:'button',text:"RAC",align:'right', handler: this.racGroupClick, scope: this},
-				
+				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh', handler: this.reloadContactClick, scope: this},				
 			],
 			docked:'bottom',
 		};
@@ -66,17 +63,6 @@ Ext.define("cfa.view.contact.ContactView", {
 	
 	reloadContactClick: function(){
 		this.fireEvent('reloadContactCommand',this);		
-	},
-	
-	sacGroupClick: function(){
-		this.fireEvent('groupBySACCommand', this);		
-	},
-	
-	racGroupClick: function(){
-		console.log("Fire contac group by RAC");
-		this.fireEvent('groupByRACCommand',this);
-		
-	},
-	 
+	}, 
 	
 });

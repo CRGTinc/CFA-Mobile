@@ -28,44 +28,27 @@ Ext.define('cfa.view.contact.ContactDetail',{
 			disabled: true
 		}
 		
-		var contactCell = {
+		var contactMobilePhone = {
 			xtype: 'textfield',
-			name: 'cell',
-			label: 'Cell',
+			name: 'mobile_phone',
+			label: 'Mobile Phone',
 			disabled: true
 		}
 		
-		var conctactSAC = {
+		var contactDepartement = {
 			xtype: 'textfield',
-			name: 'sac',
-			label: 'SAC',
+			name: 'departement',
+			label: 'Departement',
 			disabled: true
 		}
 		
-		var conctactRAC = {
-			xtype: 'textfield',
-			name: 'rac',
-			label: 'RAC',
-			disabled: true
-		}
-		
-		var conctactAddress = {
-			xtype: 'textfield',
-			name: 'address',
-			label: 'Address',
-			disabled: true
-		}
 		
 		this.add([
 			{ 
 				xtype: "fieldset",
-	          	items: [contactName, contactEmail, contactOfficePhone, contactCell],
+	          	items: [contactName, contactEmail, contactOfficePhone, contactMobilePhone, contactDepartement],
 				
-			},{
-				xtype: "fieldset",
-				items: [conctactSAC,conctactRAC,conctactAddress],
-			}
-			
+			}			
 			
 		]);
 			

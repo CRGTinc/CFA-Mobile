@@ -8,9 +8,24 @@ Ext.define('cfa.controller.reference.ReferenceController',{
         },
 
         refs: {
-            main: 'main'
-        }
+            main: 'main',
+			referenceViewContainer: 'reference_view_container',
+			referenceDetail: 'reference_detail'
+        },
+		
+		control:{
+			referenceViewContainer:{
+				openReferenceSourceCommand: 'openReferenceResource'	
+			}
+		}
+		
     },
+	
+	openReferenceResource: function(list,record){	
+		var v = this.getReferenceDetail();
+		v.setUrl(record.getData().url);		
+		v.getHTMLContentByUrl(v);
+	},
 	
 	showReferencePage: function(){
 		console.log("Go to references page");

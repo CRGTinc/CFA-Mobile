@@ -34,31 +34,6 @@ Ext.define('cfa.controller.contact.ContactController',{
 		Ext.getStore("Contacts").load();			
 	},
 	
-	groupContactBySAC: function(){
-		var store  = Ext.getStore("Contacts");
-		store.setSorters(['sac']);
-		var grouper = {
-			groupFn: function(record) {
-				 return record.get('sac');
-			}	
-		};
-		store.setGrouper(grouper);		
-		Ext.getStore("Contacts").load();	
-		
-	},
-	
-	groupContactByRAC: function(){
-		var store  = Ext.getStore("Contacts");
-		store.setSorters(['rac']);
-		var grouper = {
-			groupFn: function(record) {
-				 return record.get('rac');
-			}	
-		};
-		store.setGrouper(grouper);		
-		Ext.getStore("Contacts").load();
-	},
-	
 	showContactPage: function(){
 		console.log("Go to contacts page");
 		var contactView = Ext.create('cfa.view.contact.ContactView');

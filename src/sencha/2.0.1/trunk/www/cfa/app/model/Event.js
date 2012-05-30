@@ -4,12 +4,11 @@ Ext.define('cfa.model.Event',{
 	config:{
 		idProperty: 'id',
 		fields:[
-			{name: 'id', type:'int'},
-			{name: 'title', type: 'string'},
-			{name: 'date', type: 'date'},
+			{name: 'event_name', type: 'string'},
+			{name: 'date', type: 'date',},
 			{name: 'time', type: 'string'},
 			{name: 'location', type: 'string'},
-			{name: 'description', type: 'string'},		
+			{name: 'event_description', type: 'string'},		
 		]	
 	}	
 })

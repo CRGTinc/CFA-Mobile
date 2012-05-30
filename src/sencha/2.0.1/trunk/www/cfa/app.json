@@ -129,7 +129,9 @@
         "resources/startup",
 		"contact.html",
 		"data/Events.json",
-		"data/Contacts.json"
+		"data/Contacts.json",
+		"data/Contacts.csv",
+		"data/References.csv"
     ],
 
     /**

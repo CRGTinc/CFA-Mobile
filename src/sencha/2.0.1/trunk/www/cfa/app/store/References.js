@@ -1,19 +1,19 @@
-Ext.define("cfa.store.Contacts",{
+Ext.define("cfa.store.References",{
 	extend : "Ext.data.Store",
 	
 	config : {
-		model : "cfa.model.Contact",		
+		model : "cfa.model.Reference",		
 		proxy : {
 			type: "ajax",
-			url : "/data/Contacts.csv",	
+			url : "/data/References.csv",	
 			reader : {
 				type:"csv"
 			},
 		},
-		sorters: 'lastname',
+		sorters: 'title',
 		grouper: {			
 			groupFn: function(record) {
-				return record.get('lastname')[0];
+				return record.get('title')[0];
 			}
 		},
 	}	
