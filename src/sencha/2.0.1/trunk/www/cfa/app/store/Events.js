@@ -10,7 +10,6 @@ Ext.define("cfa.store.Events",{
 				type:"csv"
 			},						
 		},
-		sorters: 'date',
 		grouper: {			
 			groupFn: function(record) {
 				return record.get('date').toDateString();

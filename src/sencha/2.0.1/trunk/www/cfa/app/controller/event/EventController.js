@@ -43,14 +43,12 @@ Ext.define('cfa.controller.event.EventController',{
 	groupByMonth: function(){
 		console.log("Month group");
 		var store  = Ext.getStore("Events");
-		store.setSorters(['date']);
 		var grouper = {
 			groupFn: function(record) {
-				return date = record.get('date').getMonth();
-				var day =["Monday", "Tuesday", "Webnesday", "Thusday","Friday","Statuday", "Sunday"]
-				var monthNames = [ "January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ];
-				return day[date.getDay()]+","+ date.getDate()+"-"+ monthNames[date.getMonth()];
-			}	
+				return record.get('date').toDateString();
+			},
+			sortProperty: 'date',
+    		direction: 'ASC'
 		};
 		store.setGrouper(grouper);		
 		Ext.getStore("Events").load();		
@@ -59,12 +57,12 @@ Ext.define('cfa.controller.event.EventController',{
 	groupByOffice: function(){
 		console.log("Location group");
 		var store  = Ext.getStore("Events");
-		store.setSorters(['location']);
 		var grouper = {
 			groupFn: function(record) {
-				 var location = record.get('location').split(" ");
-				 return location[3];
-			}	
+				return record.get('location');
+			},
+			sortProperty: 'location',
+    		direction: 'ASC'
 		};
 		store.setGrouper(grouper);		
 		Ext.getStore("Events").load();
