@@ -12,8 +12,8 @@ Ext.define('cfa.view.about.AboutView', {
 		items:[{
                 centered: true,
                 html: [
-                    '<p align="center">CFA Mobile App</p>',
-                    '<p align="center">Version ' + cfa.app.version + '</p>'
+                    '<p align="center">CFA Mobile Application</p>',
+                    '<p align="center">Version ' + '0.1.0' + '</p>'
                     
                 ].join('')
             }

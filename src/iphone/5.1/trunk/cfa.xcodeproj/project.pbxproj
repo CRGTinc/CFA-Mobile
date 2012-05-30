@@ -39,6 +39,14 @@
 		97A2FC7F1566374000A0DEFE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC7E1566374000A0DEFE /* MainViewController.xib */; };
 		97A2FC831566374000A0DEFE /* verify.sh in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC821566374000A0DEFE /* verify.sh */; };
 		97A2FC8E1566386400A0DEFE /* www in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC8D1566386400A0DEFE /* www */; };
+		ADB98FA61576231000CB49AB /* ChildBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADB98F971576231000CB49AB /* ChildBrowser.bundle */; };
+		ADB98FA71576231000CB49AB /* ChildBrowser.js in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F981576231000CB49AB /* ChildBrowser.js */; };
+		ADB98FA81576231000CB49AB /* ChildBrowserCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F9A1576231000CB49AB /* ChildBrowserCommand.m */; };
+		ADB98FA91576231000CB49AB /* ChildBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F9C1576231000CB49AB /* ChildBrowserViewController.m */; };
+		ADB98FAA1576231000CB49AB /* ChildBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADB98F9D1576231000CB49AB /* ChildBrowserViewController.xib */; };
+		ADB98FAB1576231000CB49AB /* Cordova.plist.png in Resources */ = {isa = PBXBuildFile; fileRef = ADB98F9E1576231000CB49AB /* Cordova.plist.png */; };
+		ADB98FB01576231000CB49AB /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = ADB98FA41576231000CB49AB /* index.html */; };
+		ADB98FB11576231000CB49AB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = ADB98FA51576231000CB49AB /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +88,16 @@
 		97A2FC811566374000A0DEFE /* README */ = {isa = PBXFileReference; lastKnownFileType = text; name = README; path = Plugins/README; sourceTree = "<group>"; };
 		97A2FC821566374000A0DEFE /* verify.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = verify.sh; sourceTree = "<group>"; };
 		97A2FC8D1566386400A0DEFE /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		ADB98F971576231000CB49AB /* ChildBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ChildBrowser.bundle; sourceTree = "<group>"; };
+		ADB98F981576231000CB49AB /* ChildBrowser.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ChildBrowser.js; sourceTree = "<group>"; };
+		ADB98F991576231000CB49AB /* ChildBrowserCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildBrowserCommand.h; sourceTree = "<group>"; };
+		ADB98F9A1576231000CB49AB /* ChildBrowserCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildBrowserCommand.m; sourceTree = "<group>"; };
+		ADB98F9B1576231000CB49AB /* ChildBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildBrowserViewController.h; sourceTree = "<group>"; };
+		ADB98F9C1576231000CB49AB /* ChildBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildBrowserViewController.m; sourceTree = "<group>"; };
+		ADB98F9D1576231000CB49AB /* ChildBrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChildBrowserViewController.xib; sourceTree = "<group>"; };
+		ADB98F9E1576231000CB49AB /* Cordova.plist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cordova.plist.png; sourceTree = "<group>"; };
+		ADB98FA41576231000CB49AB /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		ADB98FA51576231000CB49AB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +135,7 @@
 		97A2FC1F1566373F00A0DEFE = {
 			isa = PBXGroup;
 			children = (
+				ADB98F95157622F900CB49AB /* Plugins */,
 				97A2FC8D1566386400A0DEFE /* www */,
 				97A2FC4B1566373F00A0DEFE /* cfa */,
 				97A2FC301566373F00A0DEFE /* Frameworks */,
@@ -262,6 +281,32 @@
 			name = Plugins;
 			sourceTree = "<group>";
 		};
+		ADB98F95157622F900CB49AB /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				ADB98F961576231000CB49AB /* ChildBrowser */,
+			);
+			name = Plugins;
+			sourceTree = "<group>";
+		};
+		ADB98F961576231000CB49AB /* ChildBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				ADB98F971576231000CB49AB /* ChildBrowser.bundle */,
+				ADB98F981576231000CB49AB /* ChildBrowser.js */,
+				ADB98F991576231000CB49AB /* ChildBrowserCommand.h */,
+				ADB98F9A1576231000CB49AB /* ChildBrowserCommand.m */,
+				ADB98F9B1576231000CB49AB /* ChildBrowserViewController.h */,
+				ADB98F9C1576231000CB49AB /* ChildBrowserViewController.m */,
+				ADB98F9D1576231000CB49AB /* ChildBrowserViewController.xib */,
+				ADB98F9E1576231000CB49AB /* Cordova.plist.png */,
+				ADB98FA41576231000CB49AB /* index.html */,
+				ADB98FA51576231000CB49AB /* README.md */,
+			);
+			name = ChildBrowser;
+			path = Plugins/ChildBrowser;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -333,6 +378,11 @@
 				97A2FC7F1566374000A0DEFE /* MainViewController.xib in Resources */,
 				97A2FC831566374000A0DEFE /* verify.sh in Resources */,
 				97A2FC8E1566386400A0DEFE /* www in Resources */,
+				ADB98FA61576231000CB49AB /* ChildBrowser.bundle in Resources */,
+				ADB98FAA1576231000CB49AB /* ChildBrowserViewController.xib in Resources */,
+				ADB98FAB1576231000CB49AB /* Cordova.plist.png in Resources */,
+				ADB98FB01576231000CB49AB /* index.html in Resources */,
+				ADB98FB11576231000CB49AB /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +412,9 @@
 				97A2FC521566373F00A0DEFE /* main.m in Sources */,
 				97A2FC7A1566374000A0DEFE /* AppDelegate.m in Sources */,
 				97A2FC7D1566374000A0DEFE /* MainViewController.m in Sources */,
+				ADB98FA71576231000CB49AB /* ChildBrowser.js in Sources */,
+				ADB98FA81576231000CB49AB /* ChildBrowserCommand.m in Sources */,
+				ADB98FA91576231000CB49AB /* ChildBrowserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +489,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -456,6 +510,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -481,6 +536,7 @@
 					"DEBUG=1,",
 					"CORDOVA_FRAMEWORK=1",
 				);
+				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "cfa/cfa-Info.plist";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -515,6 +571,7 @@
 					"NDEBUG=1,",
 					"CORDOVA_FRAMEWORK=1",
 				);
+				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "cfa/cfa-Info.plist";
 				OTHER_LDFLAGS = (
 					"-weak_framework",

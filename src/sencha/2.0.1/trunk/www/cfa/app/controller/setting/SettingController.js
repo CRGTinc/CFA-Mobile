@@ -25,18 +25,19 @@ Ext.define('cfa.controller.setting.SettingController',{
 	},
     
     resetData: function() {
-        Ext.Msg.confirm("Reset Data", "Do you want to reset data?", confirmResetData);
+        Ext.Msg.confirm("Reset Data", "Do you want to reset data?", this.confirmResetData, this);
+    },
+    
+    confirmResetData: function(button) {
+        if (button == 'yes') {
+            Ext.Msg.confirm("Reset Data", "This action can not be reverted, do you really want to reset data?", this.confirmResetData2, this);
+        }
+    },
+
+    confirmResetData2: function(button) {
+        if (button == 'yes') {
+            Ext.Msg.alert('Reset Data', 'Data has been reseted successfully.', Ext.emptyFn, this);
+        }
     }
+
 })
-
-function confirmResetData(button) {
-    if (button == 'yes') {
-        Ext.Msg.confirm("Reset Data", "This action can not be reverted, do you really want to reset data?", confirmResetData2);
-    }
-}
-
-function confirmResetData2(button) {
-    if (button == 'yes') {
-        Ext.Msg.alert('Reset Data', 'Data has been reseted successfully.', Ext.emptyFn);
-    }
-}
