@@ -45,10 +45,10 @@ Ext.define('cfa.controller.event.EventController',{
 		var store  = Ext.getStore("Events");
 		var grouper = {
 			groupFn: function(record) {
-				return record.get('date').toDateString();
+				return Ext.util.Format.date(record.get('date'), 'Y-M-d');
 			},
 			sortProperty: 'date',
-    		direction: 'ASC'
+    		direction: 'DESC'
 		};
 		store.setGrouper(grouper);		
 		Ext.getStore("Events").load();		

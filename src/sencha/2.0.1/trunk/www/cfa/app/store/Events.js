@@ -12,10 +12,10 @@ Ext.define("cfa.store.Events",{
 		},
 		grouper: {			
 			groupFn: function(record) {
-				return record.get('date').toDateString();
+				return Ext.util.Format.date(record.get('date'), 'Y-M-d');
 			},
 			sortProperty: 'date',
-    		direction: 'ASC'
+    		direction: 'DESC'
 		},
 	}	
 })
