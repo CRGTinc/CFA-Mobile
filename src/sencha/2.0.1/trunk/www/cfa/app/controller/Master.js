@@ -14,28 +14,27 @@ Ext.define('cfa.controller.Master', {
 		control:{
 			aboutbtn: {
 			   tap: 'goToAbout'
-			},			
+			},
 			basicbtn: {
 			   tap: 'goToBasic'
-			},	
+			},
 			fedbtn: {
 			   tap: 'goToFed'
-			},	
-		}	
+			},
+		}
     },
 	
 	goToAbout: function(){
-	  this.getMain().push({
-                    title: 'About Page',
-                    html:  '<font color="white">About Page</font>'
-                });
-	},				
+        this.redirectTo('about');
+	},
+    
 	goToBasic: function(){
 	  this.getMain().push({
                     title: 'Basics Help Page',
                     html:  '<font color="white">Basics Help Page</font>'
                 });
-	},		
+	},
+    
 	goToFed: function(){
         this.redirectTo('feedback');
 	},		

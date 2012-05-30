@@ -1,0 +1,43 @@
+[{
+        text: 'Case 2',
+        artifactType: 'Case',
+        items: [{
+                text: 'Compaq',
+                artifactType: 'System',
+                items: [{
+                        text:'HP Flash Drive',
+                        artifactType: 'Storage',
+                        leaf: true
+                    }
+                ]
+            }, {
+                text:'Kingston Flash Drive',
+                artifactType: 'Storage',
+                leaf: true
+            }, {
+                text:'House Image',
+                artifactType: 'Photo',
+                leaf: true
+            }, {
+                text:'Testimony Doc',
+                artifactType: 'Document',
+                leaf: true
+            }, {text:'CD',
+                artifactType: 'Media',
+                leaf: true
+            }, {
+                text:'iPhone',
+                artifactType: 'Mobile',
+                leaf: true
+            }
+        ],
+    }, {
+        text: 'TA07QR11TA0040',
+        artifactType: 'Case',
+        leaf: true
+    }, {
+        text:'Case 77',
+        artifactType: 'Case',
+        leaf: true
+    }
+]

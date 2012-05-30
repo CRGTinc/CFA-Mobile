@@ -12,7 +12,8 @@ Ext.define('cfa.profile.Tablet', {
 		'cfa.controller.reference.ReferenceController',
 		'cfa.controller.report.ReportController',
 		'cfa.controller.setting.SettingController',
-		'cfa.controller.feedback.FeedbackController'
+		'cfa.controller.feedback.FeedbackController',
+		'cfa.controller.about.AboutController'        
 		],
         views: ['Main']
     },

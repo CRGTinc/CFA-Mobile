@@ -2,13 +2,14 @@ Ext.application({
     name: 'cfa',
 
 	profiles: ['Tablet', 'Phone'],
+    
     stores: ['Dashboards', 'Events', 'Cases','Contacts'],
 	
     requires: [
         'Ext.MessageBox'
     ],
     
-	
+    version: new Ext.Version('0.1.0'),
 
     icon: {
         '57': 'resources/icons/Icon.png',
@@ -31,9 +32,6 @@ Ext.application({
     launch: function() {
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
-
-        // Initialize the main view
-        //Ext.Viewport.add(Ext.create('cfa.view.Main'));
     },
 
     onUpdated: function() {

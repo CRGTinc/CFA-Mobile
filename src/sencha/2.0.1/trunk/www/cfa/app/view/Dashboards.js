@@ -3,6 +3,8 @@ Ext.define('cfa.view.Dashboards', {
     xtype: 'dashboards',
 	
 	config: {
+        title: 'CFA Mobile App',
+
 		refs: {
             main: 'main'
         },

@@ -8,46 +8,49 @@ Ext.define('cfa.view.Main', {
     ],
 
     config: {
-		items: [{
-                xtype: 'dashboards',
-                title: 'Dashboards',
-                store: 'Dashboards'
-            }
-        ],
-        
         fullscreen: true,
         
         navigationBar: {
-            backButton: {
-                iconCls: 'back'
-            },
-            
 			items: [{
 					xtype: 'button',
 					text: 'Home',
+                    iconCls: 'home',
+                    iconMask: true,
 					ui: 'action',
 					id: 'home-btn',
 					align:'right'
                 }, {
 					xtype: 'button',
-					text: 'Basics Help',
+					text: 'Help',
+                    iconCls: 'bookmarks',
+                    iconMask: true,
 					ui: 'action',
 					id: 'basic-btn',
 					align:'right'
 				}, {
 					xtype: 'button',
 					text: 'Feedback',
+                    iconCls: 'compose',
+                    iconMask: true,
 					ui: 'action',
 					id: 'fed-btn',
 					align:'right'
 				}, {
 					xtype: 'button',
 					text: 'About',
+                    iconCls: 'info',
+                    iconMask: true,
 					ui: 'action',
 					id: 'about-btn',
 					align:'right'
 				}
             ]			
-        }
+        },
+        
+        items: [{
+                xtype: 'dashboards',
+                store: 'Dashboards'
+            }
+        ],
     }
 });

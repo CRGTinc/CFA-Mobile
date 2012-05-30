@@ -3,16 +3,37 @@ Ext.define("cfa.view.case.CaseView", {
 	xtype: 'case',
 	
     config: {
-		layout: 'hbox',        
+        title: 'Case Data Management',
+		layout: 'hbox',
 		items:[{
-                xtype: 'panel',
-				layout: 'fit',
+                xtype: 'tabpanel',
+                tabBarPosition: 'bottom',
 				flex: 1,
                 items: [{
                         xtype: 'nestedlist',
                         title: 'Cases',
-                        id: 'caseslist',                        
-                        store: 'Cases'
+                        iconCls: 'star',
+                        id: 'caseslist',
+                        store: 'Cases',
+                        toolbar: {
+                            items: [{
+                                    xtype: 'button',
+                                    iconCls: 'add',
+                                    iconMask: true,
+                                    align:'right'
+                                }
+                            ]
+                        }
+                    }, {
+                        title: 'Devices',
+                        xtype: 'panel',
+                        iconCls: 'settings',
+                        html: 'Devices Panel'
+                    }, {
+                        title: 'Search',
+                        xtype: 'panel',
+                        iconCls: 'search',
+                        html: 'Search Panel'
                     }
                 ]
             }, {

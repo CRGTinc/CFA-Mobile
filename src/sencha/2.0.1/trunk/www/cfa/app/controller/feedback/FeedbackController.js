@@ -1,5 +1,6 @@
 Ext.define('cfa.controller.feedback.FeedbackController',{
 	extend: 'Ext.app.Controller',
+    
 	requires: ['cfa.view.feedback.FeedbackView'],
 	
 	config: {
@@ -9,7 +10,8 @@ Ext.define('cfa.controller.feedback.FeedbackController',{
 
         refs: {
             main: 'main',
-            sendFeedbackButton: '#sendfeedbackbtn'
+            sendFeedbackButton: '#sendfeedbackbtn',
+            feedbackTextArea: '#feedbacktext'
         },
         
         control: {
@@ -19,15 +21,27 @@ Ext.define('cfa.controller.feedback.FeedbackController',{
         }
     },
 	
-	showFeedbackPage: function(){
-		var feedbackView = Ext.create('cfa.view.feedback.FeedbackView');
-        this.getMain().push(feedbackView);
+	showFeedbackPage: function() {
+        if (!this.feedbackView) {
+            this.feedbackView = Ext.create('cfa.view.feedback.FeedbackView');
+            Ext.Viewport.add(this.feedbackView);
+        }
+        
+        this.feedbackView.show();
 	},
     
     sendFeedback: function() {
-        Ext.Msg.alert('Feedback', 'Thank you for your feedback.', Ext.emptyFn);
+        if (this.getFeedbackTextArea().getValue() == '') {
+            Ext.Msg.alert('Feedback', 'Please enter your feedback before sending.', Ext.emptyFn);            
+        } else {
+            Ext.Msg.alert('Feedback', 'Thank you for your feedback.', sentFeedback);
+        }
     },
     
 })
 
+function sentFeedback() {
+    Ext.getCmp('feedbackview').hide();
+    Ext.getCmp('feedbacktext').setValue('');
+}
 

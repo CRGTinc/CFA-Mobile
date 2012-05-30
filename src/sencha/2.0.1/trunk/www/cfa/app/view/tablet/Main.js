@@ -1,7 +1,3 @@
 Ext.define('cfa.view.tablet.Main', {
-    extend: 'cfa.view.Main',
-
-    config: {
-        useTitleForBackButtonText: true
-    }
+    extend: 'cfa.view.Main'
 });

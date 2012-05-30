@@ -26,6 +26,19 @@ Ext.define('cfa.view.setting.SettingView', {
                             }
                         ]
                     }, {
+                        xtype: 'fieldset',
+                        title: 'About',
+                        defaults: {
+                            labelWidth: '20%'
+                        },
+                        items: [{
+                                xtype: 'textfield',
+                                label: 'Version',
+                                value: cfa.app.version,
+                                readOnly: true
+                            }
+                        ]
+                    }, {
                         xtype: 'panel',
                         items: [{
                                 xtype: 'button',
