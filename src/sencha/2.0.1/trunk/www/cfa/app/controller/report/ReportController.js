@@ -4,7 +4,7 @@ Ext.define('cfa.controller.report.ReportController',{
 	
 	config: {
         routes: {
-            'report': 'showReferencePage'
+            'report': 'showReportPage'
         },
 
         refs: {
@@ -12,9 +12,8 @@ Ext.define('cfa.controller.report.ReportController',{
         }
     },
 	
-	showReferencePage: function(){
-		console.log("Go to report page");
-		var caseView = Ext.create('cfa.view.report.ReportView');
-		this.getMain().push(caseView);        						
+	showReportPage: function(){
+		var reportView = Ext.create('cfa.view.report.ReportView');
+		this.getMain().push(reportView);        						
 	}		
 })

@@ -1,5 +1,6 @@
 Ext.define('cfa.controller.reference.ReferenceController',{
 	extend: 'Ext.app.Controller',
+    
 	requires: ['cfa.view.reference.ReferenceView'],
 	
 	config: {
@@ -22,12 +23,11 @@ Ext.define('cfa.controller.reference.ReferenceController',{
     },
 	
 	openReferenceResource: function(list, record) {
-        console.log(window.plugins);
         window.plugins.childBrowser.showWebPage(record.getData().url);
 	},
 	
 	showReferencePage: function(){
-		var caseView = Ext.create('cfa.view.reference.ReferenceView');
-		this.getMain().push(caseView);        						
+		var referenceView = Ext.create('cfa.view.reference.ReferenceView');
+		this.getMain().push(referenceView);        						
 	}		
 })

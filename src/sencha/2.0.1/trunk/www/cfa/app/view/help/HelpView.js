@@ -1,14 +1,13 @@
-Ext.define('cfa.view.report.ReportView', {
+Ext.define('cfa.view.help.HelpView', {
     extend: 'Ext.Panel',
-    xtype: 'report',
-
+	
     config: {
         modal: true,
         centered: true,
         hideOnMaskTap: true,
         height: 200,
         width: 600,
-        title: 'Report',
+        title: 'Help',
         layout: 'fit',
 		items:[{
                 centered: true,
@@ -19,4 +18,3 @@ Ext.define('cfa.view.report.ReportView', {
         ]
     }
 });
-

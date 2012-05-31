@@ -1,5 +1,7 @@
 Ext.define("cfa.store.References",{
 	extend : "Ext.data.Store",
+    
+    requires: ['cfa.model.Reference', 'cfa.reader.Csv'],
 	
 	config : {
 		model : "cfa.model.Reference",		

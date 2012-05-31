@@ -41,6 +41,10 @@
             "update": "delta"
         },
         {
+			"path": "lib/cordova-1.7.0.js",		
+            "update": "delta"			
+        },
+        {
 			"path": "lib/ChildBrowser.js",		
             "update": "delta"			
         },

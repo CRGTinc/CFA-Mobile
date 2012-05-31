@@ -29,10 +29,7 @@ Ext.define('cfa.controller.Master', {
 	},
     
 	goToBasic: function(){
-	  this.getMain().push({
-                    title: 'Basics Help Page',
-                    html:  '<font color="white">Basics Help Page</font>'
-                });
+        this.redirectTo('help');
 	},
     
 	goToFed: function(){
