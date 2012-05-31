@@ -2,6 +2,7 @@ Ext.define('cfa.view.setting.SettingView', {
     extend: 'Ext.Panel',
 	xtype: 'setting',
 	
+	
     config: {
         title: 'Settings',
         layout: 'fit',
@@ -42,7 +43,7 @@ Ext.define('cfa.view.setting.SettingView', {
                         xtype: 'panel',
                         items: [{
                                 xtype: 'button',
-                                id: 'resetdatabtn',
+                                action : 'resetdatabtn',
                                 width: 200,
                                 text: 'Reset Data'
                             }

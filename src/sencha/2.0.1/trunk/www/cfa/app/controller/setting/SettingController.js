@@ -9,7 +9,7 @@ Ext.define('cfa.controller.setting.SettingController',{
 
         refs: {
             main: 'main',
-            resetDataButton: '#resetdatabtn'
+            resetDataButton: 'button[action=resetdatabtn]'
         },
         
         control: {
@@ -20,6 +20,7 @@ Ext.define('cfa.controller.setting.SettingController',{
     },
 	
 	showSettingPage: function(){
+		console.log('Show setting page');
 		var caseView = Ext.create('cfa.view.setting.SettingView');
 		this.getMain().push(caseView);        						
 	},
