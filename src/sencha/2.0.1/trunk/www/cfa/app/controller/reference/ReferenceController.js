@@ -23,7 +23,11 @@ Ext.define('cfa.controller.reference.ReferenceController',{
     },
 	
 	openReferenceResource: function(list, record) {
-        window.plugins.childBrowser.showWebPage(record.getData().url);
+        if (Ext.os.is.Desktop) {
+            window.open(record.getData().url);
+        } else {
+            window.plugins.childBrowser.showWebPage(record.getData().url);
+        }
 	},
 	
 	showReferencePage: function(){
