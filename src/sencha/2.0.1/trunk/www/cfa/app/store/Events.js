@@ -18,7 +18,7 @@ Ext.define("cfa.store.Events",{
 				return Ext.util.Format.date(record.get('date'), 'Y-M-d');
 			},
 			sortProperty: 'date',
-    		direction: 'DESC'
+    		direction: 'ASC'
 		},
 	}	
 })
