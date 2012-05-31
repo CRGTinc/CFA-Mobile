@@ -11,35 +11,35 @@ Ext.define('cfa.view.contact.ContactDetail',{
 			xtype: 'textfield',
 			name: 'firstname',
 			label: 'Name',
-			disabled: true
+			readOnly: true
 		};
 		
 		var contactEmail = {
 			xtype: 'urlfield',
 			name: 'email',
 			label: 'Email',
-			disabled: true
+			readOnly: true
 		}
 		
 		var contactOfficePhone = {
 			xtype: 'textfield',
 			name: 'office_phone',
 			label: 'Office Phone',
-			disabled: true
+			readOnly: true
 		}
 		
 		var contactMobilePhone = {
 			xtype: 'textfield',
 			name: 'mobile_phone',
 			label: 'Mobile Phone',
-			disabled: true
+			readOnly: true
 		}
 		
 		var contactDepartement = {
 			xtype: 'textfield',
 			name: 'departement',
 			label: 'Departement',
-			disabled: true
+			readOnly: true
 		}
 		
 		

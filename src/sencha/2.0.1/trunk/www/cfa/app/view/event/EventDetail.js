@@ -11,35 +11,35 @@ Ext.define('cfa.view.event.EventDetail',{
 			xtype: 'textfield',
 			name: 'event_name',
 			label: 'Title',
-			disabled: true
+			readOnly: true
 		};
 		
 		var eventDate = {
 			xtype: 'datepickerfield',
 			name: 'date',
 			label: 'Date',
-			disabled: true
+			readOnly: true
 		}
 		
 		var eventTime = {
 			xtype: 'textfield',
 			name: 'time',
 			label: 'Time',
-			disabled: true
+			readOnly: true
 		}
 		
 		var eventLocation = {
 			xtype: 'textfield',
 			name: 'location',
 			label: 'Location',
-			disabled: true
+			readOnly: true
 		}
 		
 		var eventDescription = {
 			xtype: 'textfield',
 			name: 'event_description',
 			label: 'Description',
-			disabled: true
+			readOnly: true
 		}
 		
 		this.add(
