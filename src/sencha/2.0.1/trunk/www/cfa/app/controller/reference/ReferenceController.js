@@ -21,14 +21,12 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		
     },
 	
-	openReferenceResource: function(list,record){	
-		var v = this.getReferenceDetail();
-		v.setUrl(record.getData().url);		
-		v.getHTMLContentByUrl(v);
+	openReferenceResource: function(list, record) {
+        console.log(window.plugins);
+        window.plugins.childBrowser.showWebPage(record.getData().url);
 	},
 	
 	showReferencePage: function(){
-		console.log("Go to references page");
 		var caseView = Ext.create('cfa.view.reference.ReferenceView');
 		this.getMain().push(caseView);        						
 	}		

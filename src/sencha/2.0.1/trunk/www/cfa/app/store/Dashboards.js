@@ -22,7 +22,7 @@ Ext.define('cfa.store.Dashboards', {
 					 "urlId":"event"         
 				  },
 				  {
-					 "label":"References",
+					 "label":"Reference",
 					 "urlId":"reference"         
 				  },
 				   {

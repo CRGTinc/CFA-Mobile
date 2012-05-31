@@ -8,14 +8,12 @@ Ext.define("cfa.view.reference.ReferenceView", {
 		layout: 'hbox',
 	},
 	
-	
-	
 	initialize: function() {
 		this.callParent(arguments);
 		
 		var topTitle = {
 			xtype:'toolbar',
-			title:"References",
+			title:"Reference",
 			docked:'top',
 			
 		};
@@ -48,8 +46,7 @@ Ext.define("cfa.view.reference.ReferenceView", {
 		this.add([leftPanel,referenceDetail])		
 	},
 		
-	onItemSelected: function(list,record,opt){
-		console.log("open website");
+	onItemSelected: function(list,record,opt) {
 		this.fireEvent('openReferenceSourceCommand',this,record);
 	},
 	
