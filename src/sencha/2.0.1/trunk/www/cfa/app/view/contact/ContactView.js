@@ -1,12 +1,14 @@
 Ext.define("cfa.view.contact.ContactView", {
     extend: 'Ext.Container',
-	alias: 'widget.contact_view_container',
-	
+    mixins: ['Deft.mixin.Injectable' ],
+    inject: [ 'contactStore' ],
+	alias: 'widget.contact_view_container',	
 	requires:['cfa.view.contact.ContactsList','cfa.model.Contact', 'cfa.view.contact.ContactDetail','cfa.reader.Csv'],	
 	
 	config: {
 		title:'Contacts',
 		layout: 'hbox',
+		contactStore: null
 	},
 	
 	
@@ -32,7 +34,7 @@ Ext.define("cfa.view.contact.ContactView", {
 		var eventsList = {
 			xtype: 'contact_list',
 			//flex: 1,
-			store: Ext.getStore("Contacts").load(),
+			store: this.getContactStore().load(),
 			listeners:{
 				select : {fn:this.onItemSelected, scope:this}
         	}

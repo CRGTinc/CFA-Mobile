@@ -1,28 +1,14 @@
-Ext.define("cfa.app.helper.PhoneGapHelper",
+Ext.define("cfa.helper.PhoneGapHelper",{	
+	singleton: true,
+	alias:'cfa.helper.PhoneGapHelper',
 	config:{
-		
-	}
+	},	
 	/*Begin Device wrapper*/
 	isOnLine : function(){
 		 return navigator.onLine;
-	}
+	},
 	/*End Device wrapper*/
-	/*Begin Nofification wrapper*/
-	showAlert : function(message, alertCallback, [title], [buttonName]){
-		return navigator.nofification.alert(message, alertCallback, [title], [buttonName]);
-	}
-	showConfirm : function(message, confirmCallback, [title], [buttonLabels]){
-		return navigator.notification.confirm(message, confirmCallback, [title], [buttonLabels])
-	}
-	doBeep : function(times){
-		navigator.notification.beep(times);
-	}
-	doVibrate : function(milliseconds){
-		navigator.notification.vibrate(milliseconds)
-	}		
-	/*End Nofification wrapper*/
-	/*Begin Connection wrapper*/
-	function checkConnection() {
+	checkConnection : function() {
         var networkState = navigator.network.connection.type;
 
         var states = {};
@@ -38,4 +24,4 @@ Ext.define("cfa.app.helper.PhoneGapHelper",
 		return states[networkState];
     }
 	/*End Connection wrapper*/
-)
+});

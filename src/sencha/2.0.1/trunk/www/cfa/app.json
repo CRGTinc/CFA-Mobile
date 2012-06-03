@@ -42,16 +42,13 @@
         },
         {
 			"path": "lib/cordova-1.7.0.js",		
-            "update": "delta"			
+            "update": "delta",
+            			
         },
         {
 			"path": "lib/ChildBrowser.js",		
             "update": "delta"			
-        },
-		{
-			"path": "lib/deft.js",			
-            "update": "delta"
-		},
+        }
     ],
 
     /**
@@ -82,8 +79,7 @@
          * List of items in the CACHE MANIFEST section
          */
         "cache": [
-            "index.html",
-			"contact.html",			
+            "index.html",				
 			"resources/icons/case.png",
 			"resources/icons/contact.png",
 			"resources/icons/event.png",
@@ -109,8 +105,7 @@
 			"resources/startup/748x1024.png",
 			"resources/startup/768x1004.png",
 			"resources/startup/1496x2048.png",
-			"resources/startup/1536x2008.png",
-			"data/Contacts.csv",
+			"resources/startup/1536x2008.png",			
 			"data/References.csv",
 			"data/Events.csv",
 			"data/Cases.json"
@@ -134,8 +129,7 @@
     "resources": [
         "resources/images",
         "resources/icons",
-        "resources/startup",
-		"contact.html",
+        "resources/startup",		
 		"data/Events.json",
 		"data/Contacts.json",
 		"data/Contacts.csv",
