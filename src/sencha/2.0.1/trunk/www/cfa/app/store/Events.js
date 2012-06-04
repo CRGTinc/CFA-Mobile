@@ -1,17 +1,15 @@
-Ext.define("cfa.store.Events",{
-	extend : "Ext.data.Store",
-	
+Ext.define('cfa.store.Events',{
+	extend : 'cfa.store.Base',
+	storeId: 'Events',
+			
 	config : {
 		model : "cfa.model.Event",		
 		proxy : {
-			type: "ajax",
+			type: 'ajax',
 			url : "/data/Events.csv",
 			reader : {
 				type:"csv"
-			},
-			enablePagingParams : false,
-			noCache: false
-								
+			},	
 		},
 		grouper: {			
 			groupFn: function(record) {

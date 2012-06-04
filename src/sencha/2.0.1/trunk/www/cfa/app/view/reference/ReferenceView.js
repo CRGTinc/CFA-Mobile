@@ -1,11 +1,14 @@
 Ext.define("cfa.view.reference.ReferenceView", {
     extend: 'Ext.Panel',
+	mixins: ['Deft.mixin.Injectable' ],
+    inject: [ 'referenceStore' ],
 	alias: 'widget.reference_view_container',
 	
 	requires:['cfa.view.reference.ReferencesList','cfa.model.Reference', 'cfa.view.reference.ReferenceDetail','cfa.reader.Csv'],	
 	
 	config: {
 		layout: 'fit',
+		referenceStore: null
 	},
 	
 	initialize: function() {
@@ -13,7 +16,7 @@ Ext.define("cfa.view.reference.ReferenceView", {
 		
 		var referencesList = {
 			xtype: 'references_list',
-			store: Ext.getStore("References").load(),
+			store: this.getReferenceStore().load(),
 			listeners:{
 				select : {fn:this.onItemSelected, scope:this}
         	}

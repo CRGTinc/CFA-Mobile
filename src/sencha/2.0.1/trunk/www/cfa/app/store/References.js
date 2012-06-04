@@ -1,7 +1,6 @@
 Ext.define("cfa.store.References",{
-	extend : "Ext.data.Store",
-    
-    requires: ['cfa.model.Reference', 'cfa.reader.Csv'],
+	extend : "cfa.store.Base",
+	storeId: 'References',
 	
 	config : {
 		model : "cfa.model.Reference",		
@@ -11,8 +10,6 @@ Ext.define("cfa.store.References",{
 			reader : {
 				type:"csv"
 			},
-			enablePagingParams : false,
-			noCache: false
 		},
 		sorters: 'title',
 		grouper: {			

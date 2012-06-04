@@ -11,8 +11,6 @@ Ext.define("cfa.view.contact.ContactView", {
 		contactStore: null
 	},
 	
-	
-	
 	initialize: function() {
 		this.callParent(arguments);
 		
@@ -33,7 +31,6 @@ Ext.define("cfa.view.contact.ContactView", {
 		
 		var eventsList = {
 			xtype: 'contact_list',
-			//flex: 1,
 			store: this.getContactStore().load(),
 			listeners:{
 				select : {fn:this.onItemSelected, scope:this}
@@ -56,7 +53,8 @@ Ext.define("cfa.view.contact.ContactView", {
 			flex: 2
 		}
 		
-		this.add([leftPanel,eventDetail])		
+		this.add([leftPanel,eventDetail]);
+				
 	},
 		
 	onItemSelected: function(list,record,opt){
@@ -64,7 +62,8 @@ Ext.define("cfa.view.contact.ContactView", {
 	},
 	
 	reloadContactClick: function(){
-		this.fireEvent('reloadContactCommand',this);		
+		this.fireEvent('reloadContactCommand',this);
+		//this.getContactStore().load();		
 	}, 
 	
 });

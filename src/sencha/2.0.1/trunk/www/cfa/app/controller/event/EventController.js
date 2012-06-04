@@ -24,25 +24,21 @@ Ext.define('cfa.controller.event.EventController',{
     },
 	
 	showEventPage: function(){
-		console.log("Go to events page");
 		var caseView = Ext.create('cfa.view.event.EventView');
 		this.getMain().push(caseView);        						
 	},
 	
 	displayEventDetail: function(list,record){
-		console.log("Display event detail");
 		var eventViewer = this.getEventDetailViewer();
 		eventViewer.setRecord(record);		
 	},
 	
-	reloadData: function(){
-		console.log("reset data");
-		Ext.getStore("Events").load();					
+	reloadData: function(obj){
+		obj.getEventStore().load();				
 	},
 	
-	groupByMonth: function(){
-		console.log("Month group");
-		var store  = Ext.getStore("Events");
+	groupByMonth: function(obj){
+		var store  = obj.getEventStore().load();
 		var grouper = {
 			groupFn: function(record) {
 				return Ext.util.Format.date(record.get('date'), 'Y-M-d');
@@ -54,9 +50,8 @@ Ext.define('cfa.controller.event.EventController',{
 		Ext.getStore("Events").load();		
 	},
 	
-	groupByOffice: function(){
-		console.log("Location group");
-		var store  = Ext.getStore("Events");
+	groupByOffice: function(obj){
+		var store  = obj.getEventStore().load();
 		var grouper = {
 			groupFn: function(record) {
 				return record.get('location');
@@ -66,6 +61,5 @@ Ext.define('cfa.controller.event.EventController',{
 		};
 		store.setGrouper(grouper);		
 		Ext.getStore("Events").load();
-	}
-			
+	},
 })

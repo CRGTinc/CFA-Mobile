@@ -1,10 +1,12 @@
 Ext.define("cfa.store.EventsLocal",{
-	extend: "Ext.data.Store",
+	extend: "cfa.store.Events",
+	storeId: 'EventsLocal',
+	
 	config:{
 		model: "cfa.model.Event",		
 		proxy:{
 			type: "localstorage",
-			id: "events"
+			id: "event"
 		},
 	}	
 })

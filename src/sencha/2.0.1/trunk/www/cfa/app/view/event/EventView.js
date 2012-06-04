@@ -1,12 +1,14 @@
 Ext.define("cfa.view.event.EventView", {
     extend: 'Ext.Container',
-	alias: 'widget.event_view_container',
-	
+	mixins: ['Deft.mixin.Injectable' ],
+    inject: [ 'eventStore' ],
+	alias: 'widget.event_view_container',	
 	requires:['cfa.view.event.EventsList','cfa.model.Event', 'cfa.view.event.EventDetail','cfa.reader.Csv'],	
 	
 	config: {
 		title:'Events',
 		layout: 'hbox',
+		eventStore: null,
 	},
 	
 	
@@ -35,8 +37,7 @@ Ext.define("cfa.view.event.EventView", {
 		
 		var eventsList = {
 			xtype: 'events_list',
-			//flex: 1,
-			store: Ext.getStore("Events").load(),
+			store: this.getEventStore().load(),
 			listeners:{
 				select : {fn:this.onItemSelected, scope:this}
         	}
@@ -75,7 +76,6 @@ Ext.define("cfa.view.event.EventView", {
 	
 	officeGroupClick: function(){
 		this.fireEvent('groupByOfficeCommand',this);
-	}
-	 
+	},	 
 	
 });

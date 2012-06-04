@@ -4,9 +4,6 @@ Ext.define('cfa.view.contact.ContactDetail',{
 	requires:['Ext.form.FieldSet'],
 
 	initialize: function(){
-		console.log("init detail");
-		console.log(this.getRecord());
-
 		var contactName = {
 			xtype: 'textfield',
 			name: 'firstname',

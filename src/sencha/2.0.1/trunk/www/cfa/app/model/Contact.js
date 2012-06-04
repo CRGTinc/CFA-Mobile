@@ -1,6 +1,6 @@
 Ext.define('cfa.model.Contact',{
 	extend: 'Ext.data.Model',
-	config:{		
+	config:{	
 		fields:[
 			{name:'id', type:'int'},
 			{name: 'firstname', type: 'string'},

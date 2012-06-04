@@ -4,9 +4,6 @@ Ext.define('cfa.view.event.EventDetail',{
 	requires:['Ext.form.FieldSet'],
 
 	initialize: function(){
-		console.log("init detail");
-		console.log(this.getRecord());
-
 		var eventTitle = {
 			xtype: 'textfield',
 			name: 'event_name',

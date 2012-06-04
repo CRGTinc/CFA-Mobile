@@ -9,7 +9,7 @@ Ext.application({
 		'Ext.MessageBox'			
 	],
 	profiles : ['Tablet', 'Phone'],
-	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts'],
+	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal'],
 
 	icon : {
 		'57' : 'resources/icons/Icon.png',
@@ -31,20 +31,48 @@ Ext.application({
 	
 	launch : function() {		
 		Deft.Injector.configure({
-    	contactStore: {
-	        fn: function() {
-	            if (cfa.helper.PhoneGapHelper.isOnLine()) {
-	                var store =  Ext.create('cfa.store.Contacts');	                
-	                store.setOfflineStore(Ext.create('cfa.store.LSContacts'));
-	                return store;	
-	            }	
-	            else {
-	                return Ext.create('cfa.store.LSContacts' );
-	            }
-	        },
-	        eager: true
-    	}    	
-    });
+			contactStore: {
+				fn: function() {
+					if (cfa.helper.PhoneGapHelper.isOnLine()) {
+						var store =  Ext.create('cfa.store.Contacts');	                
+						store.setOfflineStore(Ext.create('cfa.store.LSContacts'));
+						return store;	
+					}	
+					else {
+						return Ext.create('cfa.store.LSContacts' );
+					}
+				},
+				
+			},
+			
+			eventStore: {
+				fn: function() {
+					if (cfa.helper.PhoneGapHelper.isOnLine()) {					
+						var store =  Ext.create('cfa.store.Events');	                
+						store.setOfflineStore(Ext.create('cfa.store.EventsLocal'));
+						return store;	
+					}	
+					else {					
+						return Ext.create('cfa.store.EventsLocal' );
+					}
+				},
+					
+			},
+			
+			referenceStore:{
+				fn: function() {
+					if (cfa.helper.PhoneGapHelper.isOnLine()) {					
+						var store =  Ext.create('cfa.store.References');	                
+						store.setOfflineStore(Ext.create('cfa.store.ReferencesLocal'));
+						return store;	
+					}	
+					else {					
+						return Ext.create('cfa.store.ReferencesLocal' );
+					}
+				},
+			}
+		   	
+    	});
 	    //Destroy the #appLoadingIndicator element		
     	Ext.fly('appLoadingIndicator').destroy();
 	},

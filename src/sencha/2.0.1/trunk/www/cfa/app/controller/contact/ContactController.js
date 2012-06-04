@@ -17,28 +17,22 @@ Ext.define('cfa.controller.contact.ContactController',{
 			contactContainer:{
 				contactDetailCommand : 'displayContactDetail',
 				reloadContactCommand : 'reloadContact',
-				groupBySACCommand : 'groupContactBySAC',
-				groupByRACCommand : 'groupContactByRAC'
-			}
-			
+			}			
 		}
     },
 	
-	displayContactDetail: function(list,record){
-		
+	displayContactDetail: function(list,record){		
 		var contactDetail = this.getContactDetailView();
 		contactDetail.setRecord(record);
 	},
 	
-	reloadContact: function(){
-		Ext.getStore("Contacts").load();			
+	reloadContact: function(obj){
+		obj.getContactStore().load();			
 	},
 	
 	showContactPage: function(){
-		console.log("Go to contacts page");
 		var contactView = Ext.create('cfa.view.contact.ContactView');
 		this.getMain().push(contactView);        						
-	}
-	
-			
+	},
+
 })
