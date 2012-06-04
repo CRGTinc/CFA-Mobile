@@ -1,7 +1,6 @@
 Ext.define("cfa.store.Contacts", {
 	extend : 'cfa.store.Base',
 	storeId : 'Contacts',
-	
 	config : {
 		model : "cfa.model.Contact",
 		proxy : {

@@ -106,10 +106,6 @@
 			"resources/startup/768x1004.png",
 			"resources/startup/1496x2048.png",
 			"resources/startup/1536x2008.png",			
-			"data/References.csv",
-			"data/Events.csv",
-			"data/Cases.json"
-			
         ],
         /**
          * List of items in the NETWORK section
