@@ -6,7 +6,7 @@ Ext.define("cfa.store.References",{
 		model : "cfa.model.Reference",		
 		proxy : {
 			type: "ajax",
-			url : "/data/References.csv",	
+			url : "data/References.csv",	
 			reader : {
 				type:"csv"
 			},

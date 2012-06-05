@@ -6,7 +6,7 @@ Ext.define('cfa.store.Events',{
 		model : "cfa.model.Event",		
 		proxy : {
 			type: 'ajax',
-			url : "/data/Events.csv",
+			url : "data/Events.csv",
 			reader : {
 				type:"csv"
 			},	

@@ -10,9 +10,7 @@ Ext.define('cfa.store.Cases', {
         
    		proxy : {
 			type: "ajax",
-			url : "/data/Cases.json",
-			enablePagingParams : false,
-			noCache: false						
+			url : "data/Cases.json",					
 		}
     }		
 });

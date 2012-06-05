@@ -5,7 +5,7 @@ Ext.define("cfa.store.Contacts", {
 		model : "cfa.model.Contact",
 		proxy : {
 			type : "ajax",
-			url : "/data/Contacts.csv",
+			url : "data/Contacts.csv",
 			reader : {
 				type : "csv"
 			},
