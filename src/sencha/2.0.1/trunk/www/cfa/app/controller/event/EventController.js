@@ -41,7 +41,7 @@ Ext.define('cfa.controller.event.EventController',{
 		var store  = obj.getEventStore().load();
 		var grouper = {
 			groupFn: function(record) {
-				return Ext.util.Format.date(record.get('date'), 'd M Y');
+				return Ext.util.Format.date(record.get('date'), 'm/d/Y');
 			},
 			sortProperty: 'date',
     		direction: 'ASC'
