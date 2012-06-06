@@ -39,6 +39,10 @@
 		97A2FC7F1566374000A0DEFE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC7E1566374000A0DEFE /* MainViewController.xib */; };
 		97A2FC831566374000A0DEFE /* verify.sh in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC821566374000A0DEFE /* verify.sh */; };
 		97A2FC8E1566386400A0DEFE /* www in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC8D1566386400A0DEFE /* www */; };
+		AD75C8B1157F4B5D0016CC1D /* PGSQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = AD75C8B0157F4B5D0016CC1D /* PGSQLitePlugin.m */; };
+		AD75C8BA157F4B640016CC1D /* EmailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD75C8B6157F4B640016CC1D /* EmailComposer.m */; };
+		AD75C8BE157F4BEF0016CC1D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD75C8BD157F4BEF0016CC1D /* MessageUI.framework */; };
+		AD75C8C0157F4BF60016CC1D /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AD75C8BF157F4BF60016CC1D /* libsqlite3.dylib */; };
 		ADB98FA61576231000CB49AB /* ChildBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADB98F971576231000CB49AB /* ChildBrowser.bundle */; };
 		ADB98FA81576231000CB49AB /* ChildBrowserCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F9A1576231000CB49AB /* ChildBrowserCommand.m */; };
 		ADB98FA91576231000CB49AB /* ChildBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F9C1576231000CB49AB /* ChildBrowserViewController.m */; };
@@ -84,6 +88,12 @@
 		97A2FC811566374000A0DEFE /* README */ = {isa = PBXFileReference; lastKnownFileType = text; name = README; path = Plugins/README; sourceTree = "<group>"; };
 		97A2FC821566374000A0DEFE /* verify.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = verify.sh; sourceTree = "<group>"; };
 		97A2FC8D1566386400A0DEFE /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		AD75C8AF157F4B5D0016CC1D /* PGSQLitePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSQLitePlugin.h; sourceTree = "<group>"; };
+		AD75C8B0157F4B5D0016CC1D /* PGSQLitePlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSQLitePlugin.m; sourceTree = "<group>"; };
+		AD75C8B4157F4B640016CC1D /* EmailComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailComposer.h; sourceTree = "<group>"; };
+		AD75C8B6157F4B640016CC1D /* EmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailComposer.m; sourceTree = "<group>"; };
+		AD75C8BD157F4BEF0016CC1D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		AD75C8BF157F4BF60016CC1D /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		ADB98F971576231000CB49AB /* ChildBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ChildBrowser.bundle; sourceTree = "<group>"; };
 		ADB98F991576231000CB49AB /* ChildBrowserCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildBrowserCommand.h; sourceTree = "<group>"; };
 		ADB98F9A1576231000CB49AB /* ChildBrowserCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildBrowserCommand.m; sourceTree = "<group>"; };
@@ -97,6 +107,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD75C8C0157F4BF60016CC1D /* libsqlite3.dylib in Frameworks */,
+				AD75C8BE157F4BEF0016CC1D /* MessageUI.framework in Frameworks */,
 				97A2FC321566373F00A0DEFE /* Foundation.framework in Frameworks */,
 				97A2FC341566373F00A0DEFE /* UIKit.framework in Frameworks */,
 				97A2FC361566373F00A0DEFE /* CoreGraphics.framework in Frameworks */,
@@ -111,13 +123,6 @@
 				97A2FC481566373F00A0DEFE /* MobileCoreServices.framework in Frameworks */,
 				97A2FC4A1566373F00A0DEFE /* CoreMedia.framework in Frameworks */,
 				97A2FC551566373F00A0DEFE /* Cordova.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		97A2FC2A1566373F00A0DEFE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +151,9 @@
 		97A2FC301566373F00A0DEFE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD75C8BF157F4BF60016CC1D /* libsqlite3.dylib */,
+				AD75C8BD157F4BEF0016CC1D /* MessageUI.framework */,
+				97A2FC541566373F00A0DEFE /* Cordova.framework */,
 				97A2FC311566373F00A0DEFE /* Foundation.framework */,
 				97A2FC331566373F00A0DEFE /* UIKit.framework */,
 				97A2FC351566373F00A0DEFE /* CoreGraphics.framework */,
@@ -166,7 +174,6 @@
 		97A2FC4B1566373F00A0DEFE /* cfa */ = {
 			isa = PBXGroup;
 			children = (
-				97A2FC541566373F00A0DEFE /* Cordova.framework */,
 				97A2FC561566373F00A0DEFE /* Resources */,
 				97A2FC771566374000A0DEFE /* Classes */,
 				97A2FC801566374000A0DEFE /* Plugins */,
@@ -273,9 +280,31 @@
 			name = Plugins;
 			sourceTree = "<group>";
 		};
+		AD75C8AE157F4B5D0016CC1D /* PGSQLitePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				AD75C8AF157F4B5D0016CC1D /* PGSQLitePlugin.h */,
+				AD75C8B0157F4B5D0016CC1D /* PGSQLitePlugin.m */,
+			);
+			name = PGSQLitePlugin;
+			path = Plugins/PGSQLitePlugin;
+			sourceTree = "<group>";
+		};
+		AD75C8B3157F4B640016CC1D /* EmailComposer */ = {
+			isa = PBXGroup;
+			children = (
+				AD75C8B4157F4B640016CC1D /* EmailComposer.h */,
+				AD75C8B6157F4B640016CC1D /* EmailComposer.m */,
+			);
+			name = EmailComposer;
+			path = Plugins/EmailComposer;
+			sourceTree = "<group>";
+		};
 		ADB98F95157622F900CB49AB /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				AD75C8B3157F4B640016CC1D /* EmailComposer */,
+				AD75C8AE157F4B5D0016CC1D /* PGSQLitePlugin */,
 				ADB98F961576231000CB49AB /* ChildBrowser */,
 			);
 			name = Plugins;
@@ -305,8 +334,6 @@
 				97A2FC261566373F00A0DEFE /* Sources */,
 				97A2FC271566373F00A0DEFE /* Frameworks */,
 				97A2FC281566373F00A0DEFE /* Resources */,
-				97A2FC291566373F00A0DEFE /* Sources */,
-				97A2FC2A1566373F00A0DEFE /* Frameworks */,
 				97A2FC2B1566373F00A0DEFE /* ShellScript */,
 			);
 			buildRules = (
@@ -385,7 +412,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "\n\t\t\t\t\t\t\t\tchmod 755 \"$PROJECT_DIR/$PROJECT_NAME/verify.sh\"\n\t\t\t\t\t\t\t\t\"$PROJECT_DIR/$PROJECT_NAME/verify.sh\"\n\t\t\t\t\t";
+			shellScript = "chmod 755 \"$PROJECT_DIR/$PROJECT_NAME/verify.sh\"\n\"$PROJECT_DIR/$PROJECT_NAME/verify.sh\"\t\t\t\t\t";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -399,13 +426,8 @@
 				97A2FC7D1566374000A0DEFE /* MainViewController.m in Sources */,
 				ADB98FA81576231000CB49AB /* ChildBrowserCommand.m in Sources */,
 				ADB98FA91576231000CB49AB /* ChildBrowserViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		97A2FC291566373F00A0DEFE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				AD75C8B1157F4B5D0016CC1D /* PGSQLitePlugin.m in Sources */,
+				AD75C8BA157F4B640016CC1D /* EmailComposer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

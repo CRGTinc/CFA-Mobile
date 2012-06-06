@@ -26,6 +26,10 @@
 	</array>
 	<key>Plugins</key>
 	<dict>
+		<key>EmailComposer</key>
+		<string>EmailComposer</string>
+		<key>PGSQLitePlugin</key>
+		<string>PGSQLitePlugin</string>
 		<key>ChildBrowserCommand</key>
 		<string>ChildBrowserCommand</string>
 		<key>Compass</key>
