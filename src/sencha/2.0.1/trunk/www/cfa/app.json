@@ -81,10 +81,10 @@
         "cache": [
             "index.html",				
 			"resources/icons/case.png",
-			"resources/icons/contact.png",
-			"resources/icons/event.png",
+			"resources/icons/contacts.png",
+			"resources/icons/events.png",
 			"resources/icons/reference.png",
-			"resources/icons/report.png",
+			"resources/icons/search.png",
 			"resources/icons/setting.png",
 			"resources/icons/Icon.png",
 			"resources/icons/Icon@2x.png",
