@@ -4,7 +4,7 @@ Ext.define('cfa.controller.report.ReportController',{
 	
 	config: {
         routes: {
-            'report': 'showReportPage'
+            'search': 'showReportPage'
         },
 
         refs: {

@@ -4,7 +4,7 @@ Ext.define('cfa.controller.event.EventController',{
 	
 	config: {
         routes: {
-            'event': 'showEventPage'
+            'events': 'showEventPage'
         },
 
         refs: {

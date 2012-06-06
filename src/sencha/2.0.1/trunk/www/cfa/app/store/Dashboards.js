@@ -15,22 +15,22 @@ Ext.define('cfa.store.Dashboards', {
 				  },
 				  {
 					 "label":"Contacts",
-					 "urlId":"contact"         
+					 "urlId":"contacts"         
 				  },
 				  {
 					 "label":"Events",
-					 "urlId":"event"         
+					 "urlId":"events"         
 				  },
 				  {
 					 "label":"Reference",
 					 "urlId":"reference"         
 				  },
-				   {
-					 "label":"Reports",
-					 "urlId":"report"         
+				  {
+					 "label":"Search",
+					 "urlId":"search"         
 				  },
 				  {
-					 "label":"Settings",
+					 "label":"Setting",
 					 "urlId":"setting"         
 				  }
 			   ]

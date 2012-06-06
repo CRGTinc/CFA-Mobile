@@ -4,7 +4,7 @@ Ext.define('cfa.controller.contact.ContactController',{
 	
 	config: {
         routes: {
-            'contact': 'showContactPage'
+            'contacts': 'showContactPage'
         },
 
         refs: {
