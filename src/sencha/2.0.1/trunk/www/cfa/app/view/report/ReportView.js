@@ -17,6 +17,10 @@ Ext.define('cfa.view.report.ReportView', {
                 ].join('')
             }
         ]
-    }
+    },
+	
+	initialize: function(){
+		cfa.app.helpUrl = "Report";	
+	}
 });
 

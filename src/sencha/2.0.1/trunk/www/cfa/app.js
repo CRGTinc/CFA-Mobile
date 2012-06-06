@@ -5,11 +5,12 @@ Ext.Loader.setPath({
 Ext.require(['Deft.*','cfa.helper.PhoneGapHelper']);
 Ext.application({
 	name : 'cfa',
+	helpUrl: 'root',
 	requires : [		
 		'Ext.MessageBox'			
 	],
 	profiles : ['Tablet', 'Phone'],
-	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal'],
+	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 			'ReferencesLocal'],
 
 	icon : {
 		'57' : 'resources/icons/Icon.png',

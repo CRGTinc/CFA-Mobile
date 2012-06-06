@@ -49,8 +49,14 @@ Ext.define('cfa.view.Main', {
         
         items: [{
                 xtype: 'dashboards',
-                store: 'Dashboards'
+                store: 'Dashboards',
             }
         ],
+    },
+	
+	pop: function() {
+        this.callParent(arguments);
+		cfa.app.helpUrl = "root";
     }
+	
 });

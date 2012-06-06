@@ -29,10 +29,16 @@ Ext.define('cfa.controller.Master', {
 	},
     
 	goToBasic: function(){
-        this.redirectTo('help');
+		if( cfa.app.helpUrl == "root" ){
+			this.redirectTo('help');
+		} else {
+			this.redirectTo('help/'+ cfa.app.helpUrl);
+		}
+		
 	},
     
 	goToFed: function(){
         this.redirectTo('feedback');
-	},		
+	},
+	
 });

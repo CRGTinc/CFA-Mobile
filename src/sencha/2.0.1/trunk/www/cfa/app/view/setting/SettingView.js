@@ -52,5 +52,9 @@ Ext.define('cfa.view.setting.SettingView', {
                 ]
             }
         ]
-    }
+    },
+	
+	initialize: function(){
+		cfa.app.helpUrl = "Setting";	
+	}
 });

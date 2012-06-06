@@ -13,7 +13,7 @@ Ext.define("cfa.view.contact.ContactView", {
 	
 	initialize: function() {
 		this.callParent(arguments);
-		
+		cfa.app.helpUrl = "Contact";
 		var topTitle = {
 			xtype:'toolbar',
 			title:"Contacts",
