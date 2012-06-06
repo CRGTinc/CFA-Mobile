@@ -4,7 +4,7 @@ Ext.define("cfa.view.reference.ReferenceView", {
     inject: [ 'referenceStore' ],
 	alias: 'widget.reference_view_container',
 	
-	requires:['cfa.view.reference.ReferencesList','cfa.model.Reference', 'cfa.view.reference.ReferenceDetail','cfa.reader.Csv'],	
+	requires:['cfa.view.reference.ReferencesList','cfa.model.Reference','cfa.reader.Csv'],	
 	
 	config: {
 		layout: 'fit',

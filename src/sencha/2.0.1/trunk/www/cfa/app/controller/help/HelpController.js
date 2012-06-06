@@ -1,7 +1,7 @@
 Ext.define('cfa.controller.help.HelpController',{
 	extend: 'Ext.app.Controller',
     
-	requires: ['cfa.view.help.HelpView', 'cfa.view.HTMLPanel'],
+	requires: ['cfa.view.help.HelpView'],
 	
 	config: {
         routes: {
