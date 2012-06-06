@@ -126,8 +126,6 @@
         "resources/images",
         "resources/icons",
         "resources/startup",		
-		"data/Events.json",
-		"data/Contacts.json",
 		"data/Contacts.csv",
 		"data/References.csv",
 		"data/Events.csv",
