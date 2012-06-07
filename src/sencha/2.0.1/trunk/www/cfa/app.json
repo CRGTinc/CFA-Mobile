@@ -42,11 +42,14 @@
         },
         {
 			"path": "lib/cordova-1.7.0.js",		
-            "update": "delta",
-            			
+            "update": "delta"
         },
         {
-			"path": "lib/ChildBrowser.js",		
+			"path": "lib/ChildBrowser.js",
+            "update": "delta"			
+        },
+        {
+			"path": "lib/FormPod.js",
             "update": "delta"			
         }
     ],
