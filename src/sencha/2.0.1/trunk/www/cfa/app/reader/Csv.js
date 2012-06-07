@@ -13,7 +13,8 @@ Ext.define('cfa.reader.Csv', {
 		}
 		
 		if (csvRows.length < 2){
-			 Ext.Msg.alert('Conacts file error');
+			console.log('CSV file is empty');
+            return [];
 		} else {
 			objArr = [];
 			for (var i = 0; i < csvRows.length; i++){

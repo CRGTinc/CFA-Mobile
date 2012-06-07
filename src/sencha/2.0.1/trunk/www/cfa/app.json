@@ -42,11 +42,14 @@
         },
         {
 			"path": "lib/cordova-1.7.0.js",		
-            "update": "delta",
-            			
+            "update": "delta"
         },
         {
-			"path": "lib/ChildBrowser.js",		
+			"path": "lib/ChildBrowser.js",
+            "update": "delta"			
+        },
+        {
+			"path": "lib/FormPod.js",
             "update": "delta"			
         }
     ],
@@ -94,7 +97,6 @@
 			"resources/icons/Icon~ipad@2x.png",
 			"resources/icons/icon-spot~ipad.png",
 			"resources/icons/iTunesArtwork.png",
-			"resources/images/back.png",
 			"resources/images/back-button.png",
 									
 			"resources/images/toolbar.png",
