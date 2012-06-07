@@ -1,3 +1,6 @@
+$base-color: #404d6a;
+$button-gradient: "glossy";
+
 @import 'sencha-touch/default/all';
 
 @inlcude sencha-touch-all;
@@ -13,7 +16,9 @@
 @include sencha-list;
 @include sencha-layout;
 @include sencha-form;
-@include sencha-sheet; 
+@include sencha-sheet;
+
+
 
 // dashboards list
 .dashboards-list {
