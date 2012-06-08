@@ -30,7 +30,9 @@ Ext.application({
 		'1496x2048' : 'resources/startup/1496x2048.png'
 	},
 	
-	launch : function() {		
+	launch : function() {
+        Formpod.init(FD_Forms, Formpod.FormEngine.CodeGenerators.Sencha);
+        
 		Deft.Injector.configure({
 			contactStore: {
 				fn: function() {
@@ -74,7 +76,8 @@ Ext.application({
 			}
 		   	
     	});
-	    //Destroy the #appLoadingIndicator element		
+        
+        //Destroy the #appLoadingIndicator element		
     	Ext.fly('appLoadingIndicator').destroy();
 	},
 	onUpdated : function() {
