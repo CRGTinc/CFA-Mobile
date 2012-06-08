@@ -48,10 +48,6 @@
 			"path": "lib/ChildBrowser.js",
             "update": "delta"			
         },
-        {
-			"path": "lib/FormPod.js",
-            "update": "delta"			
-        }
     ],
 
     /**
@@ -98,7 +94,7 @@
 			"resources/icons/icon-spot~ipad.png",
 			"resources/icons/iTunesArtwork.png",
 			"resources/images/back-button.png",
-			"resources/images/background.png",								
+			"resources/images/background.png",				
 			"resources/startup/320x460.jpg",
 			"resources/startup/640x920.png",
 			"resources/startup/748x1024.png",
