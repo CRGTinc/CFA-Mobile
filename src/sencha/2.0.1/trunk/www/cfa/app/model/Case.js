@@ -1,19 +1,11 @@
 Ext.define('cfa.model.Case', {
 	extend: 'Ext.data.Model',
-    
-    requires: [
-        'cfa.proxy.FormEngine'
-    ],
 
     config: {
         fields: [
-            'id',
-            'cfa',
-            { name: 'text', type: 'string' }
-        ],
-        
-        proxy: {
-            type: 'formengine'
-        }
+            {name: 'text', type: 'string'},
+            {name: 'aname', type: 'string'},
+            {name: 'artifactType', type: 'string'}
+        ]
     }
 })

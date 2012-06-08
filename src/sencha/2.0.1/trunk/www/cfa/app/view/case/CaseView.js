@@ -20,19 +20,20 @@ Ext.define("cfa.view.case.CaseView", {
                                     xtype: 'button',
                                     iconCls: 'add',
                                     iconMask: true,
-                                    align:'right',
-                                    action: 'addCaseData'
+                                    align:'right'
                                 }
                             ]
                         }
                     }, {
-                        xtype: 'nestedlist',
                         title: 'Devices',
-                        iconCls: 'settings'
-                    }, {
                         xtype: 'panel',
+                        iconCls: 'settings',
+                        html: 'Devices Panel'
+                    }, {
                         title: 'Search',
-                        iconCls: 'search'
+                        xtype: 'panel',
+                        iconCls: 'search',
+                        html: 'Search Panel'
                     }
                 ]
             }, {
