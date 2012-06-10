@@ -16,24 +16,16 @@ Ext.define('cfa.proxy.FormEngine', {
     //inherit docs
     create: function (operation, callback, scope) {
         console.log('create operation', operation);
-        var records = operation.getRecords(),
-            length = records.length,
-            id, record, i;
-
+        var records = operation.getRecords();
         operation.setStarted();
+        this.setRecord(records, function () {
+            operation.setCompleted();
+            operation.setSuccessful();
 
-        for (i = 0; i < length; i++) {
-            record = records[i];
-            id = record.getId();
-            this.setRecord(record);
-        }
-
-        operation.setCompleted();
-        operation.setSuccessful();
-
-        if (typeof callback == 'function') {
-            callback.call(scope || this, operation);
-        }
+            if (typeof callback == 'function') {
+                callback.call(scope || this, operation);
+            }
+        });
     },
 
     //inherit docs
@@ -45,7 +37,7 @@ Ext.define('cfa.proxy.FormEngine', {
             Model = this.getModel(),
             idProperty = Model.getIdProperty(),
             params = operation.getParams() || {},
-            i, record, obj;
+            record;
 
         //read a single record
         if (params[idProperty] !== undefined) {
@@ -56,20 +48,26 @@ Ext.define('cfa.proxy.FormEngine', {
                 operation.setSuccessful();
             }
 
-            records = this.encodeObjects(objs, Model);
+            records = this.applyDataToModels(objs, Model);
             this.completeRead(operation, callback, scope, records);
         } else {
             if (params['node'] == 'cases') {
                 Formpod.findObjectsByClass('Case Form', function (objs) {
-                    me.encodeObjects(objs, Model, function (records) {
+                    me.applyDataToModels(objs, Model, function (records) {
+                        me.completeRead(operation, callback, scope, records);
+                    });
+                });
+            } else if (params['node'] == 'devices') {
+                Formpod.findObjectsByClass('Device Form', function (objs) {
+                    me.applyDataToModels(objs, Model, function (records) {
                         me.completeRead(operation, callback, scope, records);
                     });
                 });
             } else {
                 Formpod.findRelatedIdsWithType(params['node'], 'hasChild', function (ids) {
                     Formpod.getObjects(ids, function (objs) {
-                        me.encodeObjects(objs, Model, function (records) {
-                            me.completeRead(operation, callback, scope, objs);
+                        me.applyDataToModels(objs, Model, function (records) {
+                            me.completeRead(operation, callback, scope, records);
                         });
                     });
                 });
@@ -79,59 +77,43 @@ Ext.define('cfa.proxy.FormEngine', {
         }
     },
 
-    completeRead: function (operation, callback, scope, records) {
-        operation.setCompleted();
-        operation.setResultSet(Ext.create('Ext.data.ResultSet', {
-            records: records,
-            total: records.length,
-            loaded: true
-        }));
-        operation.setRecords(records);
-
-        if (typeof callback == 'function') {
-            callback.call(scope || this, operation);
-        }
-    },
-
     //inherit docs
     update: function (operation, callback, scope) {
         console.log('update operation', operation);
-        var records = operation.getRecords(),
-            length = records.length,
-            record, id, i;
-
+        var records = operation.getRecords();
         operation.setStarted();
+        this.setRecord(records, function () {
+            operation.setCompleted();
+            operation.setSuccessful();
 
-        for (i = 0; i < length; i++) {
-            record = records[i];
-            this.setRecord(record);
-        }
-
-        operation.setCompleted();
-        operation.setSuccessful();
-
-        if (typeof callback == 'function') {
-            callback.call(scope || this, operation);
-        }
+            if (typeof callback == 'function') {
+                callback.call(scope || this, operation);
+            }
+        });
     },
 
     //inherit
     destroy: function (operation, callback, scope) {
         console.log('destroy operation', operation);
-        var records = operation.getRecords(),
-            length = records.length,
-            i;
+        var records = operation.getRecords();
 
-        for (i = 0; i < length; i++) {
-            this.removeRecord(records[i], false);
-        }
+        this.removeRecord(records, function () {
+            operation.setCompleted();
+            operation.setSuccessful();
 
-        operation.setCompleted();
-        operation.setSuccessful();
+            if (typeof callback == 'function') {
+                callback.call(scope || this, operation);
+            }
+        });
+    },
 
-        if (typeof callback == 'function') {
-            callback.call(scope || this, operation);
-        }
+    /**
+    * Destroys all records stored in the proxy and removes all keys and values used to support the proxy from the
+    * storage object.
+    */
+    clear: function () {
+        console.log('clear operation');
+        Formpod.deleteAllObjects();
     },
 
     /**
@@ -149,21 +131,27 @@ Ext.define('cfa.proxy.FormEngine', {
     * @param {Ext.data.Model} record The model instance
     * @param {String} [id] The id to save the record under (defaults to the value of the record's getId() function)
     */
-    setRecord: function (record, id) {
-        if (id) {
-            record.setId(id);
-        } else {
-            id = record.getId();
+    setRecord: function (records, callback) {
+        var me = this,
+            length = records.length,
+            record, formData, i;
+
+        for (i = 0; i < length; i++) {
+            record = records[i];
+            formData = record.getData().form;
+            Formpod.saveInstance(formData);
+
+            if (formData.parentId) {
+                Formpod.relateObject(formData.parentId, formData.id, 'hasChild');
+            }
+
+            record.id = formData.id;
+            record.commit();
         }
 
-        var me = this,
-            rawData = record.getData(),
-            cfaData;
-
-        cfaData = rawData.cfa;
-        Formpod.saveInstance(cfaData);
-        record.id = cfaData.id;
-        record.commit();
+        if (typeof callback == 'function') {
+            callback();
+        }
     },
 
     /**
@@ -172,7 +160,7 @@ Ext.define('cfa.proxy.FormEngine', {
     * use instead because it updates the list of currently-stored record ids
     * @param {String/Number/Ext.data.Model} id The id of the record to remove, or an Ext.data.Model instance
     */
-    removeRecord: function (id, updateIds) {
+    removeRecord: function (id) {
         if (id.isModel) {
             id = id.getId();
         }
@@ -180,7 +168,7 @@ Ext.define('cfa.proxy.FormEngine', {
         Formpod.deleteObjectWithId(id);
     },
 
-    encodeObjects: function (objs, Model, callback) {
+    applyDataToModels: function (objs, Model, callback) {
         var records = [],
             data = {},
             length = objs.length,
@@ -189,13 +177,14 @@ Ext.define('cfa.proxy.FormEngine', {
         for (i = 0; i < length; i++) {
             obj = objs[i];
             data['id'] = obj.id;
-            data['text'] = obj[Formpod.FormTypes[obj.engineClass.name].objTitle];
-            data['cfa'] = obj;
+            data['text'] = obj[Formpod.FormTypes[obj.engineClass.name].displayProperty];
+            data['form'] = obj;
             record = new Model(data, obj.id);
-            records.push(record);
 
             if (i == length - 1) {
                 this.updateLeaf(record, function (record) {
+                    records.push(record);
+
                     if (typeof callback == 'function') {
                         callback(records);
                     }
@@ -203,7 +192,9 @@ Ext.define('cfa.proxy.FormEngine', {
 
                 return;
             } else {
-                this.updateLeaf(record, Ext.emptyFn);
+                this.updateLeaf(record, function (record) {
+                    records.push(record);
+                });
             }
         }
 
@@ -226,12 +217,17 @@ Ext.define('cfa.proxy.FormEngine', {
         });
     },
 
-    /**
-    * Destroys all records stored in the proxy and removes all keys and values used to support the proxy from the
-    * storage object.
-    */
-    clear: function () {
-        console.log('clear operation');
-        Formpod.deleteAllObjects();
+    completeRead: function (operation, callback, scope, records) {
+        operation.setCompleted();
+        operation.setResultSet(Ext.create('Ext.data.ResultSet', {
+            records: records,
+            total: records.length,
+            loaded: true
+        }));
+        operation.setRecords(records);
+
+        if (typeof callback == 'function') {
+            callback.call(scope || this, operation);
+        }
     }
 });

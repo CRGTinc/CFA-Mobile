@@ -6,9 +6,8 @@ Ext.define('cfa.model.Case', {
     config: {
         fields: [
             'id',
-            'cfa',
-            { name: 'text', type: 'string' },
-            { name: 'group', type: 'string' }
+            'form',
+            { name: 'text', type: 'string' }
         ],
 
         proxy: {

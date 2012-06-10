@@ -54,7 +54,7 @@ Ext.define("cfa.view.case.CaseView", {
                                 html: '<center>Context Information</center>'
                             }, {
                                 xtype: 'panel',
-                                layout: 'fit',
+                                layout: 'card',
                                 flex: 2,
                                 minHeight: 200,
                                 id: 'casecontentpanel',

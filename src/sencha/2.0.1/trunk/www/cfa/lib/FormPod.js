@@ -134,14 +134,20 @@ var Formpod = {
 				Formpod.saveInstance(obj);
 			}
 			
-			this.loadForm = function(id) {
+			this.loadForm = function(obj) {
 				var that = this;
-				this.getSavedInstance(id, function(obj) { 
-					Formpod.generator.setFormData(that.getForm(), obj); 
-					if (typeof obj.id !== 'undefined') {
-						that.getForm().engineObjectId = obj.id;
+                var callback = function(instance) {
+					Formpod.generator.setFormData(that.getForm(), instance); 
+					if (typeof instance.id !== 'undefined') {
+						that.getForm().engineObjectId = instance.id;
 					}
-				});
+				};
+
+                if (typeof obj === 'string') {
+                    this.getSavedInstance(id, callback);
+                } else {
+                    callback(obj);
+                }
 			}
 			
 			this.resetForm = function() {
@@ -192,7 +198,7 @@ var Formpod = {
 			if (!formDefinitions.hasOwnProperty(idx)) continue;
 			var def = formDefinitions[idx];
 			this.FormTypes[def.formName] = new FormClass(def.formName, def.formDesc, def.formFields)
-			this.FormTypes[def.formName].objTitle = def.objTitle;
+			this.FormTypes[def.formName].displayProperty = def.displayProperty;
 		}
 		this.generator = generator;
 	},
@@ -330,11 +336,11 @@ var Formpod = {
 			}
 		); //Close transaction
 	},
-	relateObjects: function (src, dest, type) {
+	relateObject: function (src, dest, type) {
 		if (typeof src.id === "undefined") {
-			throw Error("relateObjects: Source object does not have an id. Save it first.")
+			throw Error("relateObject: Source object does not have an id. Save it first.")
 		} else if (typeof dest.id === "undefined") {
-			throw Error("relateObjects: Destination object does not have an id. Save it first.")
+			throw Error("relateObject: Destination object does not have an id. Save it first.")
 		}
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		db.transaction( 
@@ -343,11 +349,11 @@ var Formpod = {
 			}
 		);
 	},
-	unrelateObjects: function (src, dest, type) {
+	unrelateObject: function (src, dest, type) {
 		if (typeof src.id === "undefined") {
-			throw Error("relateObjects: Source object does not have an id. Save it first.")
+			throw Error("unrelateObject: Source object does not have an id. Save it first.")
 		} else if (typeof dest.id === "undefined") {
-			throw Error("relateObjects: Destination object does not have an id. Save it first.")
+			throw Error("unrelateObject: Destination object does not have an id. Save it first.")
 		}
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		db.transaction( 

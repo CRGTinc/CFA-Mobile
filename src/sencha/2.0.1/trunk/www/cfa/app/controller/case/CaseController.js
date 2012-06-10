@@ -11,6 +11,8 @@ Ext.define('cfa.controller.case.CaseController', {
         refs: {
             main: 'main',
             casesList: '#caseslist',
+            caseContextPanel: '#casecontextpanel',
+            caseContentPanel: '#casecontentpanel',
             addCaseDataButton: 'button[action = addCaseData]'
         },
 
@@ -31,20 +33,13 @@ Ext.define('cfa.controller.case.CaseController', {
     },
 
     caseItemTap: function (nestedList, list, index, target, record, e, eOpts) {
-        console.log('case item tapped');
+        var engine = record.get('form').engineClass;
+        engine.loadForm(record.get('form'));
+
+        var form = engine.getForm();
+        this.getCaseContentPanel().add(form);
     },
 
     addCaseData: function () {
-        console.log('case data add');
-        var store = Ext.getStore('Cases');
-        store.add({
-            cfa: {
-                CaseTitle: 'test',
-                engineClass: {
-                    name: 'Case Form'
-                }
-            }
-        });
-        store.sync();
     }
 });
