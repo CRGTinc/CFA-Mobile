@@ -9,8 +9,9 @@ var FD_Forms = [];
 
 FD_Forms ['Case Form'] =
 	{
-		formName : "Case Form",
+	    formName: "Case Form",
 		formDesc : "Case Main Data Form",
+		objTitle: "CaseTitle",
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "Case Information", instructions: "Case Information"},
@@ -47,7 +48,8 @@ FD_Forms ['Case Form'] =
 FD_Forms ['AR Form'] =
 	{
 		formName : "AR Form",
-		formDesc : "Assistance Request Form",
+		formDesc: "Assistance Request Form",
+        objTitle: 'OAgency',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "OAgency", type: "textfield", label: "Originating Agency", value: "", required: false, source: "OAgency", helpText: "Help"},

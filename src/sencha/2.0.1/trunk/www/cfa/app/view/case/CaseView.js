@@ -1,14 +1,14 @@
 Ext.define("cfa.view.case.CaseView", {
     extend: 'Ext.Container',
-	xtype: 'case',
-	
+    xtype: 'case',
+
     config: {
         title: 'Case Data Management',
-		layout: 'hbox',
-		items:[{
+        layout: 'hbox',
+        items: [{
                 xtype: 'tabpanel',
                 tabBarPosition: 'bottom',
-				flex: 1,
+                flex: 1,
                 items: [{
                         xtype: 'nestedlist',
                         title: 'Cases',
@@ -20,57 +20,56 @@ Ext.define("cfa.view.case.CaseView", {
                                     xtype: 'button',
                                     iconCls: 'add',
                                     iconMask: true,
-                                    align:'right'
+                                    align:'right',
+                                    action: 'addCaseData'
                                 }
                             ]
                         }
                     }, {
+                        xtype: 'list',
                         title: 'Devices',
-                        xtype: 'panel',
-                        iconCls: 'settings',
-                        html: 'Devices Panel'
+                        iconCls: 'settings'
                     }, {
-                        title: 'Search',
                         xtype: 'panel',
-                        iconCls: 'search',
-                        html: 'Search Panel'
+                        title: 'Search',
+                        iconCls: 'search'
                     }
                 ]
             }, {
                 xtype: 'panel',
-				flex:2,
-				layout: 'fit',
+                flex:2,
+                layout: 'fit',
                 items: [
-					{
-						xtype:'panel',
-						layout: 'vbox',
-						items:[
-							{
-								xtype: 'panel',
-								id: 'casecontextpanel',
-								docked: 'top',
-								layout: 'fit',
-								flex: 1,
-								minHeight: 100,
-								html: '<center>Context Information</center>'
-							}, {
-								xtype: 'panel',
-								layout: 'fit',
-								flex: 2,
-								minHeight: 200,
-								id: 'casecontentpanel',
-								html: '<center>Content</center>'
-							}
-						
-						]	
-					}
+                    {
+                        xtype:'panel',
+                        layout: 'vbox',
+                        items:[
+                            {
+                                xtype: 'panel',
+                                id: 'casecontextpanel',
+                                docked: 'top',
+                                layout: 'fit',
+                                flex: 1,
+                                minHeight: 100,
+                                html: '<center>Context Information</center>'
+                            }, {
+                                xtype: 'panel',
+                                layout: 'fit',
+                                flex: 2,
+                                minHeight: 200,
+                                id: 'casecontentpanel',
+                                html: '<center>Content</center>'
+                            }
+                        
+                        ]    
+                    }
                 ]
             }
         ]
     },
-	
-	initialize: function(){
-		this.callParent(arguments);
-		cfa.app.helpUrl = "Cases";	
-	}
+    
+    initialize: function(){
+        this.callParent(arguments);
+        cfa.app.helpUrl = "Cases";
+    }
 });

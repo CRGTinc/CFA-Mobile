@@ -91,9 +91,9 @@ var Formpod = {
 					}
 					
 					var fitems = generateSenchaFieldSet();
-				    var form = Ext.create ('Ext.form.Panel', {items: fitems});
+					var form = Ext.create ('Ext.form.Panel', {items: fitems});
 					
-				    return form;
+					return form;
 				}, 
 				getFormData: function(form) { return form.getValues(); },
 				setFormData: function(form, obj) { form.setValues(obj); }
@@ -192,6 +192,7 @@ var Formpod = {
 			if (!formDefinitions.hasOwnProperty(idx)) continue;
 			var def = formDefinitions[idx];
 			this.FormTypes[def.formName] = new FormClass(def.formName, def.formDesc, def.formFields)
+			this.FormTypes[def.formName].objTitle = def.objTitle;
 		}
 		this.generator = generator;
 	},
@@ -205,6 +206,7 @@ var Formpod = {
 		}
 		var instance = new FormInstance();
 		instance.prototype = formClass.instance;
+		instance.engineClass = formClass;
 		return instance;
 	},
 	getSavedInstance: function(formClass, id, callback) {
@@ -218,6 +220,7 @@ var Formpod = {
 			this.buildInstance(formClass);
 		}
 		loadedObj.prototype = formClass.instance;
+		loadedObj.engineClass = formClass;
 		db.transaction(
 			function (t) {
 				t.executeSql("SELECT * FROM attr WHERE objid = ?", [id],
@@ -254,7 +257,7 @@ var Formpod = {
 							Formpod.buildInstance(formClass);
 						}
 						loadedObj.prototype = formClass.instance;
-						
+						loadedObj.engineClass = formClass;
 						for (var i = 0; i < rs.rows.length; i++) {
 							var row = rs.rows.item(i);
 							loadedObj[row.name] = row.value;
@@ -327,7 +330,7 @@ var Formpod = {
 			}
 		); //Close transaction
 	},
-	relateObjects: function (src,dest,type) {
+	relateObjects: function (src, dest, type) {
 		if (typeof src.id === "undefined") {
 			throw Error("relateObjects: Source object does not have an id. Save it first.")
 		} else if (typeof dest.id === "undefined") {
@@ -340,7 +343,7 @@ var Formpod = {
 			}
 		);
 	},
-	unrelateObjects: function (src,dest,type) {
+	unrelateObjects: function (src, dest, type) {
 		if (typeof src.id === "undefined") {
 			throw Error("relateObjects: Source object does not have an id. Save it first.")
 		} else if (typeof dest.id === "undefined") {
@@ -353,16 +356,27 @@ var Formpod = {
 			}
 		);
 	},
+	deleteObjectWithId: function(id) {
+		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		db.transaction( function(t) {
+			t.executeSql("delete from rel where src = ?", [id]);
+			t.executeSql("delete from rel where dest = ?", [id]);
+			t.executeSql("delete from attr where objid = ?", [id]);
+			t.executeSql("delete from obj where id = ?", [id]);
+		});//Close transaction
+	},
 	deleteObject: function (o) {
 		if (typeof o.id === "undefined") {
 			throw "deleteObject: this object hasn't been saved yet. It cannot be deleted";
 		}
+		this.deleteObjectWithId(o.id);
+	},
+	deleteAllObjects: function() {
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		db.transaction( function(t) {
-			t.executeSql("delete from rel where src = ?", [o.id]);
-			t.executeSql("delete from rel where dest = ?", [o.id]);
-			t.executeSql("delete from attr where objid = ?", [o.id]);
-			t.executeSql("delete from obj where id = ?", [o.id]);
+			t.executeSql("delete * from rel");
+			t.executeSql("delete * from attr");
+			t.executeSql("delete * from obj");
 		});//Close transaction
 	},
 	findObjectsByAttr: function(query, value, callback) {
@@ -427,17 +441,52 @@ var Formpod = {
 							}
 				);
 			},
-			null, 
-			function() { 
+			null,
+			function() {
 				Formpod.getObjects(objIds, callback);
 			}	
 		); //Close Transaction
-		
+	},
+	findRelatedIdsWithType: function(id, type, callback) {
+		var objIds = [];
+		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		db.transaction( 
+			function(t) {
+				t.executeSql("select r.dest, o.class from rel r, obj o where r.src = ? and r.type = ? and r.dest = o.id", [id, type],
+					function(t, rs) {
+						for (var i = 0; i < rs.rows.length; i++) {
+							var row = rs.rows.item(i);
+							objIds.push([row.dest, row.class]);
+						}
+					}
+				);
+			},
+			null, 
+			function() {
+				if (typeof callback === 'function')
+					callback(objIds);
+			}
+		); //Close Transaction
+	},
+	findRelatedObjectsWithType: function(obj, type, details, callback) {
+		if (typeof o.id !== 'number') {
+			console.log("Formpod.findRelatedObjectsWithType: The object provided has not been persisted.")
+		}
+		Formpod.findRelatedObjectsFromIdWithType(obj.id, type, details, callback);
+	},
+	findRelatedObjectsFromIdWithType: function(id, type, callback, details) {
+		if (details) {
+			Formpod.findRelatedIdsWithType(obj.id, type, function(ids) {
+				Formpod.findObjects(ids, callback);
+			});
+		} else {
+			Formpod.findRelatedIdsWithType(obj.id, type, callback);
+		}
 	},
 	buildInstance: function(formClass) {
 		function FormInstance() {};
 		var instance = new FormInstance();
-		formClass.instance = instance 
+		formClass.instance = instance;
 		instance.engineClass = formClass;
 		var def = formClass.definition;
 		for (idx in def) {
@@ -471,7 +520,7 @@ var Formpod = {
 							Formpod.buildInstance(formClass);
 						}
 						loadedObj.prototype = formClass.instance;
-						
+						loadedObj.engineClass = formClass;
 						for (var i = 0; i < rs.rows.length; i++) {
 							var row = rs.rows.item(i);
 							loadedObj[row.name] = row.value;
