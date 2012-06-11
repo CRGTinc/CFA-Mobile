@@ -2,8 +2,7 @@ Ext.define('cfa.controller.case.CaseController', {
     extend: 'Ext.app.Controller',
 
     requires: [
-        'cfa.view.case.CaseView',
-        'cfa.view.case.CaseFormView'
+        'cfa.view.case.CaseView'
     ],
 
     config: {
