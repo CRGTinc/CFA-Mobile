@@ -81,26 +81,15 @@ Ext.define('cfa.controller.case.CaseController', {
         } else {
             record = Ext.create('cfa.model.Case');
             engine = Formpod.FormTypes['Case Form'];
-<<<<<<< HEAD
-        engine.resetForm();
-        record.set('form', {
-            engineClass: engine
-        });
-
-        this.setCurrentRecord(record);
-        this.getCaseFormPanel().add(engine.getForm());
-        //this.getCaseContextPanel().setHtml('Add new case');
-        var p = this.getCaseContextPanel();
-        p.getComponent(0).getComponent(0).setHtml('<div align="center"><strong><font size="+2">Add new case</font></strong></div>');
-=======
-            
             record.set('form', {
                 engineClass: engine
             });
+            
             this.setCurrentRecord(record);
             this.showCurrentRecord();
+            var p = this.getCaseContextPanel();
+            p.getComponent(0).getComponent(0).setHtml('<div align="center"><strong><font size="+2">Add new case</font></strong></div>');
         }
->>>>>>> Update cases form code.
     },
     
     saveCaseData: function() {

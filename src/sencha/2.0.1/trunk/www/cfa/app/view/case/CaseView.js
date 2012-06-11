@@ -77,6 +77,7 @@ Ext.define("cfa.view.case.CaseView", {
                                         id: 'caseformpanel',                                        
                                     }, {
                                         xtype: 'toolbar',
+                                        id: 'casetoolbar',
                                         layout:{
                                         	align:'center',
                                         	pack:'right'	
