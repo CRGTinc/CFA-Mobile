@@ -55,7 +55,9 @@ Ext.define('cfa.controller.case.CaseController', {
         engine.loadForm(formData);
 
         var form = engine.getForm();
-        this.getCaseFormPanel().add(form);        
+        this.getCaseFormPanel().add(form);
+        var p = this.getCaseContextPanel();
+        p.getComponent(0).getComponent(0).setHtml('<div align="center"><strong><font size="+2">Case information</font></strong></div>');       
     },
 
     addCaseData: function () {
@@ -68,7 +70,9 @@ Ext.define('cfa.controller.case.CaseController', {
 
         this.setCurrentRecord(record);
         this.getCaseFormPanel().add(engine.getForm());
-        this.getCaseContextPanel().setHtml('Add new case');
+        //this.getCaseContextPanel().setHtml('Add new case');
+        var p = this.getCaseContextPanel();
+        p.getComponent(0).getComponent(0).setHtml('<div align="center"><strong><font size="+2">Add new case</font></strong></div>');
     },
     
     saveCaseData: function() {

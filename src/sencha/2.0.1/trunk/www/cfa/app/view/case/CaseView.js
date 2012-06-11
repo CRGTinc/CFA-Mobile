@@ -45,34 +45,53 @@ Ext.define("cfa.view.case.CaseView", {
                         layout: 'vbox',
                         items:[
                             {
-                                xtype: 'panel',
+                                xtype: 'formpanel',
+                                baseCls: 'panel-shadow',
+                                margin:'5 15 10 15',
                                 id: 'casecontextpanel',
                                 layout: 'fit',
+                                items:[{
+                                	xtype:'fieldset',
+                                	items:[{
+                                		
+                                		xtype:'textfield',
+                                		readOnly: true,
+                                	}],
+                                	
+                                	
+                                }],                           
+                               
                                 flex: 1,
-                                minHeight: 100,
-                                html: '<center>Context Information</center>'
                             }, {
                                 xtype: 'panel',
-                                layout: 'card',
-                                flex: 2,
-                                minHeight: 200,
+                                baseCls: 'panel-shadow',
+                                margin:'5 15 0 15',
+                                layout: 'fit',
+                                flex: 9,                                
                                 id: 'casecontentpanel',
-                                items: [{
+                                items: [
+                                	{
                                         xtype: 'panel',
+                                        margin:'0 0 0 0',
                                         layout: 'fit',
-                                        id: 'caseformpanel'
+                                        id: 'caseformpanel',                                        
                                     }, {
                                         xtype: 'toolbar',
+                                        layout:{
+                                        	align:'center',
+                                        	pack:'right'	
+                                        	
+                                        } ,                                       
+                                     	                                       
                                         docked: 'bottom',
-                                        items: [{
+                                        items: [
+                                        	{
                                                 xtype: 'button',
-                                                action: 'savecasedata',
-                                                align: 'right',
+                                                action: 'savecasedata',                   
                                                 text: 'Save'
                                             }, {
                                                 xtype: 'button',
-                                                action: 'cancelcasedata',
-                                                align: 'right',
+                                                action: 'cancelcasedata',                    
                                                 text: 'Cancel'
                                             }
                                         ]
