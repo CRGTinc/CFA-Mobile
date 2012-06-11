@@ -347,10 +347,13 @@ var Formpod = {
 		} else if (typeof dest.id === "undefined") {
 			throw Error("relateObject: Destination object does not have an id. Save it first.")
 		}
+      	Formpod.relateObjectById(src.id, dest.id, type);
+	},
+	relateObjectById: function (srcId, destId, type) {
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		db.transaction( 
 			function (t) {
-				t.executeSql("INSERT INTO rel(src, dest, type) VALUES(?, ?, ?)", [src.id, dest.id, type]);
+				t.executeSql("INSERT INTO rel(src, dest, type) VALUES(?, ?, ?)", [srcId, destId, type]);
 			}
 		);
 	},
@@ -443,7 +446,7 @@ var Formpod = {
 		}
 		db.transaction( 
 			function(t) {
-				t.executeSql("select r.dest, o.class from rel r, obj o where r.src = ? and r.dest = o.id", [o.id],
+				t.executeSql("select distinct r.dest, o.class from rel r, obj o where r.src = ? and r.dest = o.id", [o.id],
 							function(t, rs) {
 								for (var i = 0; i < rs.rows.length; i++) {
 									var row = rs.rows.item(i);
@@ -463,7 +466,7 @@ var Formpod = {
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		db.transaction( 
 			function(t) {
-				t.executeSql("select r.dest, o.class from rel r, obj o where r.src = ? and r.type = ? and r.dest = o.id", [id, type],
+				t.executeSql("select distinct r.dest, o.class from rel r, obj o where r.src = ? and r.type = ? and r.dest = o.id", [id, type],
 					function(t, rs) {
 						for (var i = 0; i < rs.rows.length; i++) {
 							var row = rs.rows.item(i);
@@ -511,42 +514,31 @@ var Formpod = {
 		}
 	},
 	getObjects: function(ids, callback) {
-		function FormInstance() {};
-		var objectList = [];
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
-		db.transaction(
-			function (t) {
-				for (var idx in ids) {
-					if (!ids.hasOwnProperty(idx)) continue;
-					var id = ids[idx][0];
-					var formClass = ids[idx][1];
-					if (typeof formClass === 'string') {
-						formClass = Formpod.FormTypes[formClass];
-					}	
-					
-					t.executeSql("SELECT * FROM attr WHERE objid = ?", [id],
-					function (t, rs) {
-						var loadedObj = new FormInstance();
-						if (typeof formClass.instance === 'undefined') {
-							Formpod.buildInstance(formClass);
-						}
-						loadedObj.prototype = formClass.instance;
-						loadedObj.engineClass = formClass;
-						for (var i = 0; i < rs.rows.length; i++) {
-							var row = rs.rows.item(i);
-							loadedObj[row.name] = row.value;
-							loadedObj.id = row.objid;
-						}
-						objectList.push(loadedObj);
-					}
-					);
-				}
-			},
-			null,
-			function () {
-				if (typeof callback === 'function')
-				callback(objectList);
-			}
-		);
+		var objectList = [],
+            length = ids.length,
+            i;
+            
+        for (i = 0; i < length; i++) {
+            var id = ids[i];
+            
+            if (i == length - 1) {
+                Formpod.getSavedInstance(id[1], id[0], function(obj) {
+                    objectList.push(obj);
+
+                    if (typeof callback === 'function')
+                        callback(objectList);
+                });
+                
+                    
+                return;
+            } else {
+                Formpod.getSavedInstance(id[1], id[0], function(obj) {
+                    objectList.push(obj);
+                });
+            }
+        }
+        
+        if (typeof callback === 'function')
+            callback(objectList);
 	}
 }

@@ -5,7 +5,7 @@
   
 */
 
-var FD_Forms = [];
+var FD_Forms = {};
 
 FD_Forms ['Case Form'] =
 	{
@@ -50,7 +50,7 @@ FD_Forms ['AR Form'] =
 	{
 		formName : "AR Form",
 		formDesc: "Assistance Request Form",
-		displayProperty: 'OAgency',
+		displayProperty: 'ProsecutorName',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "OAgency", type: "textfield", label: "Originating Agency", value: "", required: false, source: "OAgency", helpText: "Help"},
@@ -73,6 +73,7 @@ FD_Forms ['BR Form'] =
 	{
 		formName : "BR Form",
 		formDesc : "Border Response Form",
+        displayProperty: 'SubjectName',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "SubjectName", type: "textfield", label: "Subject Name", value: "", required: false, source: "SubjectName", helpText: "Help"},
@@ -88,6 +89,7 @@ FD_Forms ['System Form'] =
 	{
 		formName : "System Form",
 		formDesc : "System Form",
+        displayProperty: 'SystName',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "System Information", instructions: "System Information"},
@@ -112,12 +114,9 @@ FD_Forms ['System Form'] =
         ]
 	};
 
-FD_Forms ['Test Form'] =
-	{
-		formName : "Test Form",
-		formDesc : "Test Form",
-		formFields: [
-			/* name, type, label, default value, required, data source, help text */
-			{name: "name", type: "textfield", label: "Label", value: "", required: false, source: "Source", helpText: "Help"},
-        ]
-	};
+var CaseForms = [];
+
+for (var name in FD_Forms) {
+    if (name != 'Case Form')
+        Ext.Array.insert(CaseForms, CaseForms.length, [FD_Forms[name]]);
+}

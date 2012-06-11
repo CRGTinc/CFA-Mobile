@@ -134,19 +134,22 @@ Ext.define('cfa.proxy.FormEngine', {
     setRecord: function (records, callback) {
         var me = this,
             length = records.length,
-            record, formData, i;
+            record, rawData, formData, i;
 
         for (i = 0; i < length; i++) {
             record = records[i];
-            formData = record.getData().form;
+            rawData = record.getData();
+            formData = rawData.form;
             
             if (i == length - 1) {
                 Formpod.saveInstance(formData, function(obj) {
                     record.set('id', obj.id);
                     record.commit();
                     
-                    if (formData.parentId)
-                        Formpod.relateObject(formData.parentId, formData.id, 'hasChild');
+                    var parentId = record.get('parentId');
+                    
+                    if (parentId)
+                        Formpod.relateObjectById(parentId, obj.id, 'hasChild');
                 });
                 
                 if (typeof callback == 'function')
@@ -160,7 +163,7 @@ Ext.define('cfa.proxy.FormEngine', {
                     record.commit();
                     
                     if (formData.parentId)
-                        Formpod.relateObject(formData.parentId, formData.id, 'hasChild');
+                        Formpod.relateObject(formData.id,formData.parentId, 'hasChild');
                 });
             }
         }

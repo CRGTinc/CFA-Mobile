@@ -81,8 +81,7 @@ Ext.define("cfa.view.case.CaseView", {
                                         	align:'center',
                                         	pack:'right'	
                                         	
-                                        } ,                                       
-                                     	                                       
+                                        },
                                         docked: 'bottom',
                                         items: [
                                         	{
