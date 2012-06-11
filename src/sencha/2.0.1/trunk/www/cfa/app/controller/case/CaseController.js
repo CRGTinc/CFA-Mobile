@@ -1,7 +1,10 @@
 Ext.define('cfa.controller.case.CaseController', {
     extend: 'Ext.app.Controller',
 
-    requires: ['cfa.view.case.CaseView'],
+    requires: [
+        'cfa.view.case.CaseView',
+        'cfa.view.case.CaseFormView'
+    ],
 
     config: {
         routes: {
@@ -13,7 +16,10 @@ Ext.define('cfa.controller.case.CaseController', {
             casesList: '#caseslist',
             caseContextPanel: '#casecontextpanel',
             caseContentPanel: '#casecontentpanel',
-            addCaseDataButton: 'button[action = addCaseData]'
+            caseFormPanel: '#caseformpanel',
+            addCaseDataButton: 'button[action = addCaseData]',
+            saveCaseDataButton: 'button[action = savecasedata]',
+            cancelCaseDataButton: 'button[action = cancelcasedata]'
         },
 
         control: {
@@ -23,8 +29,18 @@ Ext.define('cfa.controller.case.CaseController', {
 
             addCaseDataButton: {
                 'tap': 'addCaseData'
+            },
+            
+            saveCaseDataButton: {
+                'tap': 'saveCaseData'
+            },
+            
+            cancelCaseDataButton: {
+                'tap': 'cancelCaseData'
             }
-        }
+        },
+        
+        currentFormView: null
     },
 
     showCasePage: function () {
@@ -41,5 +57,18 @@ Ext.define('cfa.controller.case.CaseController', {
     },
 
     addCaseData: function () {
+        var caseForm = Formpod.FormTypes['Case Form'].getForm();
+        this.getCaseFormPanel().add(caseForm);
+        
+        this.getCaseContextPanel().setHtml('Add new case');
+        this.setCurrentFormView(caseForm);
+    },
+    
+    saveCaseData: function() {
+        console.log('save case data');
+    },
+    
+    cancelCaseData: function() {
+        this.getCaseFormPanel().removeAll();
     }
 });

@@ -47,7 +47,6 @@ Ext.define("cfa.view.case.CaseView", {
                             {
                                 xtype: 'panel',
                                 id: 'casecontextpanel',
-                                docked: 'top',
                                 layout: 'fit',
                                 flex: 1,
                                 minHeight: 100,
@@ -58,9 +57,28 @@ Ext.define("cfa.view.case.CaseView", {
                                 flex: 2,
                                 minHeight: 200,
                                 id: 'casecontentpanel',
-                                html: '<center>Content</center>'
+                                items: [{
+                                        xtype: 'panel',
+                                        layout: 'fit',
+                                        id: 'caseformpanel'
+                                    }, {
+                                        xtype: 'toolbar',
+                                        docked: 'bottom',
+                                        items: [{
+                                                xtype: 'button',
+                                                action: 'savecasedata',
+                                                align: 'right',
+                                                text: 'Save'
+                                            }, {
+                                                xtype: 'button',
+                                                action: 'cancelcasedata',
+                                                align: 'right',
+                                                text: 'Cancel'
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
-                        
                         ]    
                     }
                 ]
