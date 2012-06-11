@@ -12,6 +12,7 @@ FD_Forms ['Case Form'] =
 	    formName: "Case Form",
 		formDesc : "Case Main Data Form",
 		displayProperty: "CaseTitle",
+        childForms: ['AR Form', 'BR Form'],
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "Case Information", instructions: "Case Information"},

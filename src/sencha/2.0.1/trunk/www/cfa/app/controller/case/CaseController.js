@@ -39,7 +39,7 @@ Ext.define('cfa.controller.case.CaseController', {
             }
         },
         
-        currentFormView: null
+        currentRecord: null
     },
 
     showCasePage: function () {
@@ -48,26 +48,73 @@ Ext.define('cfa.controller.case.CaseController', {
     },
 
     caseItemTap: function (nestedList, list, index, target, record, e, eOpts) {
-        var engine = record.get('form').engineClass;
-        engine.loadForm(record.get('form'));
+        this.setCurrentRecord(record);
+
+        var formData = record.get('form');
+        var engine = formData.engineClass;
+        engine.loadForm(formData);
 
         var form = engine.getForm();
-        this.getCaseContentPanel().add(form);
+        this.getCaseFormPanel().add(form);        
     },
 
     addCaseData: function () {
-        var caseForm = Formpod.FormTypes['Case Form'].getForm();
-        this.getCaseFormPanel().add(caseForm);
-        
+        var record = Ext.create('cfa.model.Case'),
+            engine = Formpod.FormTypes['Case Form'];
+        engine.resetForm();
+        record.set('form', {
+            engineClass: engine
+        });
+
+        this.setCurrentRecord(record);
+        this.getCaseFormPanel().add(engine.getForm());
         this.getCaseContextPanel().setHtml('Add new case');
-        this.setCurrentFormView(caseForm);
     },
     
     saveCaseData: function() {
-        console.log('save case data');
+        var currentRecord = this.getCurrentRecord();
+        
+        if (currentRecord) {
+            var store = Ext.getStore('Cases'),
+                phantomRecord = currentRecord.phantom;
+
+            if (phantomRecord) {
+                store.add(currentRecord);
+            }
+            
+            var form = currentRecord.get('form'),
+                engine = form.engineClass;
+            
+            form = engine.getFormObject();
+            currentRecord.beginEdit();
+            currentRecord.set('form', form);
+            currentRecord.set('text', form[Formpod.FormTypes[engine.name].displayProperty]);
+            currentRecord.endEdit();
+            
+            if (!phantomRecord) {
+                currentRecord.setDirty(true);
+            }
+
+            store.sync();
+            
+            if (phantomRecord) {
+                var node = store.getNode();
+                node.appendChild(currentRecord);
+            }
+
+            var engine = currentRecord.get('form').engineClass;
+            this.getCaseFormPanel().remove(engine.getForm(), false);            
+            this.setCurrentRecord(null);
+        }
     },
     
     cancelCaseData: function() {
-        this.getCaseFormPanel().removeAll();
+        var currentRecord = this.getCurrentRecord();
+
+        if (currentRecord) {
+            var engine = currentRecord.get('form').engineClass;
+            this.getCaseFormPanel().remove(engine.getForm(), false);
+            this.setCurrentRecord(null);
+        }
     }
 });

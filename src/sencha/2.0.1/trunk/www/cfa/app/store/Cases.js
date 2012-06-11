@@ -11,8 +11,6 @@ Ext.define('cfa.store.Cases', {
 
         defaultRootId: 'cases',
 
-        groupField: 'group',
-
         proxy : {
             type: "formengine"
         }

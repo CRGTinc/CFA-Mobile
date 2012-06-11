@@ -139,14 +139,30 @@ Ext.define('cfa.proxy.FormEngine', {
         for (i = 0; i < length; i++) {
             record = records[i];
             formData = record.getData().form;
-            Formpod.saveInstance(formData);
+            
+            if (i == length - 1) {
+                Formpod.saveInstance(formData, function(obj) {
+                    record.set('id', obj.id);
+                    record.commit();
+                    
+                    if (formData.parentId)
+                        Formpod.relateObject(formData.parentId, formData.id, 'hasChild');
+                });
+                
+                if (typeof callback == 'function')
+                    callback();
+                    
+                return;
 
-            if (formData.parentId) {
-                Formpod.relateObject(formData.parentId, formData.id, 'hasChild');
+            } else {
+                Formpod.saveInstance(formData, function(obj) {
+                    record.id = obj.id;
+                    record.commit();
+                    
+                    if (formData.parentId)
+                        Formpod.relateObject(formData.parentId, formData.id, 'hasChild');
+                });
             }
-
-            record.id = formData.id;
-            record.commit();
         }
 
         if (typeof callback == 'function') {
@@ -204,17 +220,18 @@ Ext.define('cfa.proxy.FormEngine', {
     },
 
     updateLeaf: function (record, callback) {
-        Formpod.findRelatedIdsWithType(record.get('id'), 'hasChild', function (ids) {
-            if (ids.length) {
-                record.set('leaf', false);
-            } else {
-                record.set('leaf', true);
-            }
-
-            if (typeof callback == 'function') {
-                callback(record);
-            }
-        });
+        var engine = record.get('form').engineClass,
+            childForms = Formpod.FormTypes[engine.name].childForms;
+        
+        if (childForms && childForms.length) {
+            record.set('leaf', false);
+        } else {
+            record.set('leaf', true);
+        }
+        
+        if (typeof callback == 'function') {
+            callback(record);
+        }
     },
 
     completeRead: function (operation, callback, scope, records) {

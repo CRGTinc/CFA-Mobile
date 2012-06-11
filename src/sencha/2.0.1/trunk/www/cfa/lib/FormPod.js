@@ -199,6 +199,7 @@ var Formpod = {
 			var def = formDefinitions[idx];
 			this.FormTypes[def.formName] = new FormClass(def.formName, def.formDesc, def.formFields)
 			this.FormTypes[def.formName].displayProperty = def.displayProperty;
+			this.FormTypes[def.formName].childForms = def.childForms;            
 		}
 		this.generator = generator;
 	},
@@ -281,7 +282,7 @@ var Formpod = {
 			}
 		);
 	},
-	saveInstance: function (o) {
+	saveInstance: function (o, callback) {
 		var insertClassAttrs = {};
 		var modifyClassAttrs = {};
 		var deleteClassAttrs = {};
@@ -328,7 +329,11 @@ var Formpod = {
 							o.id = rs.insertId;
 							for (var attr in insertClassAttrs) {
 								if (insertClassAttrs[attr] === true)
-								t.executeSql("insert into attr(objid, name, value) values(?,?,?)", [o.id, attr, o[attr]]);
+								t.executeSql("insert into attr(objid, name, value) values(?,?,?)", [o.id, attr, o[attr]],
+                                    function(t, rs) {
+                                        if (typeof callback === 'function')
+                                            callback(o);
+                                    });
 							};	
 						}
 					);
@@ -380,9 +385,9 @@ var Formpod = {
 	deleteAllObjects: function() {
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		db.transaction( function(t) {
-			t.executeSql("delete * from rel");
-			t.executeSql("delete * from attr");
-			t.executeSql("delete * from obj");
+			t.executeSql("delete from rel");
+			t.executeSql("delete from attr");
+			t.executeSql("delete from obj");
 		});//Close transaction
 	},
 	findObjectsByAttr: function(query, value, callback) {
