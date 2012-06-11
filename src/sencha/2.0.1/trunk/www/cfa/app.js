@@ -75,6 +75,13 @@ Ext.application({
 			}
 		   	
     	});
+    	
+    	if(!window.plugins) {
+        	window.plugins = {};
+    	}
+        if ( ! window.plugins.childBrowser ) {
+       		window.plugins.childBrowser = new ChildBrowser();
+    	}
 	    //Destroy the #appLoadingIndicator element		
     	Ext.fly('appLoadingIndicator').destroy();
 	},
