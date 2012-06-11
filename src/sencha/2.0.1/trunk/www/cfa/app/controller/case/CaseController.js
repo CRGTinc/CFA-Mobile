@@ -61,7 +61,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
     caseItemTap: function (nestedList, list, index, target, record, e, eOpts) {
         var p = this.getCaseContextPanel();
-        p.getComponent(0).getComponent(0).setHtml('<div align="center"><strong><font size="+2">Case information</font></strong></div>');       
+        p.getComponent(0).getComponent(0).setValue("Case information");       
 
         this.setCurrentRecord(record);
         this.showCurrentRecord();
@@ -88,7 +88,7 @@ Ext.define('cfa.controller.case.CaseController', {
             this.setCurrentRecord(record);
             this.showCurrentRecord();
             var p = this.getCaseContextPanel();
-            p.getComponent(0).getComponent(0).setHtml('<div align="center"><strong><font size="+2">Add new case</font></strong></div>');
+            p.getComponent(0).getComponent(0).setValue("Add new case");
         }
     },
     
