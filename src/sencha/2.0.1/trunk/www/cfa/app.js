@@ -10,7 +10,7 @@ Ext.application({
 		'Ext.MessageBox'			
 	],
 	profiles : ['Tablet', 'Phone'],
-	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 			'ReferencesLocal'],
+	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal'],
 
 	icon : {
 		'57' : 'resources/icons/Icon.png',
@@ -74,14 +74,8 @@ Ext.application({
 				},
 			}
 		   	
-    	});
+    	});    	
     	
-    	if(!window.plugins) {
-        	window.plugins = {};
-    	}
-        if ( ! window.plugins.childBrowser ) {
-       		window.plugins.childBrowser = new ChildBrowser();
-    	}
 	    //Destroy the #appLoadingIndicator element		
     	Ext.fly('appLoadingIndicator').destroy();
 	},
