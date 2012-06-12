@@ -54,7 +54,8 @@ Ext.define("cfa.view.case.CaseView", {
                                 flex: 1,
                                 items: [
                                     {
-                                        xtype: 'label'
+                                        xtype: 'label',
+                                        id: 'casecontextlabel'
                                     }
                                 ],
                             }, {

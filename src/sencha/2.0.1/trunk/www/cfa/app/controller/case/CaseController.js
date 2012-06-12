@@ -18,6 +18,7 @@ Ext.define('cfa.controller.case.CaseController', {
             caseContentPanel: 'panel[id = "casecontentpanel"]',
             caseFormPanel: 'panel[id = "caseformpanel"]',
             caseToolbar: 'toolbar[id = "casetoolbar"]',
+            caseContextLabel: '#casecontextlabel',
             addCaseDataButton: 'button[action = addCaseData]',
             saveCaseDataButton: 'button[action = savecasedata]',
             cancelCaseDataButton: 'button[action = cancelcasedata]',
@@ -69,9 +70,6 @@ Ext.define('cfa.controller.case.CaseController', {
     },
 
     caseItemTap: function (nestedList, list, index, target, record, e, eOpts) {
-        var p = this.getCaseContextPanel();
-        p.getComponent(0).setHtml('<div align="center">Case information</div>');       
-
         this.setCurrentRecord(record);
         this.showCurrentRecord();
         
@@ -96,8 +94,6 @@ Ext.define('cfa.controller.case.CaseController', {
             
             this.setCurrentRecord(record);
             this.showCurrentRecord();
-            var p = this.getCaseContextPanel();
-            p.getComponent(0).setHtml('<div align="center">Add new case</div>');
         }
     },
     
@@ -151,6 +147,9 @@ Ext.define('cfa.controller.case.CaseController', {
     casesListBackTap: function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
         var recordsPath = this.getRecordsPath();
         Ext.Array.remove(recordsPath, recordsPath[recordsPath.length - 1]);
+        
+        this.setCurrentRecord(null);
+        this.showCurrentRecord();
     },
     
     caseFormSelected: function(list, index, target, record, e, eOpts) {
@@ -185,6 +184,7 @@ Ext.define('cfa.controller.case.CaseController', {
         var currentRecord = this.getCurrentRecord();
         
         if (currentRecord) {
+
             var formData = currentRecord.get('form');
             var engine = formData.engineClass;
             engine.resetForm();
@@ -195,10 +195,30 @@ Ext.define('cfa.controller.case.CaseController', {
             this.getCaseFormPanel().add(form);
             this.getCaseContentPanel().show();
             this.getCaseToolbar().show();
+            
         } else {
             this.getCaseFormPanel().removeAll(false);
             this.getCaseContentPanel().hide();
             this.getCaseToolbar().hide();
+        }
+        
+        this.showContextInfo(currentRecord);
+    },
+    
+    showContextInfo: function(record) {
+        if (record) {
+            var contextString,
+                engine = record.get('form').engineClass;
+            
+            if (record.phantom) {
+                contextString = Ext.String.format('<div align="center">New {0}<br />{1}</div>', engine.name, engine.description);
+            } else {
+                contextString = Ext.String.format('<div align="center">{0}<br />{1}</div>', engine.name, engine.description);
+            }
+            
+            this.getCaseContextLabel().setHtml(contextString);
+        } else {
+            this.getCaseContextLabel().setHtml('');
         }
     }
 });
