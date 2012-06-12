@@ -129,14 +129,14 @@ Ext.define('cfa.controller.case.CaseController', {
                 }
             }
 
-            this.hideCurrentRecord();
             this.setCurrentRecord(null);
+            this.showCurrentRecord();
         }
     },
     
     cancelCaseData: function() {
-        this.hideCurrentRecord();
         this.setCurrentRecord(null);
+        this.showCurrentRecord();
     },
     
     casesListBackTap: function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
@@ -166,7 +166,6 @@ Ext.define('cfa.controller.case.CaseController', {
             if (recordsPath.length) {
                 var currentNode = recordsPath[recordsPath.length - 1];
                 data.set('parentId', currentNode.get('id'));
-                console.log(data);
             }
             
             this.setCurrentRecord(data);
@@ -174,7 +173,6 @@ Ext.define('cfa.controller.case.CaseController', {
     },
     
     showCurrentRecord: function() {
-        this.hideCurrentRecord();
         var currentRecord = this.getCurrentRecord();
         
         if (currentRecord) {
@@ -184,18 +182,13 @@ Ext.define('cfa.controller.case.CaseController', {
             engine.loadForm(formData);
 
             var form = engine.getForm();
-            this.getCaseFormPanel().add(form);
-            this.getCaseToolbar().show();
-        }
-    },
-    
-    hideCurrentRecord: function() {
-        var currentRecord = this.getCurrentRecord();
-        
-        if (currentRecord) {
-            var formData = currentRecord.get('form');
-            var engine = formData.engineClass;
             this.getCaseFormPanel().removeAll(false);
+            this.getCaseFormPanel().add(form);
+            this.getCaseContentPanel().show();
+            this.getCaseToolbar().show();
+        } else {
+            this.getCaseFormPanel().removeAll(false);
+            this.getCaseContentPanel().hide();
             this.getCaseToolbar().hide();
         }
     }

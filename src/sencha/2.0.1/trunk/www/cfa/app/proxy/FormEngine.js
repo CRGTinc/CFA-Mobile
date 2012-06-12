@@ -135,7 +135,7 @@ Ext.define('cfa.proxy.FormEngine', {
         var me = this,
             length = records.length,
             record, rawData, formData, i;
-
+            
         for (i = 0; i < length; i++) {
             record = records[i];
             rawData = record.getData();
@@ -150,13 +150,12 @@ Ext.define('cfa.proxy.FormEngine', {
                     
                     if (parentId)
                         Formpod.relateObjectById(parentId, obj.id, 'hasChild');
+                        
+                    if (typeof callback == 'function')
+                        callback();
                 });
-                
-                if (typeof callback == 'function')
-                    callback();
                     
                 return;
-
             } else {
                 Formpod.saveInstance(formData, function(obj) {
                     record.id = obj.id;

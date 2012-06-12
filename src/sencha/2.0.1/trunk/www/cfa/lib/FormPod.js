@@ -318,6 +318,9 @@ var Formpod = {
 								if (deleteClassAttrs[attr] === true)
 								t.executeSql("delete from attr where objid = ? and name = ?", [o.id, attr]);
 							}
+                            
+                            if (typeof callback === 'function')
+                                callback(o);
 						}
 					);
 				} else {

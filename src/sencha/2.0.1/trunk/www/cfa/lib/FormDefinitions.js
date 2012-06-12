@@ -17,9 +17,9 @@ FD_Forms ['Case Form'] =
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "Case Information", instructions: "Case Information"},
                 {name: "fs", type: "fieldset", title: "General", instructions: "General Case Information"},
+                    {name: "CaseTitle", type: "textfield", label: "Case Title", value: "", required: true, source: "CaseTitle", helpText: "Name your case"},
                     {name: "CreationDate", type: "textfield", label: "Case Creation Date", value: "", required: false, source: "CaseCreationDate", helpText: "Date the Case was created"},
                     {name: "ICENo", type: "textfield", label: "ICE Case No.", value: "", required: false, source: "ICENo", helpText: "Enter Case Number obtained from TECS"},
-                    {name: "CaseTitle", type: "textfield", label: "Case Title", value: "", required: true, source: "CaseTitle", helpText: "Name your case"},
                     {name: "CaseAgent", type: "textfield", label: "Case Agent", value: "", required: false, source: "CaseAgent", helpText: "Case Agent's name"},
                     {name: "AgentPhone", type: "textfield", label: "Agent Phone No.", value: "(###) ###-####", required: false, source: "AgentPhone", helpText: "Case Agent's phone number"},
                     {name: "AgentEmail", type: "emailfield", label: "Agent Email", value: "", required: false, source: "AgentEmail", helpText: "Case Agent's email address"},
@@ -48,8 +48,8 @@ FD_Forms ['Case Form'] =
 	
 FD_Forms ['AR Form'] =
 	{
-		formName : "AR Form",
-		formDesc: "Assistance Request Form",
+		formName : "Assistance Request Form",
+		formDesc: "Use to request support from another office",
 		displayProperty: 'ProsecutorName',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
@@ -71,9 +71,10 @@ FD_Forms ['AR Form'] =
 	
 FD_Forms ['BR Form'] =
 	{
-		formName : "BR Form",
-		formDesc : "Border Response Form",
-        displayProperty: 'SubjectName',
+		formName : "Border Response Form",
+		formDesc : "Log a Border Response with this form",
+
+       displayProperty: 'SubjectName',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "SubjectName", type: "textfield", label: "Subject Name", value: "", required: false, source: "SubjectName", helpText: "Help"},
@@ -87,22 +88,22 @@ FD_Forms ['BR Form'] =
 
 FD_Forms ['System Form'] =
 	{
-		formName : "System Form",
-		formDesc : "System Form",
+		formName : "Device",
+		formDesc : "Enter info for a new device",
         displayProperty: 'SystName',
-		formFields: [
+        formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "System Information", instructions: "System Information"},
                 {name: "fs", type: "fieldset", title: "General", instructions: "General System Information"},
+                	{name: "SystName", type: "textfield", label: "System Name", value: "", required: false, source: "SystName", helpText: "Help"},
                     {name: "ExamStart", type: "textfield", label: "Date Exam Started", value: "", required: false, source: "ExamStart", helpText: "Help"},
                     {name: "ExamEnd", type: "textfield", label: "Date Exam Completed", value: "", required: false, source: "ExamEnd", helpText: "Help"},
                     {name: "Notes", type: "textareafield", label: "Notes", value: "", required: false, source: "Notes", helpText: "Notes about the system"},
                 {name: "efs", type: "endfieldset"},
                 {name: "fs", type: "fieldset", title: "System", instructions: "System Information"},
-                    {name: "SystManufacturer", type: "textfield", label: "Syste Manufacturer", value: "", required: false, source: "SystManufacturer", helpText: "Help"},
+                    {name: "SystManufacturer", type: "textfield", label: "System Manufacturer", value: "", required: false, source: "SystManufacturer", helpText: "Help"},
                     {name: "SystType", type: "textfield", label: "System Type", value: "", required: false, source: "SystType", helpText: "Help"},
                     {name: "SystModel", type: "textfield", label: "System Model", value: "", required: false, source: "SystModel", helpText: "Help"},
-                    {name: "SystName", type: "textfield", label: "System Name", value: "", required: false, source: "SystName", helpText: "Help"},
                     {name: "SystSN", type: "textfield", label: "System SN#", value: "", required: false, source: "SystSN", helpText: "Help"},
                     {name: "SystOS", type: "selectfield", label: "System OS", value: [ {value:'Win', name:'Windows XP/NT/7/8'}, {value:'OSX', name:'Mac OS X'}], required: false, source: "SystOS", helpText: "Help"},
                     {name: "SystBootOrder", type: "textfield", label: "System Boot Order", value: "", required: false, source: "SystBootOrder", helpText: "Help"},
@@ -120,3 +121,4 @@ for (var name in FD_Forms) {
     if (name != 'Case Form')
         Ext.Array.insert(CaseForms, CaseForms.length, [FD_Forms[name]]);
 }
+
