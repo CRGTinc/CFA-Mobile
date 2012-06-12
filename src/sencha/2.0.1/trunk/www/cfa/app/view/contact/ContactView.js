@@ -48,12 +48,12 @@ Ext.define("cfa.view.contact.ContactView", {
 			]			
 		};
 		
-		var eventDetail = {
+		var contactDetail = {
 			xtype: 'contact_detail',
 			flex: 2
 		}
 		
-		this.add([leftPanel,eventDetail]);
+		this.add([leftPanel,contactDetail]);
 				
 	},
 		
@@ -62,8 +62,7 @@ Ext.define("cfa.view.contact.ContactView", {
 	},
 	
 	reloadContactClick: function(){
-		this.fireEvent('reloadContactCommand',this);
-		//this.getContactStore().load();		
+		this.fireEvent('reloadContactCommand',this);	
 	}, 
 	
 });
