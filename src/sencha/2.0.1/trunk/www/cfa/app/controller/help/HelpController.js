@@ -23,11 +23,14 @@ Ext.define('cfa.controller.help.HelpController',{
 	},
 	
 	showHelpById: function(path){
-		 if (Ext.os.is.Desktop) {
+		/* if (Ext.os.is.Desktop) {
             window.open("help/"+path+".html");
         } else {
             window.plugins.childBrowser.showWebPage("help/"+path+".html");
-        }
+        }*/
+       
+       var helpView = Ext.create('cfa.view.help.HelpView');
+		this.getMain().push(helpView);
 	}
 			
 })
