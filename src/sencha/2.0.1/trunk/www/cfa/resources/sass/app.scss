@@ -114,9 +114,18 @@ $active-color: #3f4c68;
 }
 
 
-.x-inner{
-  padding:0px !important;
-  margin:0px  !important;
+.infoPanel {
+  background-color: white;
+  padding: 10px 10px 5px 10px;
+  border-radius: 12px;
+  margin: 15px
+}
+
+.cardAnswerList {
+  margin: 20px;
+  border-radius: 12px;
+  background-color: white;;
+  width: 400px;
 }
 
 

@@ -47,24 +47,18 @@ Ext.define("cfa.view.case.CaseView", {
                             {
                                 xtype: 'formpanel',
                                 baseCls: 'panel-shadow',
+                                cls:['infoPanel'],
                                 margin:'5 15 10 15',
                                 id: 'casecontextpanel',
                                 layout: 'fit',
                                 items:[{
-                                	xtype:'fieldset',
-                                	items:[{
-                                		
-                                		xtype:'textfield',
-                                		readOnly: true,
-                                	}],
-                                	
-                                	
-                                }],                           
-                               
+                                	xtype:'label',
+                                }],
                                 flex: 1,
                             }, {
                                 xtype: 'panel',
                                 baseCls: 'panel-shadow',
+                                cls:['infoPanel'],
                                 margin:'5 15 0 15',
                                 layout: 'fit',
                                 flex: 9,                                
@@ -72,7 +66,6 @@ Ext.define("cfa.view.case.CaseView", {
                                 items: [
                                 	{
                                         xtype: 'panel',
-                                        margin:'0 0 0 0',
                                         layout: 'fit',
                                         id: 'caseformpanel',                                        
                                     }, {
