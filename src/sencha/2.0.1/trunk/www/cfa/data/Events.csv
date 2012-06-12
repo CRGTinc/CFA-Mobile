@@ -1,6 +1,1 @@
-"date","time","event_name","event_description","location"
-"Sun, 01 Oct 2012","3pm to 4pm","Monthly Meeting","Monthly wrap-up meeting","DC office room 1538"
-"Thu, 19 Aug 2012","3pm to 4pm","Training section","Training newcommers","DC office room 1539"
-"Wed, 18 Apr 2012","4pm to 4pm","Insurance information","Insurance contract","DC office room 1540"
-"Fri, 17 Oct 2012","5pm to 4pm","Happy Hour","Happy hour","DC office room 1541"
-"Sat, 17 Feb 2012","6pm to 4pm","Customer call Conference","Calling conference with customer","DC office room 1542"
+date,time,event_name,event_description,location"Sun, 01 Oct 2012",3pm to 4pm,Monthly Meeting,Monthly wrap-up meeting,DC office room 1538"Thu, 19 Aug 2012",3pm to 4pm,Training section,Training newcommers,DC office room 1539"Wed, 18 Apr 2012",4pm to 4pm,Insurance information,Insurance contract,Main conference room"Fri, 17 Oct 2012",5pm to 4pm,Happy Hour,Happy hour,Small conference room"Sat, 17 Feb 2012",6pm to 4pm,Customer call Conference,Calling conference with customer,Main conference room"Mon, 11 Jun 2012",9am to 10am,Department Status,Update on current projects,War room"Thu, 14 Jun 2012",11am to 1pm,Brown bag session,Information on our new sales tool,Main conference room"Wed, 20 Jun 2012",10am to 11am,BD Review,Current Pipeline review session,Small conference room"Fri, 29 Jun 2012",4pm to 7pm,Summer Happy Hour,Summer Celebration,O'Connor's "Tue, Jul 3 2012",9am to 11am,Board Meeting,Quarterly board meeting,Main conference room

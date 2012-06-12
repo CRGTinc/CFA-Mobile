@@ -1,4 +1,1 @@
-"firstname","lastname","email","office_phone","mobile_phone","departement"
-"Tom","Sawyer","tom_sawyer@abc.com",1159,112255789,"IT"
-"Diana","Chan","diana_chain@abc.com",5858,223356844,"Marketing"
-"Boby","Brain","boby_brain@abc.com",4626,774775568,"Management"
+firstname,lastname,email,office_phone,mobile_phone,departementJohn,Scott,jscott@crgt.com,703-905-1238,703-401-6725,Emerging TechnologyValerie,Beaudoin,vbeaudoin@crgt.com,571-612-8508,571-246-7090,Emerging TechnologyChuck,Shotton,cshotton@crgt.com,703-905-1256,703-589-4374,Emerging TechnologyJim,Holtzclaw,jholtzclaw@crgt.com,571-612-8517,571-543-6751,Enterprise SecurityBob,Ward,rward@crgt.com,703-905-1225,703-371-6482,Strategic Business DevelopmentCurt,Mattingly,cmattingly@crgt.com,703-905-1208,703-457-3265,Strategic Business DevelopmentEric,Ruscheinski,eruscheinski@crgt.com,571-612-8515,571-983-2157,ITKayde,Cunningham,kcunningham@crgt.com,703-905-1207,,ContractsJohn,McDaniel,jmcdaniel@crgt.com,703-905-1227,703-943-5713,Proposal DevelopmentMonica,Rippe,mrippe@crgt.com,703-905-1259,703-125-4832,Administration
