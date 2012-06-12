@@ -154,6 +154,12 @@ var Formpod = {
 				this.getForm().reset();
 				delete this.getForm().engineObjectId;
 			}
+            
+            this.deleteForm = function() {
+                if (this.form) {
+                    delete this.form;
+                }
+            }
 			
 			this.getForm = function() {
 				// Generate the code for the form specified in fdata. Returns various types depending

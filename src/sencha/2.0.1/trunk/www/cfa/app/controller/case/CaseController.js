@@ -53,8 +53,17 @@ Ext.define('cfa.controller.case.CaseController', {
         
         formSelectionView: Ext.create('cfa.view.case.CaseFormSelectionView')
     },
+    
+    resetForms: function() {
+        this.setRecordsPath([]);
+        
+        for (var formName in Formpod.FormTypes) {
+            Formpod.FormTypes[formName].deleteForm();
+        }
+    },
 
     showCasePage: function () {
+        this.resetForms();
         var caseView = Ext.create('cfa.view.case.CaseView');
         this.getMain().push(caseView);
     },
