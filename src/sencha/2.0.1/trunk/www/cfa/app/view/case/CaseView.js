@@ -42,13 +42,13 @@ Ext.define("cfa.view.case.CaseView", {
                 items: [
                     {
                         xtype:'panel',
-                        layout: 'vbox',
+                        layout: 'vbox',                       
                         items:[
                             {
                                 xtype: 'formpanel',
                                 baseCls: 'panel-shadow',
                                 cls:['infoPanel'],
-                                margin:'5 15 10 15',
+                                
                                 id: 'casecontextpanel',
                                 layout: 'fit',
                                 items:[{
@@ -59,7 +59,7 @@ Ext.define("cfa.view.case.CaseView", {
                                 xtype: 'panel',
                                 baseCls: 'panel-shadow',
                                 cls:['infoPanel'],
-                                margin:'5 15 0 15',
+                                
                                 layout: 'fit',
                                 flex: 9,                                
                                 id: 'casecontentpanel',
@@ -68,26 +68,25 @@ Ext.define("cfa.view.case.CaseView", {
                                         xtype: 'panel',
                                         layout: 'fit',
                                         id: 'caseformpanel',                                        
+                                    }, 
+                                ]
+                            }, {
+                                 xtype: 'toolbar',
+                                 id: 'casetoolbar',
+                                 layout:{
+                                   	align:'center',
+                                   	pack:'right'                                     	
+                                 },
+                                 docked: 'bottom',
+                                 items: [
+                                   	{
+                                       xtype: 'button',
+                                       action: 'savecasedata',                   
+                                       text: 'Save'
                                     }, {
-                                        xtype: 'toolbar',
-                                        id: 'casetoolbar',
-                                        layout:{
-                                        	align:'center',
-                                        	pack:'right'	
-                                        	
-                                        },
-                                        docked: 'bottom',
-                                        items: [
-                                        	{
-                                                xtype: 'button',
-                                                action: 'savecasedata',                   
-                                                text: 'Save'
-                                            }, {
-                                                xtype: 'button',
-                                                action: 'cancelcasedata',                    
-                                                text: 'Cancel'
-                                            }
-                                        ]
+                                       xtype: 'button',
+                                       action: 'cancelcasedata',                    
+                                       text: 'Cancel'
                                     }
                                 ]
                             }
