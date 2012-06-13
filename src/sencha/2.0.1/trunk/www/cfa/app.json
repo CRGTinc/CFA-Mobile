@@ -49,11 +49,11 @@
             "update": "delta"
         },
         {
-            "path": "lib/FormPod.js",
+            "path": "lib/FormDefinitions.js",
             "update": "delta"
         },
         {
-            "path": "lib/FormDefinitions.js",
+            "path": "lib/FormPod.js",
             "update": "delta"
         }
     ],
@@ -131,8 +131,7 @@
         "resources/startup",		
 		"data/Contacts.csv",
 		"data/References.csv",
-		"data/Events.csv",
-		"data/Cases.json"
+		"data/Events.csv"
     ],
 
     /**

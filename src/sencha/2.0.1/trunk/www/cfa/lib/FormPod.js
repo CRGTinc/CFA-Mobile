@@ -191,21 +191,24 @@ var Formpod = {
 				);
 				t.executeSql(
 					"CREATE TABLE IF NOT EXISTS rel (" +
-					" id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-					" src INTEGER, dest INTEGER," + 
-					" type TEXT)"
+					" src INTEGER NOT NULL, dest INTEGER NOT NULL," + 
+					" type TEXT NOT NULL," +
+                    " PRIMARY KEY(src, dest, type))"
 				);
 			},
 			function(e) { throw e }
 			);
 		};
 		createDatabases();
+        this.Forms = [];
 		for (var idx in formDefinitions) {
 			if (!formDefinitions.hasOwnProperty(idx)) continue;
 			var def = formDefinitions[idx];
 			this.FormTypes[def.formName] = new FormClass(def.formName, def.formDesc, def.formFields)
 			this.FormTypes[def.formName].displayProperty = def.displayProperty;
-			this.FormTypes[def.formName].childForms = def.childForms;            
+			this.FormTypes[def.formName].childForms = def.childForms;
+            
+            this.Forms.push(this.FormTypes[def.formName]);
 		}
 		this.generator = generator;
 	},
@@ -362,7 +365,7 @@ var Formpod = {
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		db.transaction( 
 			function (t) {
-				t.executeSql("INSERT INTO rel(src, dest, type) VALUES(?, ?, ?)", [srcId, destId, type]);
+				t.executeSql("INSERT OR REPLACE INTO rel(src, dest, type) VALUES(?, ?, ?)", [srcId, destId, type]);
 			}
 		);
 	},

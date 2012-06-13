@@ -15,8 +15,8 @@ Ext.define('cfa.view.case.CaseFormSelectionView', {
         items: [{
                 xtype: 'list',
                 id: 'caseformlist',
-                itemTpl: '{formName}',
-                data: CaseForms
+                itemTpl: '{name}',
+                store: 'CaseForms'
             }
         ]
     }

@@ -5,8 +5,6 @@ Ext.define('cfa.store.CaseForms', {
 
     config: {
         autoLoad: true,
-        model: 'cfa.model.CaseForm',
-        
-        data: CaseForms
+        model: 'cfa.model.CaseForm'
     }
 });

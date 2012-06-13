@@ -31,7 +31,6 @@ Ext.application({
 	},
 	
 	launch : function() {
-		Formpod.init(FD_Forms, Formpod.FormEngine.CodeGenerators.Sencha);
 		Deft.Injector.configure({
 			contactStore: {
 				fn: function() {

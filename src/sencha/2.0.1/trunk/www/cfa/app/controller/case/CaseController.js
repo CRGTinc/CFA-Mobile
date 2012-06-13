@@ -52,19 +52,27 @@ Ext.define('cfa.controller.case.CaseController', {
         
         recordsPath: [],
         
-        formSelectionView: Ext.create('cfa.view.case.CaseFormSelectionView')
+        formSelectionView: null
     },
     
-    resetForms: function() {
-        this.setRecordsPath([]);
+    initForms: function() {
+        if (!this.getFormSelectionView())
+            this.setFormSelectionView(Ext.create('cfa.view.case.CaseFormSelectionView'));
+    
+        if (!Formpod.Forms) {
+            Formpod.init(FD_Forms, Formpod.FormEngine.CodeGenerators.Sencha);
+            Ext.getStore('CaseForms').setData(Formpod.Forms);
+        }
         
         for (var formName in Formpod.FormTypes) {
             Formpod.FormTypes[formName].deleteForm();
         }
+
+        this.setRecordsPath([]);
     },
 
     showCasePage: function () {
-        this.resetForms();
+        this.initForms();
         var caseView = Ext.create('cfa.view.case.CaseView');
         this.getMain().push(caseView);
     },
@@ -80,14 +88,23 @@ Ext.define('cfa.controller.case.CaseController', {
     },
 
     addCaseData: function () {
-        var recordsPath = this.getRecordsPath(),
-            record, engine;
+        var recordsPath = this.getRecordsPath();
             
         if (recordsPath.length) {
+            var store = Ext.getStore('CaseForms'),
+                lastRecord = recordsPath[recordsPath.length - 1],
+                childForms = lastRecord.get('form').engineClass.childForms;
+            
+            store.clearFilter();
+            store.filterBy(function(record) {
+                return Ext.Array.contains(childForms, record.get('name'));
+            });
+            
             this.getFormSelectionView().showBy(this.getCasesList().getToolbar());
         } else {
-            record = Ext.create('cfa.model.Case');
-            engine = Formpod.FormTypes['Case Form'];
+            var record = Ext.create('cfa.model.Case'),
+                engine = Formpod.FormTypes['Case Form'];
+            
             record.set('form', {
                 engineClass: engine
             });
@@ -99,7 +116,6 @@ Ext.define('cfa.controller.case.CaseController', {
     
     saveCaseData: function() {
         var currentRecord = this.getCurrentRecord();
-        console.log('save current record', currentRecord);
         
         if (currentRecord) {
             var store = Ext.getStore('Cases'),
@@ -155,7 +171,7 @@ Ext.define('cfa.controller.case.CaseController', {
     caseFormSelected: function(list, index, target, record, e, eOpts) {
         this.getFormSelectionView().hide();
         
-        var formType = record.get('formName'),
+        var formType = record.get('name'),
             data = Ext.create('cfa.model.Case'),
             engine = Formpod.FormTypes[formType];
             

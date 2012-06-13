@@ -12,16 +12,16 @@ FD_Forms ['Case Form'] =
 	    formName: "Case Form",
 		formDesc : "Case Main Data Form",
 		displayProperty: "CaseTitle",
-        childForms: ['AR Form', 'BR Form'],
+        childForms: ['Assistance Request Form', 'Border Response Form', 'Device'],
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "Case Information", instructions: "Case Information"},
                 {name: "fs", type: "fieldset", title: "General", instructions: "General Case Information"},
                     {name: "CaseTitle", type: "textfield", label: "Case Title", value: "", required: true, source: "CaseTitle", helpText: "Name your case"},
-                    {name: "CreationDate", type: "textfield", label: "Case Creation Date", value: "", required: false, source: "CaseCreationDate", helpText: "Date the Case was created"},
+                    {name: "CreationDate", type: "datepickerfield", label: "Case Creation Date", value: "", required: false, source: "CaseCreationDate", helpText: "Date the Case was created"},
                     {name: "ICENo", type: "textfield", label: "ICE Case No.", value: "", required: false, source: "ICENo", helpText: "Enter Case Number obtained from TECS"},
                     {name: "CaseAgent", type: "textfield", label: "Case Agent", value: "", required: false, source: "CaseAgent", helpText: "Case Agent's name"},
-                    {name: "AgentPhone", type: "textfield", label: "Agent Phone No.", value: "(###) ###-####", required: false, source: "AgentPhone", helpText: "Case Agent's phone number"},
+                    {name: "AgentPhone", type: "textfield", label: "Agent Phone No.", placeHolder: "(###) ###-####", required: false, source: "AgentPhone", helpText: "Case Agent's phone number"},
                     {name: "AgentEmail", type: "emailfield", label: "Agent Email", value: "", required: false, source: "AgentEmail", helpText: "Case Agent's email address"},
                     {name: "CFAName", type: "textfield", label: "CFA Name", value: "", required: false, source: "CFAName", helpText: "CF Agent's name"},
                     {name: "FPFNo", type: "textfield", label: "FP&F No.", value: "", required: false, source: "FPFNo", helpText: "FP&F No."},
@@ -40,7 +40,7 @@ FD_Forms ['Case Form'] =
                 {name: "fs", type: "fieldset", title: "Completion", instructions: "Completion Case Information"},
                     {name: "FERCompleted", type: "checkboxfield", label: "FER Completed", value: "", checked: true, required: false, source: "FERCompleted", helpText: "Help"},
                     {name: "SubmOffice", type: "textfield", label: "Submitting Office", value: "", required: false, source: "SubmOffice", helpText: "Help"},
-                    {name: "SubmDate", type: "textfield", label: "Submission Date", value: "", required: false, source: "SubmDate", helpText: "Help"},
+                    {name: "SubmDate", type: "datepickerfield", label: "Submission Date", value: "", required: false, source: "SubmDate", helpText: "Help"},
                 {name: "efs", type: "endfieldset"},
             {name: "efs", type: "endfieldset"},
         ]
@@ -54,9 +54,9 @@ FD_Forms ['AR Form'] =
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "OAgency", type: "textfield", label: "Originating Agency", value: "", required: false, source: "OAgency", helpText: "Help"},
-			{name: "RequestDate", type: "textfield", label: "Request Date", value: "", required: false, source: "RequestDate", helpText: "Help"},
+			{name: "RequestDate", type: "datepickerfield", label: "Request Date", value: "", required: false, source: "RequestDate", helpText: "Help"},
             {name: "SearchAuthority", type: "textfield", label: "Search Authority", value: "", required: false, source: "SearchAuthority", helpText: "Help"},
-            {name: "EnforcementDate", type: "textfield", label: "Enforcement Date", value: "", required: false, source: "EnforcementDate", helpText: "Help"},
+            {name: "EnforcementDate", type: "datepickerfield", label: "Enforcement Date", value: "", required: false, source: "EnforcementDate", helpText: "Help"},
             {name: "ProsecutorName", type: "textfield", label: "Prosecutor Name", value: "", required: false, source: "ProsecutorName", helpText: "Help"},
             {name: "ProsecutorAgency", type: "textfield", label: "Prosecutor Agency", value: "", required: false, source: "ProsecutorAgency", helpText: "Help"},
             {name: "ProsecutorPhone", type: "textfield", label: "Prosecutor Phone No.", value: "", required: false, source: "ProsecutorPhone", helpText: "Help"},
@@ -90,14 +90,15 @@ FD_Forms ['System Form'] =
 	{
 		formName : "Device",
 		formDesc : "Enter info for a new device",
+        childForms: ['Assistance Request Form', 'Border Response Form', 'Device'],
         displayProperty: 'SystName',
         formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "System Information", instructions: "System Information"},
                 {name: "fs", type: "fieldset", title: "General", instructions: "General System Information"},
                 	{name: "SystName", type: "textfield", label: "System Name", value: "", required: false, source: "SystName", helpText: "Help"},
-                    {name: "ExamStart", type: "textfield", label: "Date Exam Started", value: "", required: false, source: "ExamStart", helpText: "Help"},
-                    {name: "ExamEnd", type: "textfield", label: "Date Exam Completed", value: "", required: false, source: "ExamEnd", helpText: "Help"},
+                    {name: "ExamStart", type: "datepickerfield", label: "Date Exam Started", value: "", required: false, source: "ExamStart", helpText: "Help"},
+                    {name: "ExamEnd", type: "datepickerfield", label: "Date Exam Completed", value: "", required: false, source: "ExamEnd", helpText: "Help"},
                     {name: "Notes", type: "textareafield", label: "Notes", value: "", required: false, source: "Notes", helpText: "Notes about the system"},
                 {name: "efs", type: "endfieldset"},
                 {name: "fs", type: "fieldset", title: "System", instructions: "System Information"},
@@ -114,11 +115,4 @@ FD_Forms ['System Form'] =
             {name: "efs", type: "endfieldset"},
         ]
 	};
-
-var CaseForms = [];
-
-for (var name in FD_Forms) {
-    if (name != 'Case Form')
-        Ext.Array.insert(CaseForms, CaseForms.length, [FD_Forms[name]]);
-}
 
