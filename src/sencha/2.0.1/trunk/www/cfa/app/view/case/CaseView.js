@@ -21,7 +21,8 @@ Ext.define("cfa.view.case.CaseView", {
                                     iconCls: 'add',
                                     iconMask: true,
                                     align:'right',
-                                    action: 'addCaseData'
+                                    action: 'addCaseData',
+                                    ui: 'action'
                                 }
                             ]
                         }
@@ -83,14 +84,26 @@ Ext.define("cfa.view.case.CaseView", {
                                 docked: 'bottom',
                                 hidden: true,
                                 items: [
-                                   	{
+                                    {
+                                        xtype: 'button',
+                                        action: 'deletecasedata',
+                                        text: 'Delete'
+                                    }, {
+                                        xtype: 'button',
+                                        action: 'exportcasedata',
+                                        text: 'Export'
+                                    }, {
+                                        xtype: 'spacer'
+                                    }, {
                                         xtype: 'button',
                                         action: 'savecasedata',                   
-                                        text: 'Save'
+                                        text: 'Save',
+                                        ui: 'confirm'
                                     }, {
                                         xtype: 'button',
                                         action: 'cancelcasedata',                    
-                                        text: 'Cancel'
+                                        text: 'Cancel',
+                                        ui: 'decline'
                                     }
                                 ]
                             }
