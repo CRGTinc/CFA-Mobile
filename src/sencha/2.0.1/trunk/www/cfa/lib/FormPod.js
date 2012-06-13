@@ -408,11 +408,11 @@ var Formpod = {
 		var objects = [];
 		db.transaction( 
 			function(t) {
-				t.executeSql("select a.objid, o.class from attr a, obj o where a.name = ? and a.value = ? and o.id = a.objid", [query, value],
+				t.executeSql("select a.objid, o.class as clsname from attr a, obj o where a.name = ? and a.value = ? and o.id = a.objid", [query, value],
 							function(t, rs) {
 								for (var i = 0; i < rs.rows.length; i++) {
 									var row = rs.rows.item(i);
-									ids.push([row.objid, row.class]);
+									ids.push([row.objid, row.clsname]);
 								}
 							}
 				);
@@ -455,11 +455,11 @@ var Formpod = {
 		}
 		db.transaction( 
 			function(t) {
-				t.executeSql("select distinct r.dest, o.class from rel r, obj o where r.src = ? and r.dest = o.id", [o.id],
+				t.executeSql("select distinct r.dest, o.class as clsname from rel r, obj o where r.src = ? and r.dest = o.id", [o.id],
 							function(t, rs) {
 								for (var i = 0; i < rs.rows.length; i++) {
 									var row = rs.rows.item(i);
-									objIds.push([row.dest, row.class]);
+									objIds.push([row.dest, row.clsname]);
 								}
 							}
 				);
@@ -475,11 +475,11 @@ var Formpod = {
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		db.transaction( 
 			function(t) {
-				t.executeSql("select distinct r.dest, o.class from rel r, obj o where r.src = ? and r.type = ? and r.dest = o.id", [id, type],
+				t.executeSql("select distinct r.dest, o.class as clsname from rel r, obj o where r.src = ? and r.type = ? and r.dest = o.id", [id, type],
 					function(t, rs) {
 						for (var i = 0; i < rs.rows.length; i++) {
 							var row = rs.rows.item(i);
-							objIds.push([row.dest, row.class]);
+							objIds.push([row.dest, row.clsname]);
 						}
 					}
 				);
@@ -515,8 +515,8 @@ var Formpod = {
 		for (idx in def) {
 			if (!def.hasOwnProperty(idx)) continue;
 			var item = def[idx];
-			if (typeof item.default !== 'undefined') {
-				instance[item.source] = item.default;
+			if (typeof item.defaultValue !== 'undefined') {
+				instance[item.source] = item.defaultValue;
 			} else {
 				instance[item.source] = item.value;
 			}
