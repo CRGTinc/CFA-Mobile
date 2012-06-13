@@ -3,7 +3,11 @@ Ext.define('cfa.model.CaseForm', {
 
     config: {
         fields: [
-            { name: 'name', type: 'string' }
+            { name: 'name', type: 'string' },
+            { name: 'description', type: 'string' },
+            'definition',
+            { name: 'displayProperty', type: 'string' },
+            'childForms'
         ]
     }
 });
