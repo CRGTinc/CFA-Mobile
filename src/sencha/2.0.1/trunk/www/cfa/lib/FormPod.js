@@ -44,7 +44,8 @@ var Formpod = {
 								name: finfo.name,
 								label: finfo.label,
 								value: finfo.value,
-								required: finfo.required
+								required: finfo.required,
+                                placeHolder: finfo.placeHolder
 							};
 						}
 
