@@ -22,7 +22,8 @@ Ext.define('cfa.controller.case.CaseController', {
             addCaseDataButton: 'button[action = addCaseData]',
             saveCaseDataButton: 'button[action = savecasedata]',
             cancelCaseDataButton: 'button[action = cancelcasedata]',
-            caseFormList: 'list[id = "caseformlist"]'
+            caseFormList: 'list[id = "caseformlist"]',
+            exportCaseData: 'button[action = exportcasedata]'
         },
 
         control: {
@@ -45,6 +46,10 @@ Ext.define('cfa.controller.case.CaseController', {
             
             caseFormList: {
                 'itemtap': 'caseFormSelected'
+            },
+            
+            exportCaseData:{
+            	'tap' : 'exportSingleData'            	
             }
         },
         
@@ -236,5 +241,66 @@ Ext.define('cfa.controller.case.CaseController', {
         } else {
             this.getCaseContextLabel().setHtml('');
         }
-    }
+    },
+    
+    exportSingleData: function(){
+    	
+    	var currentRecord = this.getCurrentRecord();    	
+        this.getJsonString( currentRecord);
+     },
+     
+     getFormInstanceData: function(formInstance){
+     	var formdata = '{';
+     	for(key in formInstance){
+     		     		
+     		if( typeof(formInstance[key]) != "object") {
+     			formdata = formdata.concat('"' + key + '"' + ':' + '"' + formInstance[key] + '",');
+     		}     		
+     	}
+     	
+     	formdata = formdata.concat('}');
+     	formdata = formdata.replace(',}', '}');
+     	return formdata;
+     },
+    
+    getJsonString: function(record) {    	
+    	var form, engine, data;            
+        form = record.getData().form;       
+        data = this.getFormInstanceData(form);       
+       	var jsonString =  data;           
+        
+        if (record.childNodes && record.childNodes.length) {        	   	
+        	var childData = [], i;
+        	for(i = 0; i < record.childNodes.length; i++){
+        		var data = this.getJsonString(record.childNodes[i]);        		       		 
+        		childData.push(data);        		
+    		} 
+    		jsonString = jsonString.replace("}", ',"childs":['+childData+']}'); 
+        }
+        console.log(jsonString);
+        return jsonString;
+    },
+    
+    
+     exportData: function(jsonString) {
+    	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
+	    		function(fileSystem) {
+	        		fileSystem.root.getFile("readme.txt", {create: true, exclusive: false}, 
+						function(fileEntry) {
+			        		fileEntry.createWriter(
+			        			function(writer) {
+			        				writer.onwrite = function(evt) {
+			            					console.log("write success");
+			        				};
+			        				writer.write(jsonString);
+			        			}, this.fail);
+			    		}, this.fail);
+	    		},this.fail);	
+   },   
+   
+   fail:function(error){   	  	
+   	console.log(error.code);   	
+   }
+  
 });
+
