@@ -8,7 +8,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
     config: {
         routes: {
-            'case': 'showCasePage'
+            'cases': 'showCasePage'
         },
 
         refs: {
@@ -23,7 +23,7 @@ Ext.define('cfa.controller.case.CaseController', {
             saveCaseDataButton: 'button[action = savecasedata]',
             cancelCaseDataButton: 'button[action = cancelcasedata]',
             caseFormList: 'list[id = "caseformlist"]',
-            exportCaseData: 'button[action = exportcasedata]'
+            exportCaseDataButton: 'button[action = exportcasedata]'
         },
 
         control: {
@@ -48,8 +48,8 @@ Ext.define('cfa.controller.case.CaseController', {
                 'itemtap': 'caseFormSelected'
             },
             
-            exportCaseData:{
-            	'tap' : 'exportSingleData'            	
+            exportCaseDataButton: {
+            	'tap' : 'exportCaseData'            	
             }
         },
         
@@ -165,6 +165,11 @@ Ext.define('cfa.controller.case.CaseController', {
         this.showCurrentRecord();
     },
     
+    exportCaseData: function() {
+    	var currentRecord = this.getCurrentRecord();    	
+            jsonString = getJsonString(currentRecord);
+    },
+    
     casesListBackTap: function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
         var recordsPath = this.getRecordsPath();
         Ext.Array.remove(recordsPath, recordsPath[recordsPath.length - 1]);
@@ -216,7 +221,6 @@ Ext.define('cfa.controller.case.CaseController', {
             this.getCaseFormPanel().add(form);
             this.getCaseContentPanel().show();
             this.getCaseToolbar().show();
-            
         } else {
             this.getCaseFormPanel().removeAll(false);
             this.getCaseContentPanel().hide();
@@ -242,18 +246,12 @@ Ext.define('cfa.controller.case.CaseController', {
             this.getCaseContextLabel().setHtml('');
         }
     },
-    
-    exportSingleData: function(){
-    	
-    	var currentRecord = this.getCurrentRecord();    	
-        this.getJsonString( currentRecord);
-     },
-     
-     getFormInstanceData: function(formInstance){
-     	var formdata = '{';
-     	for(key in formInstance){
-     		     		
-     		if( typeof(formInstance[key]) != "object") {
+         
+    getFormInstanceData: function(formInstance) {
+    	var formdata = '{';
+        
+     	for (key in formInstance) {
+     		if (typeof(formInstance[key]) != "object") {
      			formdata = formdata.concat('"' + key + '"' + ':' + '"' + formInstance[key] + '",');
      		}     		
      	}
@@ -261,46 +259,42 @@ Ext.define('cfa.controller.case.CaseController', {
      	formdata = formdata.concat('}');
      	formdata = formdata.replace(',}', '}');
      	return formdata;
-     },
+    },
     
     getJsonString: function(record) {    	
-    	var form, engine, data;            
-        form = record.getData().form;       
-        data = this.getFormInstanceData(form);       
-       	var jsonString =  data;           
+    	var form = record.getData().form,
+            jsonString = this.getFormInstanceData(form);
         
         if (record.childNodes && record.childNodes.length) {        	   	
         	var childData = [], i;
-        	for(i = 0; i < record.childNodes.length; i++){
+            
+        	for(i = 0; i < record.childNodes.length; i++) {
         		var data = this.getJsonString(record.childNodes[i]);        		       		 
         		childData.push(data);        		
-    		} 
-    		jsonString = jsonString.replace("}", ',"childs":['+childData+']}'); 
+    		}
+            
+    		jsonString = jsonString.replace('}', ',"childs":[' + childData + ']}'); 
         }
-        console.log(jsonString);
+
         return jsonString;
     },
     
-    
-     exportData: function(jsonString) {
-    	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
-	    		function(fileSystem) {
-	        		fileSystem.root.getFile("readme.txt", {create: true, exclusive: false}, 
-						function(fileEntry) {
-			        		fileEntry.createWriter(
-			        			function(writer) {
-			        				writer.onwrite = function(evt) {
-			            					console.log("write success");
-			        				};
-			        				writer.write(jsonString);
-			        			}, this.fail);
-			    		}, this.fail);
-	    		},this.fail);	
-   },   
+    exportData: function(jsonString, filename) {
+    	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+            fileSystem.root.getFile(filename, { create: true, exclusive: false }, function(fileEntry) {
+                fileEntry.createWriter(function(writer) {
+                    writer.onwrite = function(evt) {
+                        console.log('write success');
+                    };
+                    
+                    writer.write(jsonString);
+                }, this.fail);
+            }, this.fail);
+        }, this.fail);	
+    },   
    
-   fail:function(error){   	  	
-   	console.log(error.code);   	
-   }
-  
+    fail:function(error) {
+        console.log(error.code);   	
+    }
 });
 

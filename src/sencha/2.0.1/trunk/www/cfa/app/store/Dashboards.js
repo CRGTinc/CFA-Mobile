@@ -11,7 +11,7 @@ Ext.define('cfa.store.Dashboards', {
 		data:[
 				  {
 					 "label":"Cases",
-					 "urlId":"case"         
+					 "urlId":"cases"         
 				  },
 				  {
 					 "label":"Contacts",
