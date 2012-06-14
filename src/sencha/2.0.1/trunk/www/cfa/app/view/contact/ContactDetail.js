@@ -7,7 +7,14 @@ Ext.define('cfa.view.contact.ContactDetail',{
 		var contactName = {
 			xtype: 'textfield',
 			name: 'firstname',
-			label: 'Name',
+			label: 'First Name',
+			readOnly: true
+		};
+
+		var contactLastName = {
+			xtype: 'textfield',
+			name: 'lastname',
+			label: 'Last Name',
 			readOnly: true
 		};
 		
@@ -39,19 +46,11 @@ Ext.define('cfa.view.contact.ContactDetail',{
 			readOnly: true
 		}
 		
-		
 		this.add([
 			{ 
 				xtype: "fieldset",
-	          	items: [contactName, contactEmail, contactOfficePhone, contactMobilePhone, contactDepartement],
-				
+	          	items: [contactName, contactLastName, contactEmail, contactOfficePhone, contactMobilePhone, contactDepartement]
 			}			
-			
 		]);
-			
-		
-		
 	}
-	
-
 })
