@@ -33,22 +33,16 @@ Ext.define('cfa.view.event.EventDetail',{
 		}
 		
 		var eventDescription = {
-			xtype: 'textfield',
+			xtype: 'textareafield',
 			name: 'event_description',
 			label: 'Description',
+            maxRows: 6,
 			readOnly: true
 		}
 		
-		this.add(
-			{ 
-				xtype: "fieldset",
-	          	items: [eventTitle, eventDate, eventTime, eventLocation,eventDescription],
-				
-			});
-			
-		
-		
+		this.add({ 
+            xtype: "fieldset",
+	        items: [eventTitle, eventDate, eventTime, eventLocation,eventDescription]
+        });
 	}
-	
-
-})
+});
