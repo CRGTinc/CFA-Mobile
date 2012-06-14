@@ -4,7 +4,7 @@ Ext.define('cfa.controller.setting.SettingController',{
 	
 	config: {
         routes: {
-            'setting': 'showSettingPage'
+            'settings': 'showSettingPage'
         },
 
         refs: {

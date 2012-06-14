@@ -30,8 +30,8 @@ Ext.define('cfa.store.Dashboards', {
 					 "urlId":"search"         
 				  },
 				  {
-					 "label":"Setting",
-					 "urlId":"setting"         
+					 "label":"Settings",
+					 "urlId":"settings"         
 				  }
 			   ]
     }		
