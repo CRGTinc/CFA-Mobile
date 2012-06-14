@@ -64,11 +64,6 @@ Ext.define('cfa.controller.case.CaseController', {
         if (!this.getFormSelectionView())
             this.setFormSelectionView(Ext.create('cfa.view.case.CaseFormSelectionView'));
     
-        if (!Formpod.Forms) {
-            Formpod.init(FD_Forms, Formpod.FormEngine.CodeGenerators.Sencha);
-            Ext.getStore('CaseForms').setData(Formpod.Forms);
-        }
-        
         for (var formName in Formpod.FormTypes) {
             Formpod.FormTypes[formName].deleteForm();
         }

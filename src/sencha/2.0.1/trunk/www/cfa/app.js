@@ -31,6 +31,9 @@ Ext.application({
 	},
 	
 	launch : function() {
+        Formpod.init(FD_Forms, Formpod.FormEngine.CodeGenerators.Sencha);
+        Ext.getStore('CaseForms').setData(Formpod.Forms);
+        
 		Deft.Injector.configure({
 			contactStore: {
 				fn: function() {
@@ -40,7 +43,7 @@ Ext.application({
 						return store;	
 					}	
 					else {
-						return Ext.create('cfa.store.LSContacts' );
+						return Ext.create('cfa.store.LSContacts');
 					}
 				},
 				

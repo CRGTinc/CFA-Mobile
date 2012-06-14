@@ -134,15 +134,25 @@ Ext.define('cfa.proxy.FormEngine', {
     setRecord: function (records, callback) {
         var me = this,
             length = records.length,
-            record, rawData, formData, i;
+            record, rawData, formData, i, engine;
             
         for (i = 0; i < length; i++) {
             record = records[i];
-            rawData = record.getData();
-            formData = rawData.form;
+            rawData = {};
+            formData = record.getData().form;
+            engine = formData.engineClass;
+            
+            for (var attr in formData) {
+                var field = engine.fields[attr];
+                rawData[attr] = formData[attr];
+                
+                if (field && field.type == 'datepickerfield')
+                    if (rawData[attr])
+                        rawData[attr] = Ext.Date.format(rawData[attr], Formpod.dateFormat);
+            }
             
             if (i == length - 1) {
-                Formpod.saveInstance(formData, function(obj) {
+                Formpod.saveInstance(rawData, function(obj) {
                     record.set('id', obj.id);
                     record.commit();
                     
@@ -157,7 +167,7 @@ Ext.define('cfa.proxy.FormEngine', {
                     
                 return;
             } else {
-                Formpod.saveInstance(formData, function(obj) {
+                Formpod.saveInstance(rawData, function(obj) {
                     record.id = obj.id;
                     record.commit();
                     
@@ -190,12 +200,22 @@ Ext.define('cfa.proxy.FormEngine', {
         var records = [],
             data = {},
             length = objs.length,
-            i, obj;
+            i, obj, engine;
 
         for (i = 0; i < length; i++) {
             obj = objs[i];
+            engine = obj.engineClass;
+            
+            for (var attr in obj) {
+                var field = engine.fields[attr];
+                
+                if (field && field.type == 'datepickerfield')
+                    if (obj[attr])
+                        obj[attr] = Ext.Date.parse(obj[attr], Formpod.dateFormat);
+            }
+            
             data['id'] = obj.id;
-            data['text'] = obj[Formpod.FormTypes[obj.engineClass.name].displayProperty];
+            data['text'] = obj[engine.displayProperty];
             data['form'] = obj;
             record = new Model(data, obj.id);
 

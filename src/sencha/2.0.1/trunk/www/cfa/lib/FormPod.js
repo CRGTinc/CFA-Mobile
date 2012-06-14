@@ -105,11 +105,22 @@ var Formpod = {
 		}
 	},
 	FormTypes: {},
+    dateFormat: 'm/d/Y',
 	init: function (formDefinitions, generator) {
 		function FormClass(name, description, definition) {
 			this.name = name;
 			this.description = description;
 			this.definition = definition;
+            this.fields = {};
+            
+            var i = 0,
+                length = definition.length;
+            
+            for (; i < length; i++) {
+                var field = definition[i];
+                this.fields[field.name] = field;
+            }
+            
 			this.getInstance = function() {
 				return Formpod.getInstance(this);
 			};
@@ -430,7 +441,7 @@ var Formpod = {
 	findObjectsByClass: function(formClass, callback) {
 		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		if (typeof formClass === 'string') {
-			formClass = this.FormTypes[formClass];
+			formClass = Formpod.FormTypes[formClass];
 		}
 		var objIds = [];
 		var objects = [];
