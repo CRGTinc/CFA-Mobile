@@ -39,22 +39,6 @@
             "path": "app.js",
             "bundle": true,  /* Indicates that all class dependencies are concatenated into this file when build */
             "update": "delta"
-        },
-        {
-            "path": "lib/cordova-1.7.0.js",
-            "update": "delta"
-        },
-        {
-            "path": "lib/ChildBrowser.js",
-            "update": "delta"
-        },
-        {
-            "path": "lib/FormDefinitions.js",
-            "update": "delta"
-        },
-        {
-            "path": "lib/FormPod.js",
-            "update": "delta"
         }
     ],
 

@@ -15,7 +15,6 @@ Ext.define('cfa.proxy.FormEngine', {
 
     //inherit docs
     create: function (operation, callback, scope) {
-        console.log('create operation', operation);
         var records = operation.getRecords();
         operation.setStarted();
         this.setRecord(records, function () {
@@ -30,7 +29,6 @@ Ext.define('cfa.proxy.FormEngine', {
 
     //inherit docs
     read: function (operation, callback, scope) {
-        console.log('read operation', operation);
         var records = [],
             me = this,
             data = {},
@@ -79,7 +77,6 @@ Ext.define('cfa.proxy.FormEngine', {
 
     //inherit docs
     update: function (operation, callback, scope) {
-        console.log('update operation', operation);
         var records = operation.getRecords();
         operation.setStarted();
         this.setRecord(records, function () {
@@ -94,7 +91,6 @@ Ext.define('cfa.proxy.FormEngine', {
 
     //inherit
     destroy: function (operation, callback, scope) {
-        console.log('destroy operation', operation);
         var records = operation.getRecords();
 
         this.removeRecord(records, function () {
@@ -112,7 +108,6 @@ Ext.define('cfa.proxy.FormEngine', {
     * storage object.
     */
     clear: function () {
-        console.log('clear operation');
         Formpod.deleteAllObjects();
     },
 
