@@ -71,12 +71,12 @@
          */
         "cache": [
             "index.html",				
-			"resources/icons/case.png",
+			"resources/icons/cases.png",
 			"resources/icons/contacts.png",
 			"resources/icons/events.png",
 			"resources/icons/reference.png",
 			"resources/icons/search.png",
-			"resources/icons/setting.png",
+			"resources/icons/settings.png",
 			"resources/icons/Icon.png",
 			"resources/icons/Icon@2x.png",
 			"resources/icons/Icon~ipad.png",
