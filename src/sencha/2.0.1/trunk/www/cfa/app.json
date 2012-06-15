@@ -110,6 +110,10 @@
      * Extra resources to be copied along when build
      */
     "resources": [
+        "lib/cordova-1.7.0.js",
+        "lib/ChildBrowser.js",
+        "lib/FormDefinitions.js",
+        "lib/Formpod.js",
         "resources/images",
         "resources/icons",
         "resources/startup",		
