@@ -70,7 +70,11 @@
          * List of items in the CACHE MANIFEST section
          */
         "cache": [
-            "index.html",				
+            "index.html",
+            "lib/cordova-1.7.0.js",
+            "lib/ChildBrowser.js",
+            "lib/FormDefinitions.js",
+            "lib/Formpod.js",
 			"resources/icons/cases.png",
 			"resources/icons/contacts.png",
 			"resources/icons/events.png",
