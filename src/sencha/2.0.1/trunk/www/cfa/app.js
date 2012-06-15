@@ -29,8 +29,12 @@ Ext.application({
 		'1536x2008' : 'resources/startup/1536x2008.png',
 		'1496x2048' : 'resources/startup/1496x2048.png'
 	},
+    
+    buildVersion: null,
 	
 	launch : function() {
+        this.buildVersion = new Ext.Version('1.0b1');
+
         Formpod.init(FD_Forms, Formpod.FormEngine.CodeGenerators.Sencha);
         Ext.getStore('CaseForms').setData(Formpod.Forms);
         

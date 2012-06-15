@@ -11,12 +11,19 @@ Ext.define('cfa.view.about.AboutView', {
         layout: 'fit',
 		items:[{
                 centered: true,
+                itemId: 'versionpanel',
                 html: [
                     '<p align="center">CFA Mobile</p>',
-                    '<p align="center">Version ' + '0.1.0' + '</p>'
-                    
                 ].join('')
             }
         ]
+    },
+    
+    initialize: function() {
+        var versionPanel = this.getComponent('versionpanel'),
+            content = versionPanel.getHtml();
+            
+        content += '<p>Version ' + cfa.app.application.buildVersion.version + '</p>';
+        versionPanel.setHtml(content);
     }
 });

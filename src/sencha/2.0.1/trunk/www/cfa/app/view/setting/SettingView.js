@@ -8,6 +8,7 @@ Ext.define('cfa.view.setting.SettingView', {
         layout: 'fit',
 		items:[{
                 xtype: 'formpanel',
+                itemId: 'settingformpanel',
                 items: [{
                         xtype: 'fieldset',
                         title: 'General Information',
@@ -28,14 +29,16 @@ Ext.define('cfa.view.setting.SettingView', {
                         ]
                     }, {
                         xtype: 'fieldset',
+                        itemId: 'aboutfieldset',
                         title: 'About',
                         defaults: {
                             labelWidth: '20%'
                         },
                         items: [{
                                 xtype: 'textfield',
+                                itemId: 'versiontextfield',
                                 label: 'Version',
-                                value: '0.1.0',
+                                value: '',
                                 readOnly: true
                             }
                         ]
@@ -54,7 +57,13 @@ Ext.define('cfa.view.setting.SettingView', {
         ]
     },
 	
-	initialize: function(){
-		cfa.app.helpUrl = "Setting";	
+	initialize: function() {
+        var settingFormPanel = this.getComponent('settingformpanel'),
+            aboutFieldSet = settingFormPanel.getComponent('aboutfieldset'),
+            versionTextField = aboutFieldSet.getComponent('versiontextfield');
+
+        versionTextField.setValue(cfa.app.application.buildVersion.version);
+
+		cfa.app.helpUrl = "Setting";
 	}
 });
