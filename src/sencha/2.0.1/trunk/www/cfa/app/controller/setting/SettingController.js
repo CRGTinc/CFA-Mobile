@@ -39,7 +39,7 @@ Ext.define('cfa.controller.setting.SettingController',{
             var casesStore = Ext.getStore('Cases');
             casesStore.getProxy().clear();
             casesStore.load();
-            Ext.Msg.alert('Reset Data', 'Data has been reseted successfully.', Ext.emptyFn, this);
+            Ext.Msg.alert('Reset Data', 'Data has been reset successfully.', Ext.emptyFn, this);
         }
     }
 
