@@ -30,7 +30,9 @@
 	if(subject != nil)
 		[picker setSubject:subject];
 	// set body
-	if(body != nil)
+    
+    
+	if(body != nil && [body characterAtIndex:0] != '{')
 	{
 		if(isHTML != nil && [isHTML boolValue])
 		{
@@ -61,6 +63,10 @@
 	//  NSData *myData = [NSData dataWithContentsOfFile:path];
 	//  [picker addAttachmentData:myData mimeType:@"image/png" fileName:@"rainy"];
     
+    
+    
+    NSData *jsonData = [body dataUsingEncoding:NSUTF8StringEncoding];
+    [picker addAttachmentData:jsonData mimeType:@"text/json" fileName:@"CFA_DATA.json"];
     
     
     if (picker != nil) {  	
