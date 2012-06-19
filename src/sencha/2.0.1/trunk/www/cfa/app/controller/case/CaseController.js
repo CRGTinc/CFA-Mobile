@@ -160,9 +160,12 @@ Ext.define('cfa.controller.case.CaseController', {
         this.showCurrentRecord();
     },
     
-    exportCaseData: function() {
-    	var currentRecord = this.getCurrentRecord();    	
-            jsonString = getJsonString(currentRecord);
+    exportCaseData: function() {    	
+    	var currentRecord = this.getCurrentRecord();
+        Formpod.exportData(currentRecord.getData().form, function(data) {
+	  		//this.saveFile(data);
+	  		console.log(data);
+	  	});
     },
     
     casesListBackTap: function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
@@ -274,7 +277,7 @@ Ext.define('cfa.controller.case.CaseController', {
         return jsonString;
     },
     
-    exportData: function(jsonString, filename) {
+    saveFile: function(jsonString, filename) {
     	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
             fileSystem.root.getFile(filename, { create: true, exclusive: false }, function(fileEntry) {
                 fileEntry.createWriter(function(writer) {
@@ -290,6 +293,7 @@ Ext.define('cfa.controller.case.CaseController', {
    
     fail:function(error) {
         console.log(error.code);   	
-    }
+    },   
+    
 });
 

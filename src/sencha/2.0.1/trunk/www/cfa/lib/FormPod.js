@@ -507,18 +507,18 @@ var Formpod = {
 		); //Close Transaction
 	},
 	findRelatedObjectsWithType: function(obj, type, details, callback) {
-		if (typeof o.id !== 'number') {
+		if (typeof obj.id !== 'number') {
 			console.log("Formpod.findRelatedObjectsWithType: The object provided has not been persisted.")
 		}
 		Formpod.findRelatedObjectsFromIdWithType(obj.id, type, details, callback);
 	},
-	findRelatedObjectsFromIdWithType: function(id, type, callback, details) {
+	findRelatedObjectsFromIdWithType: function(id, type, details, callback) {
 		if (details) {
-			Formpod.findRelatedIdsWithType(obj.id, type, function(ids) {
-				Formpod.findObjects(ids, callback);
+			Formpod.findRelatedIdsWithType(id, type, function(ids) {
+				Formpod.getObjects(ids, callback);
 			});
 		} else {
-			Formpod.findRelatedIdsWithType(obj.id, type, callback);
+			Formpod.findRelatedIdsWithType(id, type, callback);
 		}
 	},
 	buildInstance: function(formClass) {
@@ -564,5 +564,49 @@ var Formpod = {
         
         if (typeof callback === 'function')
             callback(objectList);
-	}
+	},
+	
+	exportData: function(form, callback) {
+		var jsonString = Formpod.getFormInstanceData(form);
+		   	
+    	Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {
+   			var childData = [],
+   				processed = 0,
+   				length = objs.length,
+   				i;
+   			  			
+   			for (i = 0; i < length; i++){
+   				Formpod.exportData(objs[i], function(data) {
+    				childData.push(data);
+    				processed++;
+    				
+    				if (processed == length) {
+			   			jsonString = jsonString.replace('}', ',"childs":[' + childData + ']}');
+			   			
+				        if (typeof callback === 'function')
+            				callback(jsonString);
+    				}
+   				});
+   			}
+   			
+	        if (length == 0 && typeof callback === 'function') {
+    			callback(jsonString);	
+   			}
+    	}); 
+	},
+	
+	
+	getFormInstanceData: function(formInstance) {
+    	var formdata = '{';
+        
+     	for (key in formInstance) {
+     		if (typeof(formInstance[key]) != "object") {
+     			formdata = formdata.concat('"' + key + '"' + ':' + '"' + formInstance[key] + '",');
+     		}     		
+     	}
+     	
+     	formdata = formdata.concat('}');
+     	formdata = formdata.replace(',}', '}');
+     	return formdata;
+    },
 }
