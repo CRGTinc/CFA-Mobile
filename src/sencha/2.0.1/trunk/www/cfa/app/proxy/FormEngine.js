@@ -148,6 +148,7 @@ Ext.define('cfa.proxy.FormEngine', {
             
             if (i == length - 1) {
                 Formpod.saveInstance(rawData, function(obj) {
+                    formData['id'] = obj.id;
                     record.set('id', obj.id);
                     record.commit();
                     
@@ -163,6 +164,7 @@ Ext.define('cfa.proxy.FormEngine', {
                 return;
             } else {
                 Formpod.saveInstance(rawData, function(obj) {
+                    formData['id'] = obj.id;
                     record.id = obj.id;
                     record.commit();
                     
