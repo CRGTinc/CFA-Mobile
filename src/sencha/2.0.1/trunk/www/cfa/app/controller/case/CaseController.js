@@ -23,7 +23,8 @@ Ext.define('cfa.controller.case.CaseController', {
             saveCaseDataButton: 'button[action = savecasedata]',
             cancelCaseDataButton: 'button[action = cancelcasedata]',
             caseFormList: 'list[id = "caseformlist"]',
-            exportCaseDataButton: 'button[action = exportcasedata]'
+            exportCaseDataButton: 'button[action = exportcasedata]',
+            deleteCaseDataButton: 'button[action = deletecasedata]'
         },
 
         control: {
@@ -50,6 +51,10 @@ Ext.define('cfa.controller.case.CaseController', {
             
             exportCaseDataButton: {
             	'tap' : 'exportCaseData'            	
+            },
+            
+            deleteCaseDataButton:{
+            	'tap' : 'deleteCaseData'	
             }
         },
         
@@ -179,6 +184,24 @@ Ext.define('cfa.controller.case.CaseController', {
 			  	window.plugins.emailComposer.showEmailComposer("CFA data export",null,"thanhthanhtin@gmail.com",null,null,null);
 	    	});
 	  	});
+    },
+    
+    deleteCaseData: function() {
+    	var store = Ext.getStore("Cases"),
+    		currentRecord = this.getCurrentRecord();
+    	
+    	this.getCasesList().goToNode(currentRecord.parentNode);
+    	
+    	if (!currentRecord.isLeaf()) {
+    		this.casesListBackTap();
+    	} else {
+	        this.setCurrentRecord(null);
+    	    this.showCurrentRecord();
+    	}
+    	
+    	currentRecord.parentNode.removeChild(currentRecord);
+    	store.remove(currentRecord);
+    	store.sync();
     },
     
     casesListBackTap: function(nestedList, node, lastActiveList, detailCardActive, eOpts) {

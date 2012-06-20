@@ -393,6 +393,7 @@ var Formpod = {
 			}
 		);
 	},
+	
 	deleteObjectWithId: function(id) {		
 		this.db.transaction( function(t) {
 			t.executeSql("delete from rel where src = ?", [id]);
@@ -400,13 +401,16 @@ var Formpod = {
 			t.executeSql("delete from attr where objid = ?", [id]);
 			t.executeSql("delete from obj where id = ?", [id]);
 		});//Close transaction
+		
 	},
+	
 	deleteObject: function (o) {
 		if (typeof o.id === "undefined") {
 			throw "deleteObject: this object hasn't been saved yet. It cannot be deleted";
 		}
 		this.deleteObjectWithId(o.id);
 	},
+	
 	deleteAllObjects: function() {		
 		this.db.transaction( function(t) {
 			t.executeSql("delete from rel");
@@ -414,6 +418,7 @@ var Formpod = {
 			t.executeSql("delete from obj");
 		});//Close transaction
 	},
+	
 	findObjectsByAttr: function(query, value, callback) {		
 		var objIds = [];
 		var objects = [];
@@ -607,5 +612,12 @@ var Formpod = {
      	formdata = formdata.replace(',}', '}');
      	return formdata;
     },
+    
+    deleteCaseData: function(node) { 
+    	   	
+    	Formpod.deleteObjectWithId(node.id)
+    	
+    	
+    }
     
 }

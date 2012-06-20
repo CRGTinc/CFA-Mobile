@@ -91,8 +91,8 @@ Ext.define('cfa.proxy.FormEngine', {
 
     //inherit
     destroy: function (operation, callback, scope) {
+    	console.log('destroy operation', operation);
         var records = operation.getRecords();
-
         this.removeRecord(records, function () {
             operation.setCompleted();
             operation.setSuccessful();
@@ -185,12 +185,15 @@ Ext.define('cfa.proxy.FormEngine', {
     * use instead because it updates the list of currently-stored record ids
     * @param {String/Number/Ext.data.Model} id The id of the record to remove, or an Ext.data.Model instance
     */
-    removeRecord: function (id) {
-        if (id.isModel) {
-            id = id.getId();
-        }
+    removeRecord: function (records, callback, scope) {
+    	var i;
+    	for(i=0; i<records.length;i++){
+    		Formpod.deleteObjectWithId(records[i].getData().form.id);	
+    	}   	 
 
-        Formpod.deleteObjectWithId(id);
+        if (typeof callback == 'function') {
+            callback.call(scope || this);
+        }
     },
 
     applyDataToModels: function (objs, Model, callback) {
