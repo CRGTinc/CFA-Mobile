@@ -393,15 +393,26 @@ var Formpod = {
 			}
 		);
 	},
-	
-	deleteObjectWithId: function(id) {		
+	deleteObjectWithId: function(id) {
+		var me = this;
+		console.log("deleteObjectWithId ", id)
 		this.db.transaction( function(t) {
-			t.executeSql("delete from rel where src = ?", [id]);
-			t.executeSql("delete from rel where dest = ?", [id]);
 			t.executeSql("delete from attr where objid = ?", [id]);
 			t.executeSql("delete from obj where id = ?", [id]);
 		});//Close transaction
 		
+		Formpod.findRelatedIdsWithType(id, 'hasChild',function(objs) {
+			me.db.transaction( function(t) {
+				t.executeSql("delete from rel where src = ?", [id]);
+				t.executeSql("delete from rel where dest = ?", [id]);
+			});//Close transaction			
+			var length = objs.length,
+   				i;
+   		
+   			for (i = 0; i < length; i++) {
+   				Formpod.deleteObjectWithId(objs[i][0]);
+   			}
+		})
 	},
 	
 	deleteObject: function (o) {
