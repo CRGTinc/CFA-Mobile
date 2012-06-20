@@ -186,9 +186,10 @@ var Formpod = {
 			}
 			return this;
 		};
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		var me = this;
 		var createDatabases = function () {
-			db.transaction(function (t) {
+			me.db.transaction(function (t) {
 				t.executeSql(
 					"CREATE TABLE IF NOT EXISTS obj (" +
 					" id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -242,14 +243,14 @@ var Formpod = {
 			formClass = this.FormTypes[formClass];
 		}
 		function FormInstance() {};
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		var loadedObj = new FormInstance();
 		if (typeof formClass.instance === 'undefined') {
 			this.buildInstance(formClass);
 		}
 		loadedObj.prototype = formClass.instance;
 		loadedObj.engineClass = formClass;
-		db.transaction(
+		this.db.transaction(
 			function (t) {
 				t.executeSql("SELECT * FROM attr WHERE objid = ?", [id],
 				function (t, rs) {
@@ -271,8 +272,8 @@ var Formpod = {
 	getMultipleInstances: function (formClass, ids, callback) {
 		function FormInstance() {};
 		var objectList = [];
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
-		db.transaction(
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		this.db.transaction(
 			function (t) {
 				for (var idx in ids) {
 					if (!ids.hasOwnProperty(idx)) continue;
@@ -312,8 +313,8 @@ var Formpod = {
 				insertClassAttrs[attr] = true;
 			}
 		}
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
-		db.transaction(
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		this.db.transaction(
 			function (t) {
 				if (typeof o.id !== "undefined") {
 					t.executeSql("select name from attr where objid = ?", [o.id],
@@ -374,8 +375,8 @@ var Formpod = {
       	Formpod.relateObjectById(src.id, dest.id, type);
 	},
 	relateObjectById: function (srcId, destId, type) {
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
-		db.transaction( 
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		this.db.transaction( 
 			function (t) {
 				t.executeSql("INSERT OR REPLACE INTO rel(src, dest, type) VALUES(?, ?, ?)", [srcId, destId, type]);
 			}
@@ -387,16 +388,16 @@ var Formpod = {
 		} else if (typeof dest.id === "undefined") {
 			throw Error("unrelateObject: Destination object does not have an id. Save it first.")
 		}
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
-		db.transaction( 
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		this.db.transaction( 
 			function (t) {
 				t.executeSql("delete from rel where src = ? and dest = ?", [src.id, dest.id]);
 			}
 		);
 	},
 	deleteObjectWithId: function(id) {
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
-		db.transaction( function(t) {
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		this.db.transaction( function(t) {
 			t.executeSql("delete from rel where src = ?", [id]);
 			t.executeSql("delete from rel where dest = ?", [id]);
 			t.executeSql("delete from attr where objid = ?", [id]);
@@ -410,18 +411,18 @@ var Formpod = {
 		this.deleteObjectWithId(o.id);
 	},
 	deleteAllObjects: function() {
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
-		db.transaction( function(t) {
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		this.db.transaction( function(t) {
 			t.executeSql("delete from rel");
 			t.executeSql("delete from attr");
 			t.executeSql("delete from obj");
 		});//Close transaction
 	},
 	findObjectsByAttr: function(query, value, callback) {
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		var objIds = [];
 		var objects = [];
-		db.transaction( 
+		this.db.transaction( 
 			function(t) {
 				t.executeSql("select a.objid, o.class as clsname from attr a, obj o where a.name = ? and a.value = ? and o.id = a.objid", [query, value],
 							function(t, rs) {
@@ -439,13 +440,13 @@ var Formpod = {
 		); //Close Transaction
 	},
 	findObjectsByClass: function(formClass, callback) {
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		if (typeof formClass === 'string') {
 			formClass = Formpod.FormTypes[formClass];
 		}
 		var objIds = [];
 		var objects = [];
-		db.transaction( 
+		this.db.transaction( 
 			function(t) {
 				t.executeSql("select id from obj where class = ?", [formClass.name],
 							function(t, rs) {
@@ -463,12 +464,12 @@ var Formpod = {
 		); //Close Transaction
 	},
 	findRelatedObjects: function(o, callback) {
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
 		var objIds = [];
 		if (typeof o.id !== 'number') {
 			console.log("Formpod.FindRelatedObjects: The object provided has not been persisted.")
 		}
-		db.transaction( 
+		this.db.transaction( 
 			function(t) {
 				t.executeSql("select distinct r.dest, o.class as clsname from rel r, obj o where r.src = ? and r.dest = o.id", [o.id],
 							function(t, rs) {
@@ -487,8 +488,8 @@ var Formpod = {
 	},
 	findRelatedIdsWithType: function(id, type, callback) {
 		var objIds = [];
-		var db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
-		db.transaction( 
+		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		this.db.transaction( 
 			function(t) {
 				t.executeSql("select distinct r.dest, o.class as clsname from rel r, obj o where r.src = ? and r.type = ? and r.dest = o.id", [id, type],
 					function(t, rs) {
@@ -506,12 +507,14 @@ var Formpod = {
 			}
 		); //Close Transaction
 	},
+	
 	findRelatedObjectsWithType: function(obj, type, details, callback) {
 		if (typeof obj.id !== 'number') {
 			console.log("Formpod.findRelatedObjectsWithType: The object provided has not been persisted.")
 		}
 		Formpod.findRelatedObjectsFromIdWithType(obj.id, type, details, callback);
 	},
+	
 	findRelatedObjectsFromIdWithType: function(id, type, details, callback) {
 		if (details) {
 			Formpod.findRelatedIdsWithType(id, type, function(ids) {
@@ -521,6 +524,7 @@ var Formpod = {
 			Formpod.findRelatedIdsWithType(id, type, callback);
 		}
 	},
+	
 	buildInstance: function(formClass) {
 		function FormInstance() {};
 		var instance = new FormInstance();
@@ -568,8 +572,8 @@ var Formpod = {
 	
 	exportData: function(form, callback) {
 		var jsonString = Formpod.getFormInstanceData(form);
-		   	
-    	Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {
+		
+    	Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {    		
    			var childData = [],
    				processed = 0,
    				length = objs.length,
@@ -590,14 +594,16 @@ var Formpod = {
    			}
    			
 	        if (length == 0 && typeof callback === 'function') {
-    			callback(jsonString);	
+	        	callback(jsonString);
+	        	        		
    			}
     	}); 
 	},
 	
 	
 	getFormInstanceData: function(formInstance) {
-    	var formdata = '{';
+    	var formdata = '{',
+    		key;
         
      	for (key in formInstance) {
      		if (typeof(formInstance[key]) != "object") {
@@ -609,4 +615,8 @@ var Formpod = {
      	formdata = formdata.replace(',}', '}');
      	return formdata;
     },
+    
+    test: function(){    	
+    	console.log("Formpad");
+    }
 }

@@ -160,14 +160,15 @@ Ext.define('cfa.controller.case.CaseController', {
         this.showCurrentRecord();
     },
     
-    exportCaseData: function() {   
+    exportCaseData: function() { 
     	var me = this;   	
     	var currentRecord = this.getCurrentRecord();
-        Formpod.exportData(currentRecord.getData().form, function(data) {        	 
-	    	//me.saveFile(data,"CFA_DATA.json");
-    		window.plugins.emailComposer.showEmailComposer("CFA data export",data,"thanhthanhtin@gmail.com",null,null,null);
+    	
+        Formpod.exportData(currentRecord.getData().form, function(data) {  
+	    	me.saveFile(data,"CFA_DATA.json", function() {
+			  	window.plugins.emailComposer.showEmailComposer("CFA data export",null,"thanhthanhtin@gmail.com",null,null,null);
+	    	});
 	  	});
-	  	//window.plugins.emailComposer.showEmailComposer("CFA data export",data,"thanhthanhtin@gmail.com",null,null,null);
     },
     
     casesListBackTap: function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
@@ -279,12 +280,15 @@ Ext.define('cfa.controller.case.CaseController', {
         return jsonString;
     },
     
-    saveFile: function(jsonString, filename) {  	
+    saveFile: function(jsonString, filename, callback, scope) {
+    	var me = this;
+    	      	
     	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {    		
             fileSystem.root.getFile(filename, { create: true, exclusive: false }, function(fileEntry) {
                 fileEntry.createWriter(function(writer) {
                     writer.onwrite = function(evt) {
-                        console.log('write success');
+                    	if (typeof callback == 'function')
+                    		Ext.callback(callback, scope || me);
                     };
                     
                     writer.write(jsonString);
@@ -298,4 +302,3 @@ Ext.define('cfa.controller.case.CaseController', {
     },   
     
 });
-

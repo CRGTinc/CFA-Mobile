@@ -30,9 +30,7 @@
 	if(subject != nil)
 		[picker setSubject:subject];
 	// set body
-    
-    
-	if(body != nil && [body characterAtIndex:0] != '{')
+	if(body != nil)
 	{
 		if(isHTML != nil && [isHTML boolValue])
 		{
@@ -63,11 +61,11 @@
 	//  NSData *myData = [NSData dataWithContentsOfFile:path];
 	//  [picker addAttachmentData:myData mimeType:@"image/png" fileName:@"rainy"];
     
-    
-    
-    NSData *jsonData = [body dataUsingEncoding:NSUTF8StringEncoding];
-    [picker addAttachmentData:jsonData mimeType:@"text/json" fileName:@"CFA_DATA.json"];
-    
+    NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [pathArray objectAtIndex:0];    
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"CFA_DATA.json"];  
+    NSData *myData = [NSData dataWithContentsOfFile:path];   
+    [picker addAttachmentData:myData mimeType:@"text/json" fileName:@"CFA_DATA.json"];
     
     if (picker != nil) {  	
         [self.viewController presentModalViewController:picker animated:YES];
