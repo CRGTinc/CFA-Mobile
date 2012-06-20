@@ -164,6 +164,16 @@ Ext.define('cfa.controller.case.CaseController', {
     	var me = this;   	
     	var currentRecord = this.getCurrentRecord();
     	
+    	if (Ext.os.is.Desktop) {
+            Ext.Msg.alert("Mail sending", "Only support on iPad");
+        } else {
+        	Formpod.exportData(currentRecord.getData().form, function(data) {  
+		    	me.saveFile(data,"CFA_DATA.json", function() {
+				  	window.plugins.emailComposer.showEmailComposer("CFA data export",null,"thanhthanhtin@gmail.com",null,null,null);
+		    	});
+	  		});
+        }
+    	
         Formpod.exportData(currentRecord.getData().form, function(data) {  
 	    	me.saveFile(data,"CFA_DATA.json", function() {
 			  	window.plugins.emailComposer.showEmailComposer("CFA data export",null,"thanhthanhtin@gmail.com",null,null,null);

@@ -243,7 +243,7 @@ var Formpod = {
 			formClass = this.FormTypes[formClass];
 		}
 		function FormInstance() {};
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		
 		var loadedObj = new FormInstance();
 		if (typeof formClass.instance === 'undefined') {
 			this.buildInstance(formClass);
@@ -271,8 +271,7 @@ var Formpod = {
 	},
 	getMultipleInstances: function (formClass, ids, callback) {
 		function FormInstance() {};
-		var objectList = [];
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		var objectList = [];		
 		this.db.transaction(
 			function (t) {
 				for (var idx in ids) {
@@ -313,7 +312,7 @@ var Formpod = {
 				insertClassAttrs[attr] = true;
 			}
 		}
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+				
 		this.db.transaction(
 			function (t) {
 				if (typeof o.id !== "undefined") {
@@ -374,8 +373,7 @@ var Formpod = {
 		}
       	Formpod.relateObjectById(src.id, dest.id, type);
 	},
-	relateObjectById: function (srcId, destId, type) {
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+	relateObjectById: function (srcId, destId, type) {		
 		this.db.transaction( 
 			function (t) {
 				t.executeSql("INSERT OR REPLACE INTO rel(src, dest, type) VALUES(?, ?, ?)", [srcId, destId, type]);
@@ -395,8 +393,7 @@ var Formpod = {
 			}
 		);
 	},
-	deleteObjectWithId: function(id) {
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+	deleteObjectWithId: function(id) {		
 		this.db.transaction( function(t) {
 			t.executeSql("delete from rel where src = ?", [id]);
 			t.executeSql("delete from rel where dest = ?", [id]);
@@ -410,16 +407,14 @@ var Formpod = {
 		}
 		this.deleteObjectWithId(o.id);
 	},
-	deleteAllObjects: function() {
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+	deleteAllObjects: function() {		
 		this.db.transaction( function(t) {
 			t.executeSql("delete from rel");
 			t.executeSql("delete from attr");
 			t.executeSql("delete from obj");
 		});//Close transaction
 	},
-	findObjectsByAttr: function(query, value, callback) {
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+	findObjectsByAttr: function(query, value, callback) {		
 		var objIds = [];
 		var objects = [];
 		this.db.transaction( 
@@ -439,8 +434,7 @@ var Formpod = {
 			}	
 		); //Close Transaction
 	},
-	findObjectsByClass: function(formClass, callback) {
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+	findObjectsByClass: function(formClass, callback) {		
 		if (typeof formClass === 'string') {
 			formClass = Formpod.FormTypes[formClass];
 		}
@@ -463,8 +457,7 @@ var Formpod = {
 			}	
 		); //Close Transaction
 	},
-	findRelatedObjects: function(o, callback) {
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+	findRelatedObjects: function(o, callback) {		
 		var objIds = [];
 		if (typeof o.id !== 'number') {
 			console.log("Formpod.FindRelatedObjects: The object provided has not been persisted.")
@@ -487,8 +480,7 @@ var Formpod = {
 		); //Close Transaction
 	},
 	findRelatedIdsWithType: function(id, type, callback) {
-		var objIds = [];
-		//this.db = openDatabase("MDR", "", "object Metadata Repository", 1048576);
+		var objIds = [];		
 		this.db.transaction( 
 			function(t) {
 				t.executeSql("select distinct r.dest, o.class as clsname from rel r, obj o where r.src = ? and r.type = ? and r.dest = o.id", [id, type],
@@ -616,7 +608,4 @@ var Formpod = {
      	return formdata;
     },
     
-    test: function(){    	
-    	console.log("Formpad");
-    }
 }
