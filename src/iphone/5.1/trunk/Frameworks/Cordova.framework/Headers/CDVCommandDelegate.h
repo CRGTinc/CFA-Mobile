@@ -17,36 +17,15 @@
  under the License.
  */
 
-//
-//  AppDelegate.h
-//  cfa
-//
-//  Created by Tin Thai on 5/18/12.
-//  Copyright __MyCompanyName__ 2012. All rights reserved.
-//
+#import "CDVInvokedUrlCommand.h"
 
-#import <UIKit/UIKit.h>
+@class CDVPlugin;
 
-#ifdef CORDOVA_FRAMEWORK
-    #import <Cordova/CDVViewController.h>
-#else
-    #import "CDVViewController.h"
-#endif
+@protocol CDVCommandDelegate <NSObject>
 
-
-@interface AppDelegate : NSObject < UIApplicationDelegate > {
-
-}
-
-// invoke string is passed to your app on launch, this is only valid if you 
-// edit cfa-Info.plist to add a protocol
-// a simple tutorial can be found here : 
-// http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-
-@property (nonatomic, retain) IBOutlet UIWindow* window;
-@property (nonatomic, retain) IBOutlet CDVViewController* viewController;
-
-- (void)updateWebKitCachePreferences;
+- (NSString*) pathForResource:(NSString*)resourcepath;
+- (id) getCommandInstance:(NSString*)pluginName;
+- (void) registerPlugin:(CDVPlugin*)plugin withClassName:(NSString*)className;
+- (BOOL) execute:(CDVInvokedUrlCommand*)command;
 
 @end
-

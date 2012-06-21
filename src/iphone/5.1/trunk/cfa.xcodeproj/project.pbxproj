@@ -22,7 +22,6 @@
 		97A2FC4A1566373F00A0DEFE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A2FC491566373F00A0DEFE /* CoreMedia.framework */; };
 		97A2FC501566373F00A0DEFE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC4E1566373F00A0DEFE /* InfoPlist.strings */; };
 		97A2FC521566373F00A0DEFE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A2FC511566373F00A0DEFE /* main.m */; };
-		97A2FC551566373F00A0DEFE /* Cordova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A2FC541566373F00A0DEFE /* Cordova.framework */; };
 		97A2FC5A1566373F00A0DEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC581566373F00A0DEFE /* Localizable.strings */; };
 		97A2FC5E1566373F00A0DEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC5C1566373F00A0DEFE /* Localizable.strings */; };
 		97A2FC621566373F00A0DEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC601566373F00A0DEFE /* Localizable.strings */; };
@@ -39,10 +38,9 @@
 		97A2FC7F1566374000A0DEFE /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC7E1566374000A0DEFE /* MainViewController.xib */; };
 		97A2FC831566374000A0DEFE /* verify.sh in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC821566374000A0DEFE /* verify.sh */; };
 		97A2FC8E1566386400A0DEFE /* www in Resources */ = {isa = PBXBuildFile; fileRef = 97A2FC8D1566386400A0DEFE /* www */; };
-		AD75C8B1157F4B5D0016CC1D /* PGSQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = AD75C8B0157F4B5D0016CC1D /* PGSQLitePlugin.m */; };
+		AD4C953F1593065500AD661B /* Cordova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4C953E1593065500AD661B /* Cordova.framework */; };
 		AD75C8BA157F4B640016CC1D /* EmailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD75C8B6157F4B640016CC1D /* EmailComposer.m */; };
 		AD75C8BE157F4BEF0016CC1D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD75C8BD157F4BEF0016CC1D /* MessageUI.framework */; };
-		AD75C8C0157F4BF60016CC1D /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AD75C8BF157F4BF60016CC1D /* libsqlite3.dylib */; };
 		ADB98FA61576231000CB49AB /* ChildBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADB98F971576231000CB49AB /* ChildBrowser.bundle */; };
 		ADB98FA81576231000CB49AB /* ChildBrowserCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F9A1576231000CB49AB /* ChildBrowserCommand.m */; };
 		ADB98FA91576231000CB49AB /* ChildBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F9C1576231000CB49AB /* ChildBrowserViewController.m */; };
@@ -68,7 +66,6 @@
 		97A2FC4F1566373F00A0DEFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		97A2FC511566373F00A0DEFE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		97A2FC531566373F00A0DEFE /* cfa-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "cfa-Prefix.pch"; sourceTree = "<group>"; };
-		97A2FC541566373F00A0DEFE /* Cordova.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cordova.framework; path = /Users/Shared/Cordova/Frameworks/Cordova.framework; sourceTree = "<absolute>"; };
 		97A2FC591566373F00A0DEFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		97A2FC5D1566373F00A0DEFE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Resources/es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		97A2FC611566373F00A0DEFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Resources/de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -88,12 +85,10 @@
 		97A2FC811566374000A0DEFE /* README */ = {isa = PBXFileReference; lastKnownFileType = text; name = README; path = Plugins/README; sourceTree = "<group>"; };
 		97A2FC821566374000A0DEFE /* verify.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = verify.sh; sourceTree = "<group>"; };
 		97A2FC8D1566386400A0DEFE /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
-		AD75C8AF157F4B5D0016CC1D /* PGSQLitePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSQLitePlugin.h; sourceTree = "<group>"; };
-		AD75C8B0157F4B5D0016CC1D /* PGSQLitePlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSQLitePlugin.m; sourceTree = "<group>"; };
+		AD4C953E1593065500AD661B /* Cordova.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cordova.framework; path = Frameworks/Cordova.framework; sourceTree = "<group>"; };
 		AD75C8B4157F4B640016CC1D /* EmailComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailComposer.h; sourceTree = "<group>"; };
 		AD75C8B6157F4B640016CC1D /* EmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailComposer.m; sourceTree = "<group>"; };
 		AD75C8BD157F4BEF0016CC1D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		AD75C8BF157F4BF60016CC1D /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		ADB98F971576231000CB49AB /* ChildBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ChildBrowser.bundle; sourceTree = "<group>"; };
 		ADB98F991576231000CB49AB /* ChildBrowserCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildBrowserCommand.h; sourceTree = "<group>"; };
 		ADB98F9A1576231000CB49AB /* ChildBrowserCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildBrowserCommand.m; sourceTree = "<group>"; };
@@ -107,7 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD75C8C0157F4BF60016CC1D /* libsqlite3.dylib in Frameworks */,
+				AD4C953F1593065500AD661B /* Cordova.framework in Frameworks */,
 				AD75C8BE157F4BEF0016CC1D /* MessageUI.framework in Frameworks */,
 				97A2FC321566373F00A0DEFE /* Foundation.framework in Frameworks */,
 				97A2FC341566373F00A0DEFE /* UIKit.framework in Frameworks */,
@@ -122,7 +117,6 @@
 				97A2FC461566373F00A0DEFE /* SystemConfiguration.framework in Frameworks */,
 				97A2FC481566373F00A0DEFE /* MobileCoreServices.framework in Frameworks */,
 				97A2FC4A1566373F00A0DEFE /* CoreMedia.framework in Frameworks */,
-				97A2FC551566373F00A0DEFE /* Cordova.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,9 +145,8 @@
 		97A2FC301566373F00A0DEFE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AD75C8BF157F4BF60016CC1D /* libsqlite3.dylib */,
+				AD4C953E1593065500AD661B /* Cordova.framework */,
 				AD75C8BD157F4BEF0016CC1D /* MessageUI.framework */,
-				97A2FC541566373F00A0DEFE /* Cordova.framework */,
 				97A2FC311566373F00A0DEFE /* Foundation.framework */,
 				97A2FC331566373F00A0DEFE /* UIKit.framework */,
 				97A2FC351566373F00A0DEFE /* CoreGraphics.framework */,
@@ -280,16 +273,6 @@
 			name = Plugins;
 			sourceTree = "<group>";
 		};
-		AD75C8AE157F4B5D0016CC1D /* PGSQLitePlugin */ = {
-			isa = PBXGroup;
-			children = (
-				AD75C8AF157F4B5D0016CC1D /* PGSQLitePlugin.h */,
-				AD75C8B0157F4B5D0016CC1D /* PGSQLitePlugin.m */,
-			);
-			name = PGSQLitePlugin;
-			path = Plugins/PGSQLitePlugin;
-			sourceTree = "<group>";
-		};
 		AD75C8B3157F4B640016CC1D /* EmailComposer */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,7 +287,6 @@
 			isa = PBXGroup;
 			children = (
 				AD75C8B3157F4B640016CC1D /* EmailComposer */,
-				AD75C8AE157F4B5D0016CC1D /* PGSQLitePlugin */,
 				ADB98F961576231000CB49AB /* ChildBrowser */,
 			);
 			name = Plugins;
@@ -426,7 +408,6 @@
 				97A2FC7D1566374000A0DEFE /* MainViewController.m in Sources */,
 				ADB98FA81576231000CB49AB /* ChildBrowserCommand.m in Sources */,
 				ADB98FA91576231000CB49AB /* ChildBrowserViewController.m in Sources */,
-				AD75C8B1157F4B5D0016CC1D /* PGSQLitePlugin.m in Sources */,
 				AD75C8BA157F4B640016CC1D /* EmailComposer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -528,7 +509,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Trung Huynh (9TX9895MBH)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Trung Huynh (9TX9895MBH)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = /Users/Shared/Cordova/Frameworks;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks\"",
+					/Users/Shared/Cordova/Frameworks,
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cfa/cfa-Prefix.pch";
@@ -565,7 +549,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = /Users/Shared/Cordova/Frameworks;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks\"",
+					/Users/Shared/Cordova/Frameworks,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cfa/cfa-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (

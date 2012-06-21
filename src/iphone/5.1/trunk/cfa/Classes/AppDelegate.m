@@ -31,11 +31,12 @@
 #ifdef CORDOVA_FRAMEWORK
     #import <Cordova/CDVPlugin.h>
     #import <Cordova/CDVURLProtocol.h>
+	#import <Cordova/CDVAvailability.h>
 #else
     #import "CDVPlugin.h"
     #import "CDVURLProtocol.h"
+	#import "CDVAvailability.h"
 #endif
-
 
 @implementation AppDelegate
 
@@ -60,7 +61,9 @@
  * This is main kick off after the app inits, the views and Settings are setup here. (preferred - iOS4 and up)
  */
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
-{    
+{
+	[self updateWebKitCachePreferences];
+	
     NSURL* url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     NSString* invokeString = nil;
     
@@ -130,6 +133,55 @@
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLNotification object:url]];
     
     return YES;    
+}
+
+- (void)updateWebKitCachePreferences
+{
+	if (!IsAtLeastiOSVersion(@"5.1")) {
+		return;
+	}
+	
+    NSString *documents = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *ourLocalStoragePath = [documents stringByAppendingPathComponent:@"LocalStorage"];;
+    NSString *ourWebSQLPath = [documents stringByAppendingPathComponent:@"Databases"];
+    
+    NSUserDefaults *appPreferences = [NSUserDefaults standardUserDefaults];
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    
+    NSString *bundlePath = [[mainBundle bundlePath] stringByDeletingLastPathComponent];
+    NSString *bundleIdentifier = [[mainBundle infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    NSString *libraryPreferences = @"Library/Preferences";
+    
+    NSString *appPlistPath = [[bundlePath stringByAppendingPathComponent:libraryPreferences] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist", bundleIdentifier]];
+    NSMutableDictionary *appPlistDict = [NSMutableDictionary dictionaryWithContentsOfFile:appPlistPath];
+	
+	if (appPlistDict == nil) {
+		appPlistDict = [NSMutableDictionary dictionaryWithCapacity:2];
+	}
+    
+    BOOL update = NO;
+    
+    NSString *key = @"WebKitLocalStorageDatabasePathPreferenceKey";
+    NSString *value = [appPlistDict objectForKey:key];
+	
+    if (![value isEqual:ourLocalStoragePath]) {
+        [appPlistDict setValue:ourLocalStoragePath forKey:key];
+        update = YES;
+    }
+    
+    key = @"WebDatabaseDirectory";
+    value = [appPlistDict objectForKey:key];
+	
+    if (![value isEqual:ourWebSQLPath]) {
+        [appPlistDict setValue:ourWebSQLPath forKey:key];
+        update = YES;
+    }
+    
+    if (update) {
+        BOOL retVal = [appPlistDict writeToFile:appPlistPath atomically:YES];
+        NSLog(@"Fix applied for database locations?: %@", retVal? @"YES" : @"NO");
+        [appPreferences synchronize];
+    }
 }
 
 - (void) dealloc

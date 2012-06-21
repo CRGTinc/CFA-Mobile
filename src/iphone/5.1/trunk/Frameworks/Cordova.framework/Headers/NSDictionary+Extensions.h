@@ -17,36 +17,20 @@
  under the License.
  */
 
-//
-//  AppDelegate.h
-//  cfa
-//
-//  Created by Tin Thai on 5/18/12.
-//  Copyright __MyCompanyName__ 2012. All rights reserved.
-//
+#import <Foundation/Foundation.h>
 
-#import <UIKit/UIKit.h>
+@interface NSDictionary(org_apache_cordova_NSDictionary_Extension)
 
-#ifdef CORDOVA_FRAMEWORK
-    #import <Cordova/CDVViewController.h>
-#else
-    #import "CDVViewController.h"
-#endif
+- (bool) existsValue:(NSString*)expectedValue forKey:(NSString*)key;
+- (NSInteger) integerValueForKey:(NSString*)key defaultValue:(NSInteger)defaultValue withRange:(NSRange)range;
+- (BOOL) typeValueForKey:(NSString *)key isArray:(BOOL*)bArray isNull:(BOOL*)bNull isNumber:(BOOL*) bNumber isString:(BOOL*)bString;
+- (BOOL) valueForKeyIsArray:(NSString *)key;
+- (BOOL) valueForKeyIsNull:(NSString *)key;
+- (BOOL) valueForKeyIsString:(NSString *)key;
+- (BOOL) valueForKeyIsNumber:(NSString *)key;
 
-
-@interface AppDelegate : NSObject < UIApplicationDelegate > {
-
-}
-
-// invoke string is passed to your app on launch, this is only valid if you 
-// edit cfa-Info.plist to add a protocol
-// a simple tutorial can be found here : 
-// http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-
-@property (nonatomic, retain) IBOutlet UIWindow* window;
-@property (nonatomic, retain) IBOutlet CDVViewController* viewController;
-
-- (void)updateWebKitCachePreferences;
+- (NSDictionary*) dictionaryWithLowercaseKeys;
 
 @end
+
 

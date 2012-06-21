@@ -17,36 +17,17 @@
  under the License.
  */
 
-//
-//  AppDelegate.h
-//  cfa
-//
-//  Created by Tin Thai on 5/18/12.
-//  Copyright __MyCompanyName__ 2012. All rights reserved.
-//
+#import <Foundation/Foundation.h>
 
-#import <UIKit/UIKit.h>
+@interface UIDevice(org_apache_cordova_UIDevice_Extension)
 
-#ifdef CORDOVA_FRAMEWORK
-    #import <Cordova/CDVViewController.h>
-#else
-    #import "CDVViewController.h"
-#endif
-
-
-@interface AppDelegate : NSObject < UIApplicationDelegate > {
-
-}
-
-// invoke string is passed to your app on launch, this is only valid if you 
-// edit cfa-Info.plist to add a protocol
-// a simple tutorial can be found here : 
-// http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-
-@property (nonatomic, retain) IBOutlet UIWindow* window;
-@property (nonatomic, retain) IBOutlet CDVViewController* viewController;
-
-- (void)updateWebKitCachePreferences;
+/*
+    Get the unique identifier from the app bundle's folder, which is already a GUID
+    Upgrading and/or deleting the app and re-installing will get you a new GUID, so
+    this is only unique per install per device.
+ */
+- (NSString*) uniqueAppInstanceIdentifier;
 
 @end
+
 
