@@ -178,7 +178,7 @@ Ext.define('cfa.controller.case.CaseController', {
 							var filename = Ext.util.Format.date(today, 'ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							me.saveFile(data, filename, function() {
-								window.plugins.emailComposer.showEmailComposer("CFA data export", null, filename, null, null, null, null);
+								window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
 							});
 						});
 						actionSheet.hide();
@@ -187,10 +187,13 @@ Ext.define('cfa.controller.case.CaseController', {
 					text : 'To iTunes',
 					handler : function() {
 						Formpod.exportData(currentRecord.getData().form, function(data) {
-							me.saveFile(data, "CFA_DATA.json", function() {
-								Ext.Msg.alert("iTunes exporting", "Export successfully!");
-								actionSheet.hide();
+							var today = new Date();
+							var filename = Ext.util.Format.date(today, 'ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+
+							me.saveFile(data, filename, function() {
+								Ext.Msg.alert("Export Data", "Data has been exported successfully.");
 							});
+							actionSheet.hide();
 						});
 					}
 				}, {
