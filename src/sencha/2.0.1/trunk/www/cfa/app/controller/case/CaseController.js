@@ -146,9 +146,6 @@ Ext.define('cfa.controller.case.CaseController', {
 					store.getNode().appendChild(currentRecord);
 				}
 			}
-
-			this.setCurrentRecord(null);
-			this.showCurrentRecord();
 		}
 	},
 
@@ -265,7 +262,6 @@ Ext.define('cfa.controller.case.CaseController', {
 		var currentRecord = this.getCurrentRecord();
 
 		if (currentRecord) {
-
 			var formData = currentRecord.get('form');
 			var engine = formData.engineClass;
 			engine.resetForm();
