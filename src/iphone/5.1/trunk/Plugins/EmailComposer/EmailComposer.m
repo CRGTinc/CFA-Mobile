@@ -22,7 +22,8 @@
 	NSString* subject = [options valueForKey:@"subject"];
 	NSString* body = [options valueForKey:@"body"];
 	NSString* isHTML = [options valueForKey:@"bIsHTML"];
-	
+    NSString* attachment = [options valueForKey:@"attachment"];
+   	
     MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
     picker.mailComposeDelegate = self;
     
@@ -61,11 +62,14 @@
 	//  NSData *myData = [NSData dataWithContentsOfFile:path];
 	//  [picker addAttachmentData:myData mimeType:@"image/png" fileName:@"rainy"];
     
-    NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [pathArray objectAtIndex:0];    
-    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"CFA_DATA.json"];  
-    NSData *myData = [NSData dataWithContentsOfFile:path];   
-    [picker addAttachmentData:myData mimeType:@"text/json" fileName:@"CFA_DATA.json"];
+    if(attachment != nil) {        
+        NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [pathArray objectAtIndex:0];    
+        NSString *path = [documentsDirectory stringByAppendingPathComponent:attachment];  
+        NSData *myData = [NSData dataWithContentsOfFile:path];         
+        [picker addAttachmentData:myData mimeType:@"text/json" fileName:attachment];
+    
+    }
     
     if (picker != nil) {  	
         [self.viewController presentModalViewController:picker animated:YES];

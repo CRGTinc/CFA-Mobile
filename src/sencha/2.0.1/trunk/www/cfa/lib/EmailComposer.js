@@ -16,7 +16,7 @@ NotSent:4
 
 // showEmailComposer : all args optional
 
-EmailComposer.prototype.showEmailComposer = function(subject,body,toRecipients,ccRecipients,bccRecipients,bIsHTML) {
+EmailComposer.prototype.showEmailComposer = function(subject,body,attachment,toRecipients,ccRecipients,bccRecipients,bIsHTML) {
 	var args = {};
 	if(toRecipients)
 		args.toRecipients = toRecipients;
@@ -30,6 +30,8 @@ EmailComposer.prototype.showEmailComposer = function(subject,body,toRecipients,c
 		args.body = body;
 	if(bIsHTML)
 		args.bIsHTML = bIsHTML;
+	if(attachment)
+		args.attachment = attachment;
 	
 	cordova.exec(null, null, "EmailComposer", "showEmailComposer", [args]);
 }

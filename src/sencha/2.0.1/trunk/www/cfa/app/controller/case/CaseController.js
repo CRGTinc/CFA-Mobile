@@ -165,25 +165,70 @@ Ext.define('cfa.controller.case.CaseController', {
         this.showCurrentRecord();
     },
     
-    exportCaseData: function() { 
-    	var me = this;   	
-    	var currentRecord = this.getCurrentRecord();
+    exportCaseData: function() {
     	
     	if (Ext.os.is.Desktop) {
-            Ext.Msg.alert("Mail sending", "Only support on iPad");
-        } else {
-        	Formpod.exportData(currentRecord.getData().form, function(data) {  
-		    	me.saveFile(data,"CFA_DATA.json", function() {
-				  	window.plugins.emailComposer.showEmailComposer("CFA data export",null,"thanhthanhtin@gmail.com",null,null,null);
-		    	});
-	  		});
-        }
+    		Ext.Msg.alert("Mail sending", "Only support on iPad");
+    	} else {
+    		var me = this;   	
+	    	var currentRecord = this.getCurrentRecord();
+	    	
+	    	var actionSheet = Ext.create('Ext.ActionSheet',{
+	    		modal:false,
+		    	left:"40%",
+		    	right:"40%",
+		    	bottom:"6%",
+		    		  	
+		    	items: [
+					{
+					   text: 'Via email',
+					   handler: function() {
+					   	
+						   	Formpod.exportData(currentRecord.getData().form, function(data) { 
+						   		var today = new Date();
+						   		var filename = Ext.util.Format.date(today, 'ymd') + "-" + currentRecord.getData().form.id + ".cfadata" ;
+						   		
+						    	me.saveFile(data,filename, function() {
+								  	window.plugins.emailComposer.showEmailComposer("CFA data export",null,filename,"thanhthanhtin@gmail.com",null,null,null);
+						    	});
+			  				});
+			  				actionSheet.hide();
+					   }
+					},
+					
+					{
+					   text: 'To iTunes',
+					   handler: function() {
+					   		Formpod.exportData(currentRecord.getData().form, function(data) { 
+						   		me.saveFile(data,"CFA_DATA.json", function() {
+									  	Ext.Msg.alert("iTunes exporting", "Export successfully!");
+									  	actionSheet.hide();
+							    });
+						    });
+					   }
+					   
+					},
+					
+					{
+						text: 'Cancel',
+					 	ui  : 'confirm',
+					 	handler:function() {
+					 		actionSheet.hide();
+					 	}
+					}
+				]    		
+	    	});	
+	    		
+			Ext.Viewport.add(actionSheet);
+			actionSheet.show();
+    	}
+    },
+    
+    showDownload: function(data){
+    	var uriContent = "data:application/octet-stream," +  encodeURIComponent(data);
+    	console.log("here" , uriContent);
+				window.open('', 'CFA_DATA.json');
     	
-        Formpod.exportData(currentRecord.getData().form, function(data) {  
-	    	me.saveFile(data,"CFA_DATA.json", function() {
-			  	window.plugins.emailComposer.showEmailComposer("CFA data export",null,"thanhthanhtin@gmail.com",null,null,null);
-	    	});
-	  	});
     },
     
     deleteCaseData: function() {
@@ -315,16 +360,16 @@ Ext.define('cfa.controller.case.CaseController', {
     
     saveFile: function(jsonString, filename, callback, scope) {
     	var me = this;
-    	      	
-    	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {    		
+    	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) { 
             fileSystem.root.getFile(filename, { create: true, exclusive: false }, function(fileEntry) {
                 fileEntry.createWriter(function(writer) {
                     writer.onwrite = function(evt) {
-                    	if (typeof callback == 'function')
+                    	if (typeof callback == 'function'){
                     		Ext.callback(callback, scope || me);
+                    	}
                     };
                     
-                    writer.write(jsonString);
+                    writer.write(jsonString);                    
                 }, this.fail);
             }, this.fail);
         }, this.fail);	
