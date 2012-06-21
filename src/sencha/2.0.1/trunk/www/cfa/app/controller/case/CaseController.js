@@ -160,7 +160,7 @@ Ext.define('cfa.controller.case.CaseController', {
 	exportCaseData : function() {
 
 		if (Ext.os.is.Desktop) {
-			Ext.Msg.alert("Mail sending", "Only support on iPad");
+			Ext.Msg.alert("Export", "Currently support only for iPad");
 		} else {
 			var me = this;
 			var currentRecord = this.getCurrentRecord();

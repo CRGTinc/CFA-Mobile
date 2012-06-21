@@ -593,7 +593,7 @@ var Formpod = {
     				processed++;
     				
     				if (processed == length) {
-			   			jsonString = jsonString.replace('}', ',"childs":[' + childData + ']}');
+			   			jsonString = jsonString.replace('}', ',"children":[' + childData + ']}');
 			   			
 				        if (typeof callback === 'function')
             				callback(jsonString);
@@ -603,7 +603,6 @@ var Formpod = {
    			
 	        if (length == 0 && typeof callback === 'function') {
 	        	callback(jsonString);
-	        	        		
    			}
     	}); 
 	},
@@ -614,9 +613,11 @@ var Formpod = {
     		key;
         
      	for (key in formInstance) {
-     		if (typeof(formInstance[key]) != "object") {
+     		if (typeof(formInstance[key]) != 'object') {
      			formdata = formdata.concat('"' + key + '"' + ':' + '"' + formInstance[key] + '",');
-     		}     		
+     		} else if (key == 'engineClass') {
+     			formdata = formdata.concat('"engineClass": "' + formInstance[key].name + '",');
+     		}   		
      	}
      	
      	formdata = formdata.concat('}');
