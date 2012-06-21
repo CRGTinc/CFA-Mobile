@@ -175,7 +175,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 						Formpod.exportData(currentRecord.getData().form, function(data) {
 							var today = new Date();
-							var filename = Ext.util.Format.date(today, 'ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+							var filename = Ext.util.Format.date(today, 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							me.saveFile(data, filename, function() {
 								window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
@@ -188,7 +188,7 @@ Ext.define('cfa.controller.case.CaseController', {
 					handler : function() {
 						Formpod.exportData(currentRecord.getData().form, function(data) {
 							var today = new Date();
-							var filename = Ext.util.Format.date(today, 'ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+							var filename = Ext.util.Format.date(today, 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							me.saveFile(data, filename, function() {
 								Ext.Msg.alert("Export Data", "Data has been exported successfully.");
