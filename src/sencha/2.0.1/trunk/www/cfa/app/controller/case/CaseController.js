@@ -147,6 +147,13 @@ Ext.define('cfa.controller.case.CaseController', {
 				}
 			}
 		}
+		
+		var currentRecord = this.getCurrentRecord();
+		if (currentRecord) {
+			var formData = currentRecord.get('form');
+			var engine = formData.engineClass;
+			 engine.scrollFormToTop();
+		}
 	},
 	
 	cancelCaseData : function() {
