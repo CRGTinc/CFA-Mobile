@@ -35,7 +35,8 @@ var Formpod = {
 								displayField: 'name',
 								store: {
 									data: finfo.value
-								}
+								},
+								labelWrap : true,
 							};
 						}
 						else {
@@ -45,8 +46,13 @@ var Formpod = {
 								label: finfo.label,
 								value: finfo.value,
 								required: finfo.required,
-                                placeHolder: finfo.placeHolder
+                                placeHolder: finfo.placeHolder,
+                                autoCapitalize: finfo.autoCapitalize,
+                                autoCorrect: finfo.autoCorrect,
+                                autoComplete: finfo.autoComplete,
+                                labelWrap : true,
 							};
+							
 						}
 
 						return fitem;

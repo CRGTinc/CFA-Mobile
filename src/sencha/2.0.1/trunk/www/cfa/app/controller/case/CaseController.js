@@ -148,7 +148,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			}
 		}
 	},
-
+	
 	cancelCaseData : function() {
 		this.setCurrentRecord(null);
 		this.showCurrentRecord();
@@ -211,21 +211,27 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	deleteCaseData : function() {
-		var store = Ext.getStore("Cases"), currentRecord = this.getCurrentRecord();
-
-		this.getCasesList().goToNode(currentRecord.parentNode);
-
-		if (!currentRecord.isLeaf()) {
-			this.casesListBackTap();
-		} else {
-			this.setCurrentRecord(null);
-			this.showCurrentRecord();
-		}
-
-		currentRecord.parentNode.removeChild(currentRecord);
-		store.remove(currentRecord);
-		store.sync();
+		Ext.Msg.confirm("Delete case", "Do you want to delete this case?", this.confirmDeleteData, this);
 	},
+	
+	confirmDeleteData: function(button) {
+        if (button == 'yes') {
+         	var store = Ext.getStore("Cases"), currentRecord = this.getCurrentRecord();
+
+			this.getCasesList().goToNode(currentRecord.parentNode);
+	
+			if (!currentRecord.isLeaf()) {
+				this.casesListBackTap();
+			} else {
+				this.setCurrentRecord(null);
+				this.showCurrentRecord();
+			}
+	
+			currentRecord.parentNode.removeChild(currentRecord);
+			store.remove(currentRecord);
+			store.sync();
+        }
+    },
 
 	casesListBackTap : function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
 		var recordsPath = this.getRecordsPath();
