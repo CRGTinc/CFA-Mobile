@@ -172,6 +172,12 @@ var Formpod = {
 				this.getForm().reset();
 				delete this.getForm().engineObjectId;
 			}
+			
+			this.scrollFormToTop = function() {
+				console.log("scroll from");
+				var form = this.getForm();
+				form.getScrollable().getScroller().scrollTo(0, 0, true);
+			}
             
             this.deleteForm = function() {
                 if (this.form) {
