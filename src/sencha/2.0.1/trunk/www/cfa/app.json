@@ -39,10 +39,6 @@
             "path": "app.js",
             "bundle": true,  /* Indicates that all class dependencies are concatenated into this file when build */
             "update": "delta"
-        },
-        {
-            "path": "lib/EmailComposer.js",
-            "update": "delta"
         }
     ],
 
@@ -77,6 +73,7 @@
             "index.html",
             "lib/cordova-1.7.0.js",
             "lib/ChildBrowser.js",
+            "lib/EmailComposer.js",
             "lib/FormDefinitions.js",
             "lib/Formpod.js",
 			"resources/icons/cases.png",
@@ -120,6 +117,7 @@
     "resources": [
         "lib/cordova-1.7.0.js",
         "lib/ChildBrowser.js",
+        "lib/EmailComposer.js",
         "lib/FormDefinitions.js",
         "lib/Formpod.js",
         "resources/images",
