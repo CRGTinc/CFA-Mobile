@@ -218,7 +218,7 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	deleteCaseData : function() {
-		Ext.Msg.confirm("Delete case", "Do you want to delete this case?", this.confirmDeleteData, this);
+		Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
 	},
 	
 	confirmDeleteData: function(button) {
