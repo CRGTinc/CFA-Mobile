@@ -4,6 +4,8 @@ Ext.define('cfa.view.Dashboards', {
 	
 	config: {
         title: 'CFA Mobile',
+        
+        scrollable: false,
 
 		refs: {
             main: 'main'
