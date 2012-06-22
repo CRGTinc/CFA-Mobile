@@ -39,17 +39,17 @@ Ext.define('cfa.view.contact.ContactDetail',{
 			readOnly: true
 		}
 		
-		var contactDepartement = {
+		var contactDepartment = {
 			xtype: 'textfield',
-			name: 'departement',
-			label: 'Departement',
+			name: 'department',
+			label: 'Department',
 			readOnly: true
 		}
 		
 		this.add([
 			{ 
 				xtype: "fieldset",
-	          	items: [contactName, contactLastName, contactEmail, contactOfficePhone, contactMobilePhone, contactDepartement]
+	          	items: [contactName, contactLastName, contactEmail, contactOfficePhone, contactMobilePhone, contactDepartment]
 			}			
 		]);
 	}
