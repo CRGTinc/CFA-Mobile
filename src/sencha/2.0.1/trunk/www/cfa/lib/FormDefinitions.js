@@ -17,9 +17,9 @@ FD_Forms ['Case Form'] =
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "Case Information", instructions: "Case Information"},
                 {name: "fs", type: "fieldset", title: "General", instructions: "General Case Information"},
-                    {name: "CaseTitle", type: "textfield", label: "Case Title", value: "", required: true, source: "CaseTitle", helpText: "Name your case"},
+                    {name: "CaseTitle", type: "textfield",textType: "pascalcase", label: "Case Title", value: "", required: true, source: "CaseTitle", helpText: "Name your case"},
                     {name: "CreationDate", type: "datepickerfield", label: "Case Creation Date", value: new Date(), required: false, source: "CaseCreationDate", helpText: "Date the Case was created"},
-                    {name: "ICENo", type: "textfield", label: "ICE Case No.", value: "", required: false, source: "ICENo", helpText: "Enter Case Number obtained from TECS"},
+                    {name: "ICENo", type: "textfield",textType: "allcase", label: "ICE Case No.", value: "", required: false, source: "ICENo", helpText: "Enter Case Number obtained from TECS"},
                     {name: "CaseAgent", type: "textfield", label: "Case Agent", value: "", required: false, source: "CaseAgent", helpText: "Case Agent's name"},
                     {name: "AgentPhone", type: "textfield", label: "Agent Phone No.", placeHolder: "(###) ###-####", required: false, source: "AgentPhone", helpText: "Case Agent's phone number"},
                     {name: "AgentEmail", type: "emailfield", label: "Agent Email", placeHolder: "username@domain.com", required: false, source: "AgentEmail", helpText: "Case Agent's email address"},

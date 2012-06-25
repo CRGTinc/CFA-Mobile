@@ -39,7 +39,7 @@ var Formpod = {
 								labelWrap : true,
 							};
 						}
-						else {
+						else if(finfo.type == 'datepickerfiled'){
 							fitem = {
 								xtype: finfo.type,
 								name: finfo.name,
@@ -53,6 +53,58 @@ var Formpod = {
                                 labelWrap : true,
 							};
 							
+						}
+						else {
+							if(finfo.textType == 'pascalcase'){
+								fitem = {
+									xtype: finfo.type,
+									name: finfo.name,
+									label: finfo.label,
+									value: finfo.value,
+									required: finfo.required,
+	                                placeHolder: finfo.placeHolder,
+	                                autoCapitalize: finfo.autoCapitalize,
+	                                autoCorrect: finfo.autoCorrect,
+	                                autoComplete: finfo.autoComplete,
+	                                labelWrap : true,
+	                                listeners: {
+	                                	change:{fn:Formpod.pascalCase,scope:Formpod}
+	                                }
+								}
+								
+							} 
+							else if(finfo.textType == 'allcase'){
+								fitem = {
+									xtype: finfo.type,
+									name: finfo.name,
+									label: finfo.label,
+									value: finfo.value,
+									required: finfo.required,
+	                                placeHolder: finfo.placeHolder,
+	                                autoCapitalize: finfo.autoCapitalize,
+	                                autoCorrect: finfo.autoCorrect,
+	                                autoComplete: finfo.autoComplete,
+	                                labelWrap : true,
+	                                listeners: {
+	                                	change:{fn:Formpod.allCap,scope:Formpod}
+	                                }
+								}
+							}
+							else {
+								fitem = {
+									xtype: finfo.type,
+									name: finfo.name,
+									label: finfo.label,
+									value: finfo.value,
+									required: finfo.required,
+	                                placeHolder: finfo.placeHolder,
+	                                autoCapitalize: finfo.autoCapitalize,
+	                                autoCorrect: finfo.autoCorrect,
+	                                autoComplete: finfo.autoComplete,
+	                                labelWrap : true,
+	                                
+								}
+							}
 						}
 
 						return fitem;
@@ -110,6 +162,19 @@ var Formpod = {
 			}
 		}
 	},
+	
+	pascalCase: function(field, newVal, oldVal, opts) {
+		var str = newVal.replace(/(\w)(\w*)/g, function(g0,g1,g2) {
+			return g1.toUpperCase() + g2.toLowerCase(); 
+		});
+		field.setValue(str);
+	},
+	
+	allCap: function(field, newVal, oldVal, opts) {
+		var str = newVal.toUpperCase(); 
+		field.setValue(str);
+	},
+	
 	FormTypes: {},
     dateFormat: 'm/d/Y',
 	init: function (formDefinitions, generator) {
@@ -174,7 +239,6 @@ var Formpod = {
 			}
 			
 			this.scrollFormToTop = function() {
-				console.log("scroll from");
 				var form = this.getForm();
 				form.getScrollable().getScroller().scrollTo(0, 0, true);
 			}
