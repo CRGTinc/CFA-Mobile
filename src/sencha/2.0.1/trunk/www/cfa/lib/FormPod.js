@@ -39,71 +39,29 @@ var Formpod = {
 								labelWrap : true,
 							};
 						}
-						else if(finfo.type == 'datepickerfiled'){
-							fitem = {
-								xtype: finfo.type,
+						else {
+                            fitem = {
+                                xtype: finfo.type,
 								name: finfo.name,
 								label: finfo.label,
 								value: finfo.value,
 								required: finfo.required,
-                                placeHolder: finfo.placeHolder,
-                                autoCapitalize: finfo.autoCapitalize,
-                                autoCorrect: finfo.autoCorrect,
-                                autoComplete: finfo.autoComplete,
-                                labelWrap : true,
-							};
-							
-						}
-						else {
-							if(finfo.textType == 'pascalcase'){
-								fitem = {
-									xtype: finfo.type,
-									name: finfo.name,
-									label: finfo.label,
-									value: finfo.value,
-									required: finfo.required,
-	                                placeHolder: finfo.placeHolder,
-	                                autoCapitalize: finfo.autoCapitalize,
-	                                autoCorrect: finfo.autoCorrect,
-	                                autoComplete: finfo.autoComplete,
-	                                labelWrap : true,
-	                                listeners: {
-	                                	change:{fn:Formpod.pascalCase,scope:Formpod}
-	                                }
-								}
-								
-							} 
-							else if(finfo.textType == 'allcase'){
-								fitem = {
-									xtype: finfo.type,
-									name: finfo.name,
-									label: finfo.label,
-									value: finfo.value,
-									required: finfo.required,
-	                                placeHolder: finfo.placeHolder,
-	                                autoCapitalize: finfo.autoCapitalize,
-	                                autoCorrect: finfo.autoCorrect,
-	                                autoComplete: finfo.autoComplete,
-	                                labelWrap : true,
-	                                listeners: {
-	                                	change:{fn:Formpod.allCap,scope:Formpod}
-	                                }
-								}
+	                            placeHolder: finfo.placeHolder,
+	                            autoCapitalize: finfo.autoCapitalize,
+	                            autoCorrect: finfo.autoCorrect,
+	                            autoComplete: finfo.autoComplete,
+	                            labelWrap: true
+                            }
+
+							if (finfo.textType == 'pascalcase') {
+								fitem.listeners = {
+                                	change: { fn:Formpod.FormEngine.Utils.pascalCase, scope:Formpod.FormEngine.Utils }
+                                }
 							}
-							else {
-								fitem = {
-									xtype: finfo.type,
-									name: finfo.name,
-									label: finfo.label,
-									value: finfo.value,
-									required: finfo.required,
-	                                placeHolder: finfo.placeHolder,
-	                                autoCapitalize: finfo.autoCapitalize,
-	                                autoCorrect: finfo.autoCorrect,
-	                                autoComplete: finfo.autoComplete,
-	                                labelWrap : true,
-	                                
-								}
+                            else if(finfo.textType == 'allcap') {
+								fitem.listeners = {
+                                	change: { fn:Formpod.FormEngine.Utils.allCap, scope:Formpod.FormEngine.Utils }
+                                }
 							}
 						}
 
@@ -160,19 +118,21 @@ var Formpod = {
 			HTML: {
 				generateForm: function(fields) { return null; }
 			}
-		}
-	},
-	
-	pascalCase: function(field, newVal, oldVal, opts) {
-		var str = newVal.replace(/(\w)(\w*)/g, function(g0,g1,g2) {
-			return g1.toUpperCase() + g2.toLowerCase(); 
-		});
-		field.setValue(str);
-	},
-	
-	allCap: function(field, newVal, oldVal, opts) {
-		var str = newVal.toUpperCase(); 
-		field.setValue(str);
+		},
+        
+        Utils: {
+            pascalCase: function(field, newVal, oldVal, opts) {
+                var str = newVal.replace(/(\w)(\w*)/g, function(g0,g1,g2) {
+                    return g1.toUpperCase() + g2.toLowerCase(); 
+                });
+                field.setValue(str);
+            },
+
+            allCap: function(field, newVal, oldVal, opts) {
+                var str = newVal.toUpperCase(); 
+                field.setValue(str);
+            }
+        }
 	},
 	
 	FormTypes: {},
