@@ -80,6 +80,7 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	caseItemTap : function(nestedList, list, index, target, record, e, eOpts) {
+		e.stopEvent();
 		this.setCurrentRecord(record);
 		this.showCurrentRecord();
 
@@ -90,6 +91,7 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	addCaseData : function() {
+		var currentRecord = this.getCurrentRecord();
 		var recordsPath = this.getRecordsPath();
 
 		if (recordsPath.length) {
@@ -115,8 +117,20 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	saveCaseData : function() {
 		var currentRecord = this.getCurrentRecord();
-
+		
 		if (currentRecord) {
+			var errors = currentRecord.validate();
+			console.log(errors);
+			
+			if (!errors.isValid()) {
+				var errorString = '';
+				Ext.each(errors.items, function(rec, i) {
+                    errorString += rec.getMessage() + "<br>";
+                });
+                Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
+				return;
+			}
+			
 			var store = Ext.getStore('Cases'), phantomRecord = currentRecord.phantom;
 
 			if (phantomRecord) {
@@ -367,4 +381,7 @@ Ext.define('cfa.controller.case.CaseController', {
 	fail : function(error) {
 		console.log(error.code);
 	},
+	
+	
 });
+
