@@ -134,7 +134,6 @@ var Formpod = {
             }
         }
 	},
-	
 	FormTypes: {},
     dateFormat: 'm/d/Y',
 	init: function (formDefinitions, generator) {
@@ -261,6 +260,9 @@ var Formpod = {
 		}
 		this.generator = generator;
 	},
+    importData: function(data) {
+        console.log('import data: ', typeof data);
+    },
 	getInstance: function(formClass) {
 		if (typeof formClass === 'string') {
 			formClass = this.FormTypes[formClass];
