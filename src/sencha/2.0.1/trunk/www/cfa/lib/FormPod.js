@@ -122,7 +122,7 @@ var Formpod = {
         
         Utils: {
             pascalCase: function(field, newVal, oldVal, opts) {
-				var str = newVal.replace(/(\w)(\w*[a-zA-Z0-9])/g, function(g0,g1,g2) { 
+				var str = newVal.replace(/(\S)(\S*)/g, function(g0,g1,g2) { 
 					return g1.toUpperCase() + g2.toLowerCase();
 				});
 				field.setValue(str);
