@@ -56,6 +56,8 @@ Ext.define('cfa.controller.case.CaseController', {
 		},
 
 		currentRecord : null,
+		
+		nextRecord: null,
 
 		recordsPath : [],
 
@@ -71,6 +73,8 @@ Ext.define('cfa.controller.case.CaseController', {
 		}
 
 		this.setRecordsPath([]);
+		this.getCurrentRecord(null);
+		this.setNextRecord(null);
 	},
 
 	showCasePage : function() {
@@ -79,11 +83,16 @@ Ext.define('cfa.controller.case.CaseController', {
 		this.getMain().push(caseView);
 	},
 
-	caseItemTap : function(nestedList, list, index, target, record, e, eOpts) {
-		e.stopEvent();
-		this.setCurrentRecord(record);
-		this.showCurrentRecord();
-
+	caseItemTap: function(nestedList, list, index, target, record, e, eOpts) {
+		if (this.formChanged()) {
+			this.setNextRecord(record);
+			Ext.Msg.confirm("Data Changed", "Do you want to save changes before openning new data?", this.confirmFormChanged, this);
+			return;
+		} else {
+			this.setNextRecord(record);
+			this.confirmFormChanged('no');
+		}
+		
 		if (!record.isLeaf()) {
 			var recordsPath = this.getRecordsPath();
 			Ext.Array.insert(recordsPath, recordsPath.length, [record]);
@@ -91,28 +100,27 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	addCaseData : function() {
-		var currentRecord = this.getCurrentRecord();
+		if (this.formChanged()) {
+			this.setNextRecord(this.getNewRecord());
+			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+		} else {
+			this.setNextRecord(this.getNewRecord());
+			this.confirmFormChanged('no');
+		}
+	},
+	
+	getNewRecord: function() {
 		var recordsPath = this.getRecordsPath();
+		var record = Ext.create('cfa.model.Case');
 
 		if (recordsPath.length) {
-			var store = Ext.getStore('CaseForms'), lastRecord = recordsPath[recordsPath.length - 1], childForms = lastRecord.get('form').engineClass.childForms;
-
-			store.clearFilter();
-			store.filterBy(function(record) {
-				return Ext.Array.contains(childForms, record.get('name'));
-			});
-
-			this.getFormSelectionView().showBy(this.getCasesList().getToolbar());
+			record.set('form', { engineClass: null });
 		} else {
-			var record = Ext.create('cfa.model.Case'), engine = Formpod.FormTypes['Case Form'];
-
-			record.set('form', {
-				engineClass : engine
-			});
-
-			this.setCurrentRecord(record);
-			this.showCurrentRecord();
+			var engine = Formpod.FormTypes['Case Form'];
+			record.set('form', engine.getInstance());
 		}
+		
+		return record;
 	},
 
 	saveCaseData : function() {
@@ -120,7 +128,6 @@ Ext.define('cfa.controller.case.CaseController', {
 		
 		if (currentRecord) {
 			var errors = currentRecord.validate();
-			console.log(errors);
 			
 			if (!errors.isValid()) {
 				var errorString = '';
@@ -128,7 +135,7 @@ Ext.define('cfa.controller.case.CaseController', {
                     errorString += rec.getMessage() + "<br>";
                 });
                 Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
-				return;
+				return false;
 			}
 			
 			var store = Ext.getStore('Cases'), phantomRecord = currentRecord.phantom;
@@ -168,6 +175,8 @@ Ext.define('cfa.controller.case.CaseController', {
 			var engine = formData.engineClass;
 			 engine.scrollFormToTop();
 		}
+		
+		return true;
 	},
 	
 	cancelCaseData : function() {
@@ -255,21 +264,27 @@ Ext.define('cfa.controller.case.CaseController', {
     },
 
 	casesListBackTap : function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
-		var recordsPath = this.getRecordsPath();
-		Ext.Array.remove(recordsPath, recordsPath[recordsPath.length - 1]);
-
-		this.setCurrentRecord(null);
-		this.showCurrentRecord();
+		if (this.formChanged()) {
+			this.setNextRecord(null);
+			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+			return false;
+		} else {
+			var recordsPath = this.getRecordsPath();
+			Ext.Array.remove(recordsPath, recordsPath[recordsPath.length - 1]);
+			this.setCurrentRecord(null);
+			this.showCurrentRecord();
+		}
 	},
 
 	caseFormSelected : function(list, index, target, record, e, eOpts) {
 		this.getFormSelectionView().hide();
 
-		var formType = record.get('name'), data = Ext.create('cfa.model.Case'), engine = Formpod.FormTypes[formType];
+		var formType = record.get('name'),
+			data = Ext.create('cfa.model.Case'),
+			engine = Formpod.FormTypes[formType];
 
-		data.set('form', {
-			engineClass : engine
-		});
+		engine.resetForm();
+		data.set('form', engine.getFormObject());
 
 		if (engine.childForms && engine.childForms.length) {
 			data.set('leaf', false);
@@ -290,12 +305,13 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	showCurrentRecord : function() {
 		var currentRecord = this.getCurrentRecord();
-
+		
 		if (currentRecord) {
 			var formData = currentRecord.get('form');
+			var data = formData;
 			var engine = formData.engineClass;
 			engine.resetForm();
-			engine.loadForm(formData);
+			engine.loadForm(data);
 
 			var form = engine.getForm();
 			this.getCaseFormPanel().removeAll(false);
@@ -327,37 +343,6 @@ Ext.define('cfa.controller.case.CaseController', {
 		}
 	},
 
-	getFormInstanceData : function(formInstance) {
-		var formdata = '{';
-
-		for (key in formInstance) {
-			if ( typeof (formInstance[key]) != "object") {
-				formdata = formdata.concat('"' + key + '"' + ':' + '"' + formInstance[key] + '",');
-			}
-		}
-
-		formdata = formdata.concat('}');
-		formdata = formdata.replace(',}', '}');
-		return formdata;
-	},
-
-	getJsonString : function(record) {
-		var form = record.getData().form, jsonString = this.getFormInstanceData(form);
-
-		if (record.childNodes && record.childNodes.length) {
-			var childData = [], i;
-
-			for ( i = 0; i < record.childNodes.length; i++) {
-				var data = this.getJsonString(record.childNodes[i]);
-				childData.push(data);
-			}
-
-			jsonString = jsonString.replace('}', ',"childs":[' + childData + ']}');
-		}
-
-		return jsonString;
-	},
-
 	saveFile : function(jsonString, filename, callback, scope) {
 		var me = this;
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
@@ -382,6 +367,61 @@ Ext.define('cfa.controller.case.CaseController', {
 		console.log(error.code);
 	},
 	
+	formChanged: function() {
+		var currentRecord = this.getCurrentRecord();
+		var changed = false;
+		
+		if (currentRecord) {
+			var currentData = currentRecord.getData().form;
+			var engine = currentData.engineClass,
+				formData = engine.getFormObject();
+				
+			for (key in formData) {
+				if (formData[key] != currentData[key]){
+					changed = true;
+					break;
+				}
+			}
+		}
+		
+		return changed;
+	},
 	
+	confirmFormChanged: function(button) {
+		if (button == 'yes') {
+			if (!this.saveCaseData()) {
+				return;
+			}
+		}
+		
+		var nextRecord = this.getNextRecord();
+
+		if (!nextRecord) {
+		} else if (nextRecord.phantom) {
+			var engine = nextRecord.get('form').engineClass;
+			
+			if (engine) {
+				engine.resetForm();
+				nextRecord.set('form', engine.getFormObject());
+			} else {
+				var recordsPath = this.getRecordsPath();
+				var store = Ext.getStore('CaseForms'),
+					lastRecord = recordsPath[recordsPath.length - 1],
+					childForms = lastRecord.get('form').engineClass.childForms;
+
+				store.clearFilter();
+				store.filterBy(function(record) {
+					return Ext.Array.contains(childForms, record.get('name'));
+				});
+
+				this.getFormSelectionView().showBy(this.getCasesList().getToolbar());
+				return;
+			}
+		} else {
+		}
+		
+		this.setCurrentRecord(nextRecord);
+		this.showCurrentRecord();
+	}
 });
 
