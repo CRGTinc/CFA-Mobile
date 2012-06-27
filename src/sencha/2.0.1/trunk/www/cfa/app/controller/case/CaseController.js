@@ -16,6 +16,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			caseFormPanel : 'panel[id = "caseformpanel"]',
 			caseToolbar : 'toolbar[id = "casetoolbar"]',
 			caseContextLabel : '#casecontextlabel',
+            refreshCaseDataButton : 'button[action = refreshCaseData]',
 			addCaseDataButton : 'button[action = addCaseData]',
 			saveCaseDataButton : 'button[action = savecasedata]',
 			cancelCaseDataButton : 'button[action = cancelcasedata]',
@@ -29,6 +30,10 @@ Ext.define('cfa.controller.case.CaseController', {
 				'itemtap' : 'caseItemTap',
 				'back' : 'casesListBackTap'
 			},
+            
+            refreshCaseDataButton: {
+                'tap' : 'refreshCaseData'
+            },
 
 			addCaseDataButton : {
 				'tap' : 'addCaseData'
@@ -98,6 +103,15 @@ Ext.define('cfa.controller.case.CaseController', {
 			Ext.Array.insert(recordsPath, recordsPath.length, [record]);
 		}
 	},
+    
+    refreshCaseData: function() {
+        this.setCurrentRecord(null);
+        this.showCurrentRecord();
+        this.setRecordsPath([]);
+    
+        var store = Ext.getStore('Cases');
+        store.load();
+    },
 
 	addCaseData : function() {
 		if (this.formChanged()) {
@@ -377,7 +391,13 @@ Ext.define('cfa.controller.case.CaseController', {
 				formData = engine.getFormObject();
 				
 			for (key in formData) {
-				if (formData[key] != currentData[key]){
+                if (formData[key] == '' && currentData[key] == null)
+                    continue;
+
+                if (formData[key] == null && currentData[key] == '')
+                    continue;
+                
+				if (formData[key] != currentData[key]) {
 					changed = true;
 					break;
 				}

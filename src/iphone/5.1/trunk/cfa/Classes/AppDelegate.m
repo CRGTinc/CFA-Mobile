@@ -138,7 +138,7 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
 	NSString *data = [NSString stringWithContentsOfURL:url encoding:NSASCIIStringEncoding error:nil];
-    NSString *jsString = [NSString stringWithFormat:@"Formpod.importData(\"%@\");", data];
+    NSString *jsString = [NSString stringWithFormat:@"Formpod.importData(\'%@\');", data];
     NSString *retCode = [self.viewController.webView stringByEvaluatingJavaScriptFromString:jsString];
 	return [retCode boolValue];
 }
