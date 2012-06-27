@@ -13,7 +13,6 @@ Ext.define('cfa.view.about.AboutView', {
                 centered: true,
                 itemId: 'versionpanel',
                 html: [
-                    '<p align="center">CFA Mobile</p>',
                 ].join('')
             }
         ]
