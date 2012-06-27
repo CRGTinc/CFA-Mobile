@@ -45,10 +45,12 @@
 		ADB98FA81576231000CB49AB /* ChildBrowserCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F9A1576231000CB49AB /* ChildBrowserCommand.m */; };
 		ADB98FA91576231000CB49AB /* ChildBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB98F9C1576231000CB49AB /* ChildBrowserViewController.m */; };
 		ADB98FAA1576231000CB49AB /* ChildBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADB98F9D1576231000CB49AB /* ChildBrowserViewController.xib */; };
+		ADF52AEA1599A2C500E3523F /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = ADF52AE81599A2C500E3523F /* Default-Landscape~ipad.png */; };
+		ADF52AEB1599A2C500E3523F /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = ADF52AE91599A2C500E3523F /* Default-Portrait~ipad.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		97A2FC2D1566373F00A0DEFE /* cfa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cfa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97A2FC2D1566373F00A0DEFE /* CFA Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CFA Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97A2FC311566373F00A0DEFE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		97A2FC331566373F00A0DEFE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		97A2FC351566373F00A0DEFE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -95,6 +97,8 @@
 		ADB98F9B1576231000CB49AB /* ChildBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildBrowserViewController.h; sourceTree = "<group>"; };
 		ADB98F9C1576231000CB49AB /* ChildBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildBrowserViewController.m; sourceTree = "<group>"; };
 		ADB98F9D1576231000CB49AB /* ChildBrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChildBrowserViewController.xib; sourceTree = "<group>"; };
+		ADF52AE81599A2C500E3523F /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape~ipad.png"; path = "Resources/splash/Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		ADF52AE91599A2C500E3523F /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait~ipad.png"; path = "Resources/splash/Default-Portrait~ipad.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +141,7 @@
 		97A2FC2E1566373F00A0DEFE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				97A2FC2D1566373F00A0DEFE /* cfa.app */,
+				97A2FC2D1566373F00A0DEFE /* CFA Mobile.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -248,6 +252,8 @@
 		97A2FC6E1566373F00A0DEFE /* splash */ = {
 			isa = PBXGroup;
 			children = (
+				ADF52AE81599A2C500E3523F /* Default-Landscape~ipad.png */,
+				ADF52AE91599A2C500E3523F /* Default-Portrait~ipad.png */,
 				97A2FC6F1566373F00A0DEFE /* Default~iphone.png */,
 				97A2FC711566373F00A0DEFE /* Default@2x~iphone.png */,
 			);
@@ -324,7 +330,7 @@
 			);
 			name = cfa;
 			productName = cfa;
-			productReference = 97A2FC2D1566373F00A0DEFE /* cfa.app */;
+			productReference = 97A2FC2D1566373F00A0DEFE /* CFA Mobile.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -377,6 +383,8 @@
 				97A2FC8E1566386400A0DEFE /* www in Resources */,
 				ADB98FA61576231000CB49AB /* ChildBrowser.bundle in Resources */,
 				ADB98FAA1576231000CB49AB /* ChildBrowserViewController.xib in Resources */,
+				ADF52AEA1599A2C500E3523F /* Default-Landscape~ipad.png in Resources */,
+				ADF52AEB1599A2C500E3523F /* Default-Portrait~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,7 +541,7 @@
 					"-weak_library",
 					/usr/lib/libSystem.B.dylib,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "CFA Mobile";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 2;
@@ -572,7 +580,7 @@
 					"-weak_library",
 					/usr/lib/libSystem.B.dylib,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "CFA Mobile";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 2;
