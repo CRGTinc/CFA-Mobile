@@ -122,11 +122,11 @@ var Formpod = {
         
         Utils: {
             pascalCase: function(field, newVal, oldVal, opts) {
-                var str = newVal.replace(/(\w)(\w*)/g, function(g0,g1,g2) {
-                    return g1.toUpperCase() + g2.toLowerCase(); 
-                });
-                field.setValue(str);
-            },
+				var str = newVal.replace(/(\S)(\S*)/g, function(g0,g1,g2) { 
+					return g1.toUpperCase() + g2.toLowerCase();
+				});
+				field.setValue(str);
+			},
 
             allCap: function(field, newVal, oldVal, opts) {
                 var str = newVal.toUpperCase(); 
@@ -134,7 +134,6 @@ var Formpod = {
             }
         }
 	},
-	
 	FormTypes: {},
     dateFormat: 'm/d/Y',
 	init: function (formDefinitions, generator) {
@@ -613,6 +612,49 @@ var Formpod = {
         if (typeof callback === 'function')
             callback(objectList);
 	},
+    
+    importData: function(data, callback) {
+        var me = this,
+            importData = data;
+        
+        try {
+            if (typeof importData == 'string')
+                importData = Ext.decode(importData);
+        } catch(error) {
+            return '1';
+        }
+        
+        delete importData.id;
+            
+        me.saveInstance(importData, function(obj) {
+            
+            var length = obj.children ? obj.children.length : 0,
+                i, count = 0;
+
+            var childCallback = function(childObj) {
+                count++;
+                me.relateObject(obj, childObj, 'hasChild');
+                
+                if (count != length)
+                    return;
+                
+                if (typeof callback == 'function')
+                    callback(obj);
+            }
+            
+            for (i = 0; i < length; i++) {
+                var child = obj.children[i];
+                me.importData(child, childCallback);
+            }
+            
+            if (length == 0 && typeof callback == 'function') {
+                callback(obj);
+            }
+
+        });
+        
+        return '0';
+    },
 	
 	exportData: function(form, callback) {
 		var jsonString = Formpod.getFormInstanceData(form);
@@ -629,7 +671,8 @@ var Formpod = {
     				processed++;
     				
     				if (processed == length) {
-			   			jsonString = jsonString.replace('}', ',"children":[' + childData + ']}');
+                        jsonString = jsonString.slice(0, -1);
+			   			jsonString = jsonString.concat(', "children": [' + childData + ']}');
 			   			
 				        if (typeof callback === 'function')
             				callback(jsonString);
@@ -643,29 +686,46 @@ var Formpod = {
     	}); 
 	},
 	
-	
 	getFormInstanceData: function(formInstance) {
     	var formdata = '{',
-    		key;
+            engine = formInstance.engineClass,
+            definition = engine.definition,
+            index;
         
-     	for (key in formInstance) {
-     		if (typeof(formInstance[key]) != 'object') {
-     			formdata = formdata.concat('"' + key + '"' + ':' + '"' + formInstance[key] + '",');
-     		} else if (key == 'engineClass') {
-     			formdata = formdata.concat('"engineClass": "' + formInstance[key].name + '",');
-     		}   		
-     	}
-     	
+		formdata = formdata.concat('"id": "' + formInstance['id'] + '",');
+		formdata = formdata.concat('"engineClass": { "name": "' + formInstance['engineClass'].name + '" },');
+
+        for (index in definition) {
+			var field = definition[index];
+            
+            if (field.type == 'fieldset' || field.type == 'endfieldset')
+                continue;
+                
+            var value = formInstance[field.name];
+            
+            if (!value) {
+                value = '';
+            }
+            
+            if (typeof value == 'object') {
+                if (field.type == 'datepickerfield') {
+                    value = Ext.Date.format(value, this.dateFormat);
+                    formdata = formdata.concat('"' + field.name + '": "' + value + '",');
+                }
+            } else {
+                formdata = formdata.concat('"' + field.name + '": "' + value + '",');
+            }
+		}
+        
+        if (formdata[formdata.length - 1] == ',') {
+            formdata = formdata.slice(0, -1);
+        }
+        
      	formdata = formdata.concat('}');
-     	formdata = formdata.replace(',}', '}');
      	return formdata;
     },
     
     deleteCaseData: function(node) { 
-    	   	
     	Formpod.deleteObjectWithId(node.id)
-    	
-    	
     }
-    
 }

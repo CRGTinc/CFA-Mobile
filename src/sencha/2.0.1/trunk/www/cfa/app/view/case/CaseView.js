@@ -18,6 +18,13 @@ Ext.define("cfa.view.case.CaseView", {
                         toolbar: {
                             items: [{
                                     xtype: 'button',
+                                    iconCls: 'refresh',
+                                    iconMask: true,
+                                    align:'right',
+                                    action: 'refreshCaseData',
+                                    ui: 'action'
+                                }, {
+                                    xtype: 'button',
                                     iconCls: 'add',
                                     iconMask: true,
                                     align:'right',
