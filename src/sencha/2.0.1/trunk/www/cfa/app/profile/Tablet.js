@@ -10,7 +10,7 @@ Ext.define('cfa.profile.Tablet', {
 		'cfa.controller.contact.ContactController',
 		'cfa.controller.event.EventController',
 		'cfa.controller.reference.ReferenceController',
-		'cfa.controller.report.ReportController',
+		'cfa.controller.search.SearchController',
 		'cfa.controller.setting.SettingController',
 		'cfa.controller.feedback.FeedbackController',
 		'cfa.controller.about.AboutController',

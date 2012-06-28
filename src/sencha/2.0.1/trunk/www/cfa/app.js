@@ -10,7 +10,7 @@ Ext.application({
 		'Ext.MessageBox'			
 	],
 	profiles : ['Tablet', 'Phone'],
-	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms'],
+	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates'],
 
 	icon : {
 		'57' : 'resources/icons/Icon.png',
@@ -37,7 +37,6 @@ Ext.application({
 
         Formpod.init(FD_Forms, Formpod.FormEngine.CodeGenerators.Sencha);
         Ext.getStore('CaseForms').setData(Formpod.Forms);
-        
 		Deft.Injector.configure({
 			contactStore: {
 				fn: function() {

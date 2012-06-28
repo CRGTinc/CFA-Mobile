@@ -4,6 +4,11 @@ Ext.define('cfa.proxy.FormEngine', {
     alias: 'proxy.formengine',
 
     alternateClassName: 'cfa.data.FormEngineProxy',
+    
+    config: {
+    	queryType: null,
+    	queryParam: null
+    },
 
     constructor: function (config) {
         this.callParent(arguments);
@@ -38,41 +43,48 @@ Ext.define('cfa.proxy.FormEngine', {
             record;
 
         //read a single record
-        if (params[idProperty] !== undefined) {
-            record = this.getRecord(params[idProperty]);
+        var queryType = this.getQueryType(),
+        	queryParam = this.getQueryParam();
 
-            if (record) {
-                records.push(record);
-                operation.setSuccessful();
-            }
-
-            records = this.applyDataToModels(objs, Model);
-            this.completeRead(operation, callback, scope, records);
+        if (queryType) {
+        	 if (queryType == 'class') {
+                Formpod.findObjectsByClass(queryParam, function (objs) {
+                    me.applyDataToModels(objs, Model, function (records) {
+                        me.completeRead(operation, callback, scope, records);
+                    });
+                });        	
+        	 }
         } else {
-            if (params['node'] == 'cases') {
-                Formpod.findObjectsByClass('Case Form', function (objs) {
-                    me.applyDataToModels(objs, Model, function (records) {
-                        me.completeRead(operation, callback, scope, records);
-                    });
-                });
-            } else if (params['node'] == 'devices') {
-                Formpod.findObjectsByClass('Device Form', function (objs) {
-                    me.applyDataToModels(objs, Model, function (records) {
-                        me.completeRead(operation, callback, scope, records);
-                    });
-                });
-            } else {
-                Formpod.findRelatedIdsWithType(params['node'], 'hasChild', function (ids) {
-                    Formpod.getObjects(ids, function (objs) {
-                        me.applyDataToModels(objs, Model, function (records) {
-                            me.completeRead(operation, callback, scope, records);
-                        });
-                    });
-                });
-            }
-
-            operation.setSuccessful();
+	        if (params[idProperty] !== undefined) {
+	            record = this.getRecord(params[idProperty]);
+	
+	            if (record) {
+	                records.push(record);
+	                operation.setSuccessful();
+	            }
+	
+	            records = this.applyDataToModels(objs, Model);
+	            this.completeRead(operation, callback, scope, records);
+	        } else {
+	            if (params['node'] == 'cases') {
+	                Formpod.findObjectsByClass('Case Form', function (objs) {
+	                    me.applyDataToModels(objs, Model, function (records) {
+	                        me.completeRead(operation, callback, scope, records);
+	                    });
+	                });
+	            } else {
+	                Formpod.findRelatedIdsWithType(params['node'], 'hasChild', function (ids) {
+	                    Formpod.getObjects(ids, function (objs) {
+	                        me.applyDataToModels(objs, Model, function (records) {
+	                            me.completeRead(operation, callback, scope, records);
+	                        });
+	                    });
+	                });
+	            }
+	        }
         }
+        
+        operation.setSuccessful();
     },
 
     //inherit docs
@@ -246,9 +258,9 @@ Ext.define('cfa.proxy.FormEngine', {
             childForms = Formpod.FormTypes[engine.name].childForms;
         
         if (childForms && childForms.length) {
-            record.set('leaf', false);
+       //     record.set('leaf', false);
         } else {
-            record.set('leaf', true);
+       //     record.set('leaf', true);
         }
         
         if (typeof callback == 'function') {
