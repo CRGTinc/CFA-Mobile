@@ -11,7 +11,7 @@ Ext.define('cfa.controller.search.SearchController',{
         	main: 'main',
             searchView: 'searchview',
             searchTemplateList: 'list[id = "searchtemplatelist"]',
-            searchInputField: '#searchinputfield'
+            searchInputField: 'searchfield[id = "searchinputfield"]',
         },
         
         control: {
@@ -22,15 +22,14 @@ Ext.define('cfa.controller.search.SearchController',{
         	
         	searchInputField:{
         		'keyup': 'setFilterByKey'
-        	}
+        	},
+        	
         }
     },
 	
 	showReportPage: function() {
 		var reportView = Ext.create('cfa.view.search.SearchView');
 		this.getMain().push(reportView); 
-		
-		
 	},
 	
 	launch: function() {
@@ -39,6 +38,7 @@ Ext.define('cfa.controller.search.SearchController',{
 	
 	activateSearchTemplateList: function() {
 		this.getSearchTemplateList().deselectAll();
+		this.getSearchTemplateList().getStore().clearFilter(false);
 	},
 	
 	searchByTemplate: function(list, record, opt) {
@@ -54,6 +54,7 @@ Ext.define('cfa.controller.search.SearchController',{
 			store: store
 		}
 		
+		this.getSearchInputField().setValue('');
 		this.getSearchView().push(resultlist);
 	},
 	
