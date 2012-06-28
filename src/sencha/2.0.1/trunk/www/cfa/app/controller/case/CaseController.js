@@ -199,13 +199,18 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	exportCaseData : function() {
-
+			
 		if (Ext.os.is.Desktop) {
-			Ext.Msg.alert("Export", "Currently support only for iPad");
+			Ext.Msg.alert("Export Data", "Currently support only for iPad.");
 		} else {
-			var me = this;
-			var currentRecord = this.getCurrentRecord();
-
+			var me = this,
+				currentRecord = this.getCurrentRecord();
+			
+			if (currentRecord.phantom) {
+				Ext.Msg.alert("Export Data", "You can not export unsaved data.");
+				return;
+			}
+			
 			var actionSheet = Ext.create('Ext.ActionSheet', {
 				modal : false,
 				left : "40%",
@@ -218,8 +223,7 @@ Ext.define('cfa.controller.case.CaseController', {
 					handler : function() {
 
 						Formpod.exportData(currentRecord.getData().form, function(data) {
-							var today = new Date();
-							var filename = Ext.util.Format.date(today, 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+							var filename = Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							me.saveFile(data, filename, function() {
 								window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
@@ -231,8 +235,7 @@ Ext.define('cfa.controller.case.CaseController', {
 					text : 'To iTunes',
 					handler : function() {
 						Formpod.exportData(currentRecord.getData().form, function(data) {
-							var today = new Date();
-							var filename = Ext.util.Format.date(today, 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+							var filename = Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							me.saveFile(data, filename, function() {
 								Ext.Msg.alert("Export Data", "Data has been exported successfully.");
@@ -255,12 +258,19 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	deleteCaseData : function() {
-		Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
+		var  currentRecord = this.getCurrentRecord();
+		
+		if(!currentRecord.phantom) {
+			Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
+		} else {
+			Ext.Msg.alert("Delete Data", "You can not delete unsaved data.");
+		}
 	},
 	
 	confirmDeleteData: function(button) {
         if (button == 'yes') {
-         	var store = Ext.getStore("Cases"), currentRecord = this.getCurrentRecord();
+         	var store = Ext.getStore("Cases"),
+         		currentRecord = this.getCurrentRecord();
 
 			this.getCasesList().goToNode(currentRecord.parentNode);
 	
