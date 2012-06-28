@@ -1,0 +1,14 @@
+[
+    {
+        "text": "All devices",
+        "description": "Query for all devices",
+        "queryType": "class",
+        "queryParam": "System"
+    },
+    {
+        "text": "Media",
+        "description": "Query for all medias",
+        "queryType": "class",
+        "queryParam": "System"
+    }
+]
