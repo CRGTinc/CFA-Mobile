@@ -125,7 +125,8 @@
         "resources/startup",		
 		"data/Contacts.csv",
 		"data/References.csv",
-		"data/Events.csv"
+		"data/Events.csv",
+		"data/SearchTemplate.json"
     ],
 
     /**
