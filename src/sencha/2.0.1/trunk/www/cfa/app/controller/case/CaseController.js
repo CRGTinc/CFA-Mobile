@@ -78,7 +78,7 @@ Ext.define('cfa.controller.case.CaseController', {
 		}
 
 		this.setRecordsPath([]);
-		this.getCurrentRecord(null);
+		this.setCurrentRecord(null);
 		this.setNextRecord(null);
 	},
 
