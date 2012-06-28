@@ -47,7 +47,7 @@ Ext.define('cfa.model.Case', {
 			                        message: formFields[i].label + " is required."
 			                    }));
 	                		}							
-						} else if (formFields[i].type == 'emailfield') {
+						} else if (formFields[i].type == 'emailfield' && (formData[formFields[i].name] != '' || formFields[i].required)) {
 							valid = Ext.data.validations.emailRe.test(formData[formFields[i].name]);
 							
 							if (!valid) {
@@ -56,7 +56,7 @@ Ext.define('cfa.model.Case', {
 			                        message: "Please enter a valid email address for " + formFields[i].label + " field."
 			                    }));
 	                		}
-						}              		
+						}             		
                 	}
                 } else {
                 	valid = validators[type](validation, this.get(field));
