@@ -110,6 +110,7 @@ Ext.define('cfa.controller.case.CaseController', {
         this.setRecordsPath([]);
     
         var store = Ext.getStore('Cases');
+        this.getCasesList().goToNode(store.getNode());
         store.load();
     },
 
