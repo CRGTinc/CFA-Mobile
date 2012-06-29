@@ -105,12 +105,15 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
     
     refreshCaseData: function() {
+        var store = Ext.getStore('Cases'),
+        	recordsPath = this.getRecordsPath(),
+        	currentNode = recordsPath.length ? recordsPath[recordsPath.length - 1] : store.getNode();
+        
+        store.load({ node: currentNode, scope: this, callback: function() {
+			store.removed = [];        	
+        }});
         this.setCurrentRecord(null);
         this.showCurrentRecord();
-        this.setRecordsPath([]);
-    
-        var store = Ext.getStore('Cases');
-        store.load();
     },
 
 	addCaseData : function() {
