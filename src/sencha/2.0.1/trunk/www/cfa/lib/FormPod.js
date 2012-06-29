@@ -430,7 +430,6 @@ var Formpod = {
 	},
 	deleteObjectWithId: function(id) {
 		var me = this;
-		console.log("deleteObjectWithId ", id)
 		this.db.transaction( function(t) {
 			t.executeSql("delete from attr where objid = ?", [id]);
 			t.executeSql("delete from obj where id = ?", [id]);
