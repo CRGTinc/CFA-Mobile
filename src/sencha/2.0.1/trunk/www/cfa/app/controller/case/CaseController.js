@@ -215,7 +215,6 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	exportCaseData : function() {
-			
 		if (Ext.os.is.Desktop) {
 			Ext.Msg.alert("Export Data", "Currently support only for iPad.");
 		} else {
@@ -284,23 +283,50 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
     
     attachCaseData: function() {		
-		var currentRecord = this.getCurrentRecord(),
-			formData = currentRecord.get('form');
-		this.getImageStore().add({formId :formData.PhotoId, srcImage : 'resources/images/back-button.png'});
-		//navigator.camera.getPicture(this.onPhotoDataSuccess, this.onFail, { quality: 50 });		
-    },
-	
-	// Called if something bad happens.    
-    onFail : function(message) {
-      alert('Failed because: ' + message);
-    },
-	
-	// Called when a photo is successfully retrieved
-    onPhotoDataSuccess : function(imageData) {
-      // Uncomment to view the base64 encoded image data
-      // console.log(imageData);	  
-    },
+        var me = this;
+        var actionSheet = Ext.create('Ext.ActionSheet', {
+            modal : false,
+			left : "40%",
+			right : "40%",
+			bottom : "6%",
 
+			items : [{
+                    text : 'Camera',
+                    handler : function() {
+                        navigator.camera.getPicture(me.onPhotoDataSuccess, me.onPhotoDataError, { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG });
+                        actionSheet.hide();
+                    }
+                }, {
+                    text : 'Photo Library',
+                    handler : function() {
+                        navigator.camera.getPicture(me.onPhotoDataSuccess, me.onPhotoDataError, { quality: 50, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG });
+                        actionSheet.hide();
+                    }
+                }, {
+                    text : 'Cancel',
+                    ui : 'confirm',
+					handler : function() {
+						actionSheet.hide();
+					}
+				}
+            ]
+        });
+
+		Ext.Viewport.add(actionSheet);
+		actionSheet.show();
+    },
+	
+    onPhotoDataError: function(message) {
+        console.log('Photo data error:', message);
+    },
+	
+    onPhotoDataSuccess: function(imageData) {
+        var currentRecord = this.getCurrentRecord(),
+            imageStore = this.getImageStore();
+        
+        var formId = currentRecord.get('form').PhotoId;
+        imageStore.add({ formId: formId, srcImage: imageData });
+    },
 	
 	confirmDeleteData: function(button) {
         if (button == 'yes') {
@@ -375,11 +401,12 @@ Ext.define('cfa.controller.case.CaseController', {
 	
 			var form = engine.getForm();
 			this.getCaseFormPanel().removeAll(false);
-			this.getCaseFormPanel().add(form);			
-			if(engine.attachment=="photo")
-			{
-				this.addImageListById(data.id);
+			this.getCaseFormPanel().add(form);
+            
+			if (engine.attachment == "photo") {
+				this.addImageListById(data.PhotoId);
 			}
+            
 			this.getCaseContentPanel().show();
 					
 		} else {
@@ -391,21 +418,24 @@ Ext.define('cfa.controller.case.CaseController', {
 		this.showContextInfo(currentRecord);
 	},
 	
-	addImageListById : function(id){	
-		this.setImageStore(undefined);	
+	addImageListById: function(id) {
+		this.setImageStore(undefined);
 		this.setImageList(undefined);
-		var imageStore = Ext.create('cfa.store.LSImages');						
-		if(id != undefined)
-		{	
-			console.log("here");
+		var imageStore = Ext.create('cfa.store.LSImages');
+        
+		if (id != undefined) {	
 			imageStore.load(function(records, operation, success) {
 					console.log(records.length);
-			}, this);			
+			}, this);
 		}
+        
+        imageStore.filterBy(function(record) {
+            return (record.formId == id);
+        });
 		this.setImageStore(imageStore);
-		console.log(this.getImageStore());
-		var imageList = Ext.create('Ext.List',{
-			  itemTpl: new Ext.XTemplate('<img src="{srcImage}" width="64" height="48"/>'),
+
+		var imageList = Ext.create('Ext.List', {
+			  itemTpl: new Ext.XTemplate('<img src="data:image/png;base64,{srcImage}" width="64" height="48"/>'),
 			  inline: { wrap: false },
 			  layout : 'fit',
 			  height : 70,			  
@@ -416,6 +446,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			},
 			store: this.getImageStore()
 		});
+        
 		this.setImageList(imageList);
 		this.getCaseFormPanel().add(this.getImageList());
 	},

@@ -258,9 +258,9 @@ Ext.define('cfa.proxy.FormEngine', {
             childForms = Formpod.FormTypes[engine.name].childForms;
         
         if (childForms && childForms.length) {
-       //     record.set('leaf', false);
+            record.set('leaf', false);
         } else {
-       //     record.set('leaf', true);
+            record.set('leaf', true);
         }
         
         if (typeof callback == 'function') {

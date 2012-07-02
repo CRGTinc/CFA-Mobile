@@ -189,9 +189,11 @@ var Formpod = {
 					obj[attrName] = formObj[attrName];
 
 					if (this.fields[attrName].type == 'hiddenfield') {
-						obj[attrName] = Formpod.randomUUID();
+                        if (obj[attrName] == '')
+                            obj[attrName] = Formpod.randomUUID();
 					}
 				}
+                
 				this.loadForm(obj);
 				return obj;
 			}
