@@ -100,6 +100,10 @@ Ext.define("cfa.view.case.CaseView", {
                                         action: 'exportcasedata',
                                         text: 'Export'
                                     }, {
+                                        xtype: 'button',
+                                        action: 'attachcasedata',
+                                        text: 'Attach'
+                                    }, {
                                         xtype: 'spacer'
                                     }, {
                                         xtype: 'button',
