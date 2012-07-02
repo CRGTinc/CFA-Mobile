@@ -71,16 +71,16 @@ Ext.define("cfa.view.case.CaseView", {
                                 baseCls: 'panel-shadow',
                                 cls:['infoPanel'],
                                 layout: 'fit',
-                                flex: 9,      
+                                flex: 2,
                                 hidden: true,
                                 id: 'casecontentpanel',
                                 items: [
                                     {
                                         xtype: 'panel',
-                                        layout: 'fit',
-                                        id: 'caseformpanel'
+                                        layout: 'vbox',
+                                        id: 'caseformpanel',									
                                     }
-                                ]
+								]
                             }, {
                                 xtype: 'toolbar',
                                 id: 'casetoolbar',

@@ -1,9 +1,11 @@
 Ext.define('cfa.controller.case.CaseController', {
 	extend : 'Ext.app.Controller',
 
-	requires : ['cfa.view.case.CaseView', 'cfa.view.case.CaseFormSelectionView'],
+	requires : ['cfa.view.case.CaseView', 'cfa.view.case.CaseFormSelectionView','cfa.store.LSImages'],
 
 	config : {
+		imageStore : undefined,
+		imageList : undefined,		
 		routes : {
 			'cases' : 'showCasePage'
 		},
@@ -178,7 +180,8 @@ Ext.define('cfa.controller.case.CaseController', {
 				currentRecord.setDirty(true);
 			}
 
-			store.sync();
+			var operations = store.sync();
+			console.log(operations);
 
 			if (phantomRecord) {
 				var parentId = currentRecord.get('parentId');
@@ -188,6 +191,11 @@ Ext.define('cfa.controller.case.CaseController', {
 				} else {
 					store.getNode().appendChild(currentRecord);
 				}
+			}
+			
+			if (this.getImageStore() != undefined)
+			{				
+				this.getImageStore().sync();
 			}
 		}
 		
@@ -275,9 +283,24 @@ Ext.define('cfa.controller.case.CaseController', {
 		}
 	},
     
-    attachCaseData: function() {
-        console.log('attach data');
+    attachCaseData: function() {		
+		var currentRecord = this.getCurrentRecord(),
+			formData = currentRecord.get('form');
+		this.getImageStore().add({formId :formData.PhotoId, srcImage : 'resources/images/back-button.png'});
+		//navigator.camera.getPicture(this.onPhotoDataSuccess, this.onFail, { quality: 50 });		
     },
+	
+	// Called if something bad happens.    
+    onFail : function(message) {
+      alert('Failed because: ' + message);
+    },
+	
+	// Called when a photo is successfully retrieved
+    onPhotoDataSuccess : function(imageData) {
+      // Uncomment to view the base64 encoded image data
+      // console.log(imageData);	  
+    },
+
 	
 	confirmDeleteData: function(button) {
         if (button == 'yes') {
@@ -321,6 +344,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 		engine.resetForm();
 		data.set('form', engine.getFormObject());
+		console.log(data);
 
 		if (engine.childForms && engine.childForms.length) {
 			data.set('leaf', false);
@@ -348,11 +372,16 @@ Ext.define('cfa.controller.case.CaseController', {
 			var engine = formData.engineClass;
 			engine.resetForm();
 			engine.loadForm(data);
-
+	
 			var form = engine.getForm();
 			this.getCaseFormPanel().removeAll(false);
-			this.getCaseFormPanel().add(form);
+			this.getCaseFormPanel().add(form);			
+			if(engine.attachment=="photo")
+			{
+				this.addImageListById(data.id);
+			}
 			this.getCaseContentPanel().show();
+					
 		} else {
 			this.getCaseFormPanel().removeAll(false);
 			this.getCaseContentPanel().hide();
@@ -360,6 +389,35 @@ Ext.define('cfa.controller.case.CaseController', {
 
         this.showEditToolbar(currentRecord);
 		this.showContextInfo(currentRecord);
+	},
+	
+	addImageListById : function(id){	
+		this.setImageStore(undefined);	
+		this.setImageList(undefined);
+		var imageStore = Ext.create('cfa.store.LSImages');						
+		if(id != undefined)
+		{	
+			console.log("here");
+			imageStore.load(function(records, operation, success) {
+					console.log(records.length);
+			}, this);			
+		}
+		this.setImageStore(imageStore);
+		console.log(this.getImageStore());
+		var imageList = Ext.create('Ext.List',{
+			  itemTpl: new Ext.XTemplate('<img src="{srcImage}" width="64" height="48"/>'),
+			  inline: { wrap: false },
+			  layout : 'fit',
+			  height : 70,			  
+			  flex : 2,
+			  scrollable: {
+			  direction: 'horizontal',
+			  directionLock: true
+			},
+			store: this.getImageStore()
+		});
+		this.setImageList(imageList);
+		this.getCaseFormPanel().add(this.getImageList());
 	},
     
     showEditToolbar: function(record) {
@@ -376,7 +434,7 @@ Ext.define('cfa.controller.case.CaseController', {
             
             var engine = record.get('form').engineClass;
 
-            if (engine.attachment) {
+            if (engine.attachment == "photo") {
                 this.getAttachCaseDataButton().show();
             } else {
                 this.getAttachCaseDataButton().hide();
