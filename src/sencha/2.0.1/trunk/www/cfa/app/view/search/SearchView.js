@@ -5,6 +5,7 @@ Ext.define('cfa.view.search.SearchView', {
 
 	config:{
 		title: 'Search',
+		autoDestroy: false,
 		navigationBar:{
 			items: [
 				{
@@ -12,7 +13,10 @@ Ext.define('cfa.view.search.SearchView', {
 					id: 'searchinputfield',
 					align: 'right'
 				}
-			]		
+			],
+			
+			
+					
 		},
 		
 		items: [
@@ -29,7 +33,8 @@ Ext.define('cfa.view.search.SearchView', {
 	pop: function() {
 		this.callParent(arguments);
 		Ext.getCmp("searchinputfield").setValue('');
-	}
+	},
+
 });
 
 
