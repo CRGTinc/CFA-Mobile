@@ -103,7 +103,6 @@ Ext.define('cfa.proxy.FormEngine', {
 
     //inherit
     destroy: function (operation, callback, scope) {
-    	console.log('destroy operation', operation);
         var records = operation.getRecords();
         this.removeRecord(records, function () {
             operation.setCompleted();
@@ -199,7 +198,7 @@ Ext.define('cfa.proxy.FormEngine', {
     */
     removeRecord: function (records, callback, scope) {
     	var i;
-    	for(i=0; i<records.length;i++){
+    	for(i = 0; i < records.length; i++) {
     		Formpod.deleteObjectWithId(records[i].getData().form.id);	
     	}   	 
 

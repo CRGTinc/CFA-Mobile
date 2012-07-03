@@ -39,6 +39,13 @@ Ext.define('cfa.controller.setting.SettingController',{
             var casesStore = Ext.getStore('Cases');
             casesStore.getProxy().clear();
             casesStore.load();
+            
+            var imageStore = Ext.create('cfa.store.LSImages');
+            imageStore.load(function() {
+                imageStore.removeAll();
+                imageStore.sync();
+            });
+            
             Ext.Msg.alert('Reset Data', 'Data has been reset successfully.', Ext.emptyFn, this);
         }
     }

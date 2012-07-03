@@ -457,23 +457,55 @@ var Formpod = {
 	},
 	deleteObjectWithId: function(id) {
 		var me = this;
-		this.db.transaction( function(t) {
-			t.executeSql("delete from attr where objid = ?", [id]);
-			t.executeSql("delete from obj where id = ?", [id]);
-		});//Close transaction
+        
+        var deleteObj = function() {
+            me.db.transaction( function(t) {
+                t.executeSql("delete from attr where objid = ?", [id]);
+                t.executeSql("delete from obj where id = ?", [id]);
+            });//Close transaction
 		
-		Formpod.findRelatedIdsWithType(id, 'hasChild',function(objs) {
-			me.db.transaction( function(t) {
-				t.executeSql("delete from rel where src = ?", [id]);
-				t.executeSql("delete from rel where dest = ?", [id]);
-			});//Close transaction			
-			var length = objs.length,
-   				i;
+            Formpod.findRelatedIdsWithType(id, 'hasChild', function(objs) {
+                me.db.transaction( function(t) {
+                    t.executeSql("delete from rel where src = ?", [id]);
+                    t.executeSql("delete from rel where dest = ?", [id]);
+                });//Close transaction			
+                var length = objs.length,
+                    i;
    		
-   			for (i = 0; i < length; i++) {
-   				Formpod.deleteObjectWithId(objs[i][0]);
-   			}
-		})
+                for (i = 0; i < length; i++) {
+                    Formpod.deleteObjectWithId(objs[i][0]);
+                }
+            });
+        };
+        
+        me.db.transaction(
+			function (t) {
+				t.executeSql("SELECT o.class as clsName FROM obj o WHERE id = ?", [id], function (t, rs) {
+                    if (rs.rows.length == 0) {
+                        deleteObj();
+                    } else {
+                        var row = rs.rows.item(0);
+                        
+                        if (row.clsName == 'Photo') {
+                            me.getSavedInstance(row.clsName, id, function(obj) {
+                                var imageStore = Ext.create('cfa.store.LSImages');
+                                imageStore.load(function() {
+                                    imageStore.filterBy(function(record) {
+                                        return (record.get('formId') == obj.PhotoId);
+                                    });
+                                    imageStore.removeAll();
+                                    imageStore.sync();
+                                });
+                                
+                                deleteObj();
+                            });
+                        } else {
+                            deleteObj();
+                        }
+                    }
+                });
+			}
+		);
 	},
 	
 	deleteObject: function (o) {

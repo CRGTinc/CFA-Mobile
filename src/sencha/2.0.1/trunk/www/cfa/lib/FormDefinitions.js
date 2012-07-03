@@ -244,10 +244,10 @@ FD_Forms ['Photo'] =
 		formName : "Photo",
 		formDesc : "Attach photo to object",
         attachment: 'photo',
-        displayProperty: 'PhotoName',
+        displayProperty: 'AlbumName',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
-			{name: "PhotoName", type: "textfield", label: "Photo Name", value: "", required: true, source: "PhotoName", helpText: "Help"},
+			{name: "AlbumName", type: "textfield", label: "Album Name", value: "", required: true, source: "AlbumName", helpText: "Help"},
 			{name: "Notes", type: "textareafield", label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
 			{name: "PhotoId", type: "hiddenfield", label: "Photo ID", value: "", required: false, source: "PhotoId", helpText: "Help"}
         ]

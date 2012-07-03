@@ -5,7 +5,8 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	config : {
 		imageStore : undefined,
-		imageList : undefined,		
+		imageList : undefined,
+        
 		routes : {
 			'cases' : 'showCasePage'
 		},
@@ -158,6 +159,7 @@ Ext.define('cfa.controller.case.CaseController', {
 				Ext.each(errors.items, function(rec, i) {
                     errorString += rec.getMessage() + "<br>";
                 });
+                
                 Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
 				return false;
 			}
@@ -181,7 +183,6 @@ Ext.define('cfa.controller.case.CaseController', {
 			}
 
 			var operations = store.sync();
-			console.log(operations);
 
 			if (phantomRecord) {
 				var parentId = currentRecord.get('parentId');
@@ -231,9 +232,7 @@ Ext.define('cfa.controller.case.CaseController', {
 				left : "40%",
 				right : "40%",
 				bottom : "6%",
-
 				items : [{
-
 					text : 'Via email',
 					handler : function() {
 
@@ -284,6 +283,19 @@ Ext.define('cfa.controller.case.CaseController', {
     
     attachCaseData: function() {		
         var me = this;
+        
+        var onPhotoDataSuccess = function(imageData) {
+            var currentRecord = me.getCurrentRecord(),
+                imageStore = me.getImageStore();
+        
+            var formId = currentRecord.get('form').PhotoId;
+            imageStore.add({ formId: formId, srcImage: imageData });
+        }
+        
+        var onPhotoDataError = function(message) {
+            console.log('Photo data error:', message);
+        }
+
         var actionSheet = Ext.create('Ext.ActionSheet', {
             modal : false,
 			left : "40%",
@@ -291,15 +303,15 @@ Ext.define('cfa.controller.case.CaseController', {
 			bottom : "6%",
 
 			items : [{
-                    text : 'Camera',
+                    text : 'From Camera',
                     handler : function() {
-                        navigator.camera.getPicture(me.onPhotoDataSuccess, me.onPhotoDataError, { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG });
+                        navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG });
                         actionSheet.hide();
                     }
                 }, {
-                    text : 'Photo Library',
+                    text : 'From Photo Library',
                     handler : function() {
-                        navigator.camera.getPicture(me.onPhotoDataSuccess, me.onPhotoDataError, { quality: 50, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG });
+                        navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, { quality: 50, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG });
                         actionSheet.hide();
                     }
                 }, {
@@ -345,6 +357,14 @@ Ext.define('cfa.controller.case.CaseController', {
 			currentRecord.parentNode.removeChild(currentRecord);
 			store.remove(currentRecord);
 			store.sync();
+            
+            var imageStore = this.getImageStore();
+            
+            if (imageStore) {
+                imageStore.removeAll();
+                imageStore.sync();
+                this.setImageStore(null);
+            }
         }
     },
 
@@ -405,7 +425,9 @@ Ext.define('cfa.controller.case.CaseController', {
             
 			if (engine.attachment == "photo") {
 				this.addImageListById(data.PhotoId);
-			}
+			} else {
+                this.addImageListById(null);
+            }
             
 			this.getCaseContentPanel().show();
 					
@@ -421,34 +443,33 @@ Ext.define('cfa.controller.case.CaseController', {
 	addImageListById: function(id) {
 		this.setImageStore(undefined);
 		this.setImageList(undefined);
-		var imageStore = Ext.create('cfa.store.LSImages');
         
 		if (id != undefined) {	
+            var imageStore = Ext.create('cfa.store.LSImages');
 			imageStore.load(function(records, operation, success) {
-					console.log(records.length);
+                imageStore.filterBy(function(record) {
+                    return (record.get('formId') == id);
+                });
 			}, this);
-		}
-        
-        imageStore.filterBy(function(record) {
-            return (record.formId == id);
-        });
-		this.setImageStore(imageStore);
+            
+            this.setImageStore(imageStore);
 
-		var imageList = Ext.create('Ext.List', {
-			  itemTpl: new Ext.XTemplate('<img src="data:image/png;base64,{srcImage}" width="64" height="48"/>'),
-			  inline: { wrap: false },
-			  layout : 'fit',
-			  height : 70,			  
-			  flex : 2,
-			  scrollable: {
-			  direction: 'horizontal',
-			  directionLock: true
-			},
-			store: this.getImageStore()
-		});
+            var imageList = Ext.create('Ext.List', {
+                itemTpl: new Ext.XTemplate('<img src="data:image/png;base64,{srcImage}" width="320" height="240"/>'),
+                inline: { wrap: false },
+                layout : 'fit',
+                height : 330,			  
+                flex : 2,
+                scrollable: {
+                    direction: 'horizontal',
+                    directionLock: true
+                },
+                store: this.getImageStore()
+            });
         
-		this.setImageList(imageList);
-		this.getCaseFormPanel().add(this.getImageList());
+            this.setImageList(imageList);
+            this.getCaseFormPanel().add(this.getImageList());
+		}
 	},
     
     showEditToolbar: function(record) {
