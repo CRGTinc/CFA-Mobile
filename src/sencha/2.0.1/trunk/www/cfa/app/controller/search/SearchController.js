@@ -231,11 +231,16 @@ Ext.define('cfa.controller.search.SearchController', {
 		} else {
 			var me = this;
 			var selectedItems = resultListView.getComponent('resultlist').getSelection(),
-				filename = Ext.util.Format.date(new Date(), 'Ymd'),
-				actionSheet = Ext.create('Ext.ActionSheet', {
+				filename = Ext.util.Format.date(new Date(), 'Ymd');
+			if (!(selectedItems && selectedItems.length > 0) ) {
+				Ext.Msg.alert("Export Data", "Please select item(s) you want to export first.");
+				return;
+			} 
+				
+			var	actionSheet = Ext.create('Ext.ActionSheet', {
 					modal : false,
-					left : "40%",
-					right : "40%",
+					left : "60%",
+					right : "20%",
 					bottom : "6%",
 					items : [{
 						text : 'Via email',
@@ -312,6 +317,8 @@ Ext.define('cfa.controller.search.SearchController', {
 		
 		if (selectedItems && selectedItems.length > 0 ) {
 			Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
+		} else {
+			Ext.Msg.alert("Export Data", "Please select item(s) you want to delete first.");
 		}
 	},
 
