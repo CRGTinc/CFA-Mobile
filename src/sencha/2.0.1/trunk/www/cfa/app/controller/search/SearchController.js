@@ -103,9 +103,9 @@ Ext.define('cfa.controller.search.SearchController', {
 		} else {
 			store = this.getSearchTemplateList().getStore();
 		}
-
+		
+		store.clearFilter(false);
 		if (field.getValue() && field.getValue() != '') {
-			
 			if (this.getResultListView()) {
 				store.filterBy(function(record) {
 					var found = false;
@@ -136,10 +136,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				store.filter('text', field.getValue(), false, false);
 			}
 
-		} else {
-			store.clearFilter(false);
-		}
-
+		} 
 	},
 
 	onResultsListItemDisclosure : function(list, record, target, index, event, eOpts) {
