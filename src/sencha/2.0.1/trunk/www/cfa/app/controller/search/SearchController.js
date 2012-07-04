@@ -58,6 +58,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		},
 
 		currentRecord : null,
+		resultListView: null
 	},
 
 	showReportPage : function() {
@@ -80,31 +81,61 @@ Ext.define('cfa.controller.search.SearchController', {
 			queryParam : record.getData().queryParam
 		}).load();
 
-		resultListView = Ext.create('cfa.view.search.SearchResultList');
-		resultListView.getComponent('resultlist').setStore(store);
+		this.setResultListView (Ext.create('cfa.view.search.SearchResultList'));
+		this.getResultListView().getComponent('resultlist').setStore(store);
 		var listener = {
 			disclose : {
 				fn : this.onResultsListItemDisclosure,
 				scope : this
 			},
 		};
-		resultListView.getComponent('resultlist').setListeners(listener);
+		this.getResultListView().getComponent('resultlist').setListeners(listener);
 
 		this.getSearchInputField().setValue('');
-		this.getSearchView().push(resultListView);
+		this.getSearchView().push(this.getResultListView());
 	},
 
 	setFilterByKey : function(field, event, opts) {
-		var store, resultlist = Ext.getCmp('resultlist');
+		var store;
 
-		if (resultlist) {
-			store = resultlist.getStore();
+		if (this.getResultListView()) {
+			store = this.getResultListView().getComponent('resultlist').getStore();
 		} else {
 			store = this.getSearchTemplateList().getStore();
 		}
 
 		if (field.getValue() && field.getValue() != '') {
-			store.filter('text', field.getValue(), true, false);
+			
+			if (this.getResultListView()) {
+				store.filterBy(function(record) {
+					var found = false;
+					var formdata = record.getData().form;
+					for (key in formdata) {
+
+						if ( typeof formdata[key] == 'string') {
+
+							if (formdata[key].toLowerCase().indexOf(field.getValue().toLowerCase()) > -1) {
+								found = true;
+							}
+
+						} else if ( typeof formdata[key] == 'object') {
+							if (key != 'engineClass' && key != 'prototype') {
+								if(formdata[key] instanceof Date) {
+									if (formdata[key].toString().indexOf(field.getValue()) > -1)
+										found = true;
+								}
+							}
+						}
+					}
+
+					if (found) {
+						return record;
+					}
+				});
+			} else {
+				store.filter('text', field.getValue(), false, false);
+			}
+
 		} else {
 			store.clearFilter(false);
 		}
@@ -123,14 +154,14 @@ Ext.define('cfa.controller.search.SearchController', {
 		deviceEditor.getComponent('editorpanel').add(form);
 		this.getSearchView().push(deviceEditor);
 	},
-	
 
 	onPop : function(navigation, view, eOpts) {
 		if (view.getId() == 'deviceeditor') {
 			view.getComponent('editorpanel').removeAll(false);
-			resultListView.getComponent('resultlist').deselectAll();
+			this.getResultListView().getComponent('resultlist').deselectAll();
+		} else {
+			this.setResultListView(null);
 		}
-
 		view.destroy();
 	},
 
@@ -149,7 +180,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				return false;
 			}
 
-			var store = resultListView.getComponent('resultlist').getStore();
+			var store = this.getResultListView().getComponent('resultlist').getStore();
 			var form = currentRecord.get('form'), engine = form.engineClass;
 
 			form = engine.getFormObject();
@@ -207,6 +238,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		if (changed) {
 			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
 		}
+		
 
 	},
 
@@ -216,13 +248,10 @@ Ext.define('cfa.controller.search.SearchController', {
 				return;
 			}
 		}
-
-		this.setCurrentRecord(null);
-		
 	},
 
 	resetSelection : function() {
-		resultListView.getComponent('resultlist').deselectAll();
+		this.getResultListView().getComponent('resultlist').deselectAll();
 	},
 
 	exportDeviceData : function() {
@@ -230,82 +259,81 @@ Ext.define('cfa.controller.search.SearchController', {
 			Ext.Msg.alert("Export Data", "Currently support only for iPad.");
 		} else {
 			var me = this;
-			var selectedItems = resultListView.getComponent('resultlist').getSelection(),
-				filename = Ext.util.Format.date(new Date(), 'Ymd');
-			if (!(selectedItems && selectedItems.length > 0) ) {
+			var selectedItems = this.getResultListView().getComponent('resultlist').getSelection(), filename = Ext.util.Format.date(new Date(), 'Ymd');
+			if (!(selectedItems && selectedItems.length > 0)) {
 				Ext.Msg.alert("Export Data", "Please select item(s) you want to export first.");
 				return;
-			} 
-				
-			var	actionSheet = Ext.create('Ext.ActionSheet', {
-					modal : false,
-					left : "60%",
-					right : "20%",
-					bottom : "6%",
-					items : [{
-						text : 'Via email',
-						handler : function() {
-							var jsonArray = '[', i, count = 0, ids = '';
-	
-							for ( i = 0; i < selectedItems.length; i++) {
-								ids = i + '-' + selectedItems[i].getData().form.id;
-	
-								Formpod.exportData(selectedItems[i].getData().form, function(jsonString) {
-									jsonArray = jsonArray + jsonString + ',';
-									count++;
-	
-									if (count == (selectedItems.length)) {
-										filename = filename + '-' + ids + ".cfadata";
-	
-										if (jsonArray[jsonArray.length - 1] == ',') {
-											jsonArray = jsonArray.slice(0, -1);
-										}
-	
-										jsonArray = jsonArray + ']';
-										cfa.helper.PhoneGapHelper.saveFile(jsonArray, filename, function() {
-											window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
-										});
+			}
+
+			var actionSheet = Ext.create('Ext.ActionSheet', {
+				modal : false,
+				left : "60%",
+				right : "20%",
+				bottom : "6%",
+				items : [{
+					text : 'Via email',
+					handler : function() {
+						var jsonArray = '[', i, count = 0, ids = '';
+
+						for ( i = 0; i < selectedItems.length; i++) {
+							ids = i + '-' + selectedItems[i].getData().form.id;
+
+							Formpod.exportData(selectedItems[i].getData().form, function(jsonString) {
+								jsonArray = jsonArray + jsonString + ',';
+								count++;
+
+								if (count == (selectedItems.length)) {
+									filename = filename + '-' + ids + ".cfadata";
+
+									if (jsonArray[jsonArray.length - 1] == ',') {
+										jsonArray = jsonArray.slice(0, -1);
 									}
-	
-								});
-							}
-							actionSheet.hide();
+
+									jsonArray = jsonArray + ']';
+									cfa.helper.PhoneGapHelper.saveFile(jsonArray, filename, function() {
+										window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+									});
+								}
+
+							});
 						}
-					}, {
-						text : 'To iTunes',
-						handler : function() {
-							var jsonArray = '[', i, count = 0, ids = '';
-							for ( i = 0; i < selectedItems.length; i++) {
-								ids = i + '-' + selectedItems[i].getData().form.id;
-								Formpod.exportData(selectedItems[i].getData().form, function(jsonString) {
-									jsonArray = jsonArray.concat(jsonString + ',');
-	
-									count++;
-									if (count == (selectedItems.length)) {
-										filename = filename + '-' + ids + ".cfadata";
-	
-										if (jsonArray[jsonArray.length - 1] == ',') {
-											jsonArray = jsonArray.slice(0, -1);
-										}
-	
-										jsonArray = jsonArray + ']';
-										cfa.helper.PhoneGapHelper.saveFile(jsonArray, filename, function() {
-											Ext.Msg.alert("Export Data", "Data has been exported successfully.");
-										});
+						actionSheet.hide();
+					}
+				}, {
+					text : 'To iTunes',
+					handler : function() {
+						var jsonArray = '[', i, count = 0, ids = '';
+						for ( i = 0; i < selectedItems.length; i++) {
+							ids = i + '-' + selectedItems[i].getData().form.id;
+							Formpod.exportData(selectedItems[i].getData().form, function(jsonString) {
+								jsonArray = jsonArray.concat(jsonString + ',');
+
+								count++;
+								if (count == (selectedItems.length)) {
+									filename = filename + '-' + ids + ".cfadata";
+
+									if (jsonArray[jsonArray.length - 1] == ',') {
+										jsonArray = jsonArray.slice(0, -1);
 									}
-	
-								});
-							}
-							actionSheet.hide();
+
+									jsonArray = jsonArray + ']';
+									cfa.helper.PhoneGapHelper.saveFile(jsonArray, filename, function() {
+										Ext.Msg.alert("Export Data", "Data has been exported successfully.");
+									});
+								}
+
+							});
 						}
-					}, {
-						text : 'Cancel',
-						ui : 'confirm',
-						handler : function() {
-							actionSheet.hide();
-						}
-					}]
-				});
+						actionSheet.hide();
+					}
+				}, {
+					text : 'Cancel',
+					ui : 'confirm',
+					handler : function() {
+						actionSheet.hide();
+					}
+				}]
+			});
 
 			Ext.Viewport.add(actionSheet);
 			actionSheet.show();
@@ -313,9 +341,9 @@ Ext.define('cfa.controller.search.SearchController', {
 	},
 
 	deleteDeviceData : function() {
-		var selectedItems = resultListView.getComponent('resultlist').getSelection();
-		
-		if (selectedItems && selectedItems.length > 0 ) {
+		var selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
+
+		if (selectedItems && selectedItems.length > 0) {
 			Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
 		} else {
 			Ext.Msg.alert("Export Data", "Please select item(s) you want to delete first.");
@@ -324,8 +352,8 @@ Ext.define('cfa.controller.search.SearchController', {
 
 	confirmDeleteData : function(button) {
 		if (button == 'yes') {
-			var selectedItems = resultListView.getComponent('resultlist').getSelection();
-			var store = resultListView.getComponent('resultlist').getStore();
+			var selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
+			var store = this.getResultListView().getComponent('resultlist').getStore();
 			for (var i = 0; i < selectedItems.length; i++) {
 				store.remove(selectedItems[i]);
 				store.sync();
