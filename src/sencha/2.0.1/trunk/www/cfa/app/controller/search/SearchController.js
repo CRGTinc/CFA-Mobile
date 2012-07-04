@@ -1,6 +1,6 @@
 Ext.define('cfa.controller.search.SearchController', {
 	extend : 'Ext.app.Controller',
-	requires : ['cfa.view.search.SearchView', 'cfa.model.SearchTemplate', 'cfa.view.search.DeviceEditor'],
+	requires : ['cfa.view.search.SearchView', 'cfa.model.SearchTemplate', 'cfa.view.search.DeviceEditor', 'cfa.view.search.SearchResultList'],
 
 	config : {
 		routes : {
@@ -11,9 +11,13 @@ Ext.define('cfa.controller.search.SearchController', {
 			main : 'main',
 			searchView : 'searchview',
 			searchTemplateList : 'list[id = "searchtemplatelist"]',
+			resultList : 'list[id = "resultlist"]',
 			searchInputField : 'searchfield[id = "searchinputfield"]',
 			onSaveDeviceButtonClick : 'button[action=savedevicedata]',
-			onCancelDeviceButtonClick : 'button[action=canceldevicedata]'
+			onCancelDeviceButtonClick : 'button[action=canceldevicedata]',
+			onExportDeviceDataClick : 'button[action=exportdevicedata]',
+			onResetSelectionClick : 'button[action=resetselection]',
+			onDeleleDeviceClick : 'button[action=deletedevicedata]'
 		},
 
 		control : {
@@ -27,7 +31,8 @@ Ext.define('cfa.controller.search.SearchController', {
 			},
 
 			searchView : {
-				'pop' : 'onPop'
+				'pop' : 'onPop',
+				'back' : 'onBack',
 			},
 
 			onSaveDeviceButtonClick : {
@@ -36,11 +41,23 @@ Ext.define('cfa.controller.search.SearchController', {
 
 			onCancelDeviceButtonClick : {
 				'tap' : 'cancelDeviceData'
+			},
+
+			onExportDeviceDataClick : {
+				'tap' : 'exportDeviceData'
+			},
+
+			onResetSelectionClick : {
+				'tap' : 'resetSelection'
+			},
+
+			onDeleleDeviceClick : {
+				'tap' : 'deleteDeviceData'
 			}
 
 		},
 
-		currentRecord : null
+		currentRecord : null,
 	},
 
 	showReportPage : function() {
@@ -63,21 +80,18 @@ Ext.define('cfa.controller.search.SearchController', {
 			queryParam : record.getData().queryParam
 		}).load();
 
-		var resultlist = {
-			id : 'resultlist',
-			title : 'Search Results',
-			xtype : 'list',
-			listeners : {
-				select : {
-					fn : this.onResultsListItemTap,
-					scope : this
-				}
+		resultListView = Ext.create('cfa.view.search.SearchResultList');
+		resultListView.getComponent('resultlist').setStore(store);
+		var listener = {
+			disclose : {
+				fn : this.onResultsListItemDisclosure,
+				scope : this
 			},
-			store : store
-		}
+		};
+		resultListView.getComponent('resultlist').setListeners(listener);
 
 		this.getSearchInputField().setValue('');
-		this.getSearchView().push(resultlist);
+		this.getSearchView().push(resultListView);
 	},
 
 	setFilterByKey : function(field, event, opts) {
@@ -97,7 +111,7 @@ Ext.define('cfa.controller.search.SearchController', {
 
 	},
 
-	onResultsListItemTap : function(list, record, opts) {
+	onResultsListItemDisclosure : function(list, record, target, index, event, eOpts) {
 		this.setCurrentRecord(record);
 		var deviceEditor = Ext.create('cfa.view.search.DeviceEditor');
 		var formData = record.get('form');
@@ -107,13 +121,14 @@ Ext.define('cfa.controller.search.SearchController', {
 		engine.loadForm(data);
 		var form = engine.getForm();
 		deviceEditor.getComponent('editorpanel').add(form);
-
 		this.getSearchView().push(deviceEditor);
 	},
+	
 
 	onPop : function(navigation, view, eOpts) {
 		if (view.getId() == 'deviceeditor') {
 			view.getComponent('editorpanel').removeAll(false);
+			resultListView.getComponent('resultlist').deselectAll();
 		}
 
 		view.destroy();
@@ -134,7 +149,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				return false;
 			}
 
-			var store = Ext.getCmp('resultlist').getStore();
+			var store = resultListView.getComponent('resultlist').getStore();
 			var form = currentRecord.get('form'), engine = form.engineClass;
 
 			form = engine.getFormObject();
@@ -164,6 +179,150 @@ Ext.define('cfa.controller.search.SearchController', {
 			var formData = currentRecord.get('form');
 			var engine = formData.engineClass;
 			engine.scrollFormToTop();
+		}
+	},
+
+	onBack : function() {
+		var currentRecord = this.getCurrentRecord();
+		var changed = false;
+
+		if (currentRecord) {
+			var currentData = currentRecord.getData().form;
+			var engine = currentData.engineClass, formData = engine.getFormObject();
+
+			for (key in formData) {
+				if (formData[key] == '' && currentData[key] == null)
+					continue;
+
+				if (formData[key] == null && currentData[key] == '')
+					continue;
+
+				if (formData[key] != currentData[key]) {
+					changed = true;
+					break;
+				}
+			}
+		}
+
+		if (changed) {
+			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+		}
+
+	},
+
+	confirmFormChanged : function(button) {
+		if (button == 'yes') {
+			if (!this.saveDeviceData()) {
+				return;
+			}
+		}
+
+		this.setCurrentRecord(null);
+		
+	},
+
+	resetSelection : function() {
+		resultListView.getComponent('resultlist').deselectAll();
+	},
+
+	exportDeviceData : function() {
+		if (Ext.os.is.Desktop) {
+			Ext.Msg.alert("Export Data", "Currently support only for iPad.");
+		} else {
+			var me = this;
+			var selectedItems = resultListView.getComponent('resultlist').getSelection(),
+				filename = Ext.util.Format.date(new Date(), 'Ymd'),
+				actionSheet = Ext.create('Ext.ActionSheet', {
+					modal : false,
+					left : "40%",
+					right : "40%",
+					bottom : "6%",
+					items : [{
+						text : 'Via email',
+						handler : function() {
+							var jsonArray = '[', i, count = 0, ids = '';
+	
+							for ( i = 0; i < selectedItems.length; i++) {
+								ids = i + '-' + selectedItems[i].getData().form.id;
+	
+								Formpod.exportData(selectedItems[i].getData().form, function(jsonString) {
+									jsonArray = jsonArray + jsonString + ',';
+									count++;
+	
+									if (count == (selectedItems.length)) {
+										filename = filename + '-' + ids + ".cfadata";
+	
+										if (jsonArray[jsonArray.length - 1] == ',') {
+											jsonArray = jsonArray.slice(0, -1);
+										}
+	
+										jsonArray = jsonArray + ']';
+										cfa.helper.PhoneGapHelper.saveFile(jsonArray, filename, function() {
+											window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+										});
+									}
+	
+								});
+							}
+							actionSheet.hide();
+						}
+					}, {
+						text : 'To iTunes',
+						handler : function() {
+							var jsonArray = '[', i, count = 0, ids = '';
+							for ( i = 0; i < selectedItems.length; i++) {
+								ids = i + '-' + selectedItems[i].getData().form.id;
+								Formpod.exportData(selectedItems[i].getData().form, function(jsonString) {
+									jsonArray = jsonArray.concat(jsonString + ',');
+	
+									count++;
+									if (count == (selectedItems.length)) {
+										filename = filename + '-' + ids + ".cfadata";
+	
+										if (jsonArray[jsonArray.length - 1] == ',') {
+											jsonArray = jsonArray.slice(0, -1);
+										}
+	
+										jsonArray = jsonArray + ']';
+										cfa.helper.PhoneGapHelper.saveFile(jsonArray, filename, function() {
+											Ext.Msg.alert("Export Data", "Data has been exported successfully.");
+										});
+									}
+	
+								});
+							}
+							actionSheet.hide();
+						}
+					}, {
+						text : 'Cancel',
+						ui : 'confirm',
+						handler : function() {
+							actionSheet.hide();
+						}
+					}]
+				});
+
+			Ext.Viewport.add(actionSheet);
+			actionSheet.show();
+		}
+	},
+
+	deleteDeviceData : function() {
+		var selectedItems = resultListView.getComponent('resultlist').getSelection();
+		
+		if (selectedItems && selectedItems.length > 0 ) {
+			Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
+		}
+	},
+
+	confirmDeleteData : function(button) {
+		if (button == 'yes') {
+			var selectedItems = resultListView.getComponent('resultlist').getSelection();
+			var store = resultListView.getComponent('resultlist').getStore();
+			for (var i = 0; i < selectedItems.length; i++) {
+				store.remove(selectedItems[i]);
+				store.sync();
+			}
 		}
 	}
 })
