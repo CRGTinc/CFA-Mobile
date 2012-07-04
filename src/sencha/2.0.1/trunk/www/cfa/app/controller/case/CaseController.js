@@ -239,7 +239,7 @@ Ext.define('cfa.controller.case.CaseController', {
 						Formpod.exportData(currentRecord.getData().form, function(data) {
 							var filename = Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
-							me.saveFile(data, filename, function() {
+							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
 								window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
 							});
 						});
@@ -251,7 +251,7 @@ Ext.define('cfa.controller.case.CaseController', {
 						Formpod.exportData(currentRecord.getData().form, function(data) {
 							var filename = Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
-							me.saveFile(data, filename, function() {
+							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
 								Ext.Msg.alert("Export Data", "Data has been exported successfully.");
 							});
 							actionSheet.hide();
@@ -512,30 +512,6 @@ Ext.define('cfa.controller.case.CaseController', {
 		} else {
 			this.getCaseContextLabel().setHtml('');
 		}
-	},
-
-	saveFile : function(jsonString, filename, callback, scope) {
-		var me = this;
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-			fileSystem.root.getFile(filename, {
-				create : true,
-				exclusive : false
-			}, function(fileEntry) {
-				fileEntry.createWriter(function(writer) {
-					writer.onwrite = function(evt) {
-						if ( typeof callback == 'function') {
-							Ext.callback(callback, scope || me);
-						}
-					};
-
-					writer.write(jsonString);
-				}, this.fail);
-			}, this.fail);
-		}, this.fail);
-	},
-
-	fail : function(error) {
-		console.log(error.code);
 	},
 	
 	formChanged: function() {
