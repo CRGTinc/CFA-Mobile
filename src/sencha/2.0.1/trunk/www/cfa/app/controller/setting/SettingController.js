@@ -1,6 +1,6 @@
 Ext.define('cfa.controller.setting.SettingController',{
 	extend: 'Ext.app.Controller',
-	requires: ['cfa.view.setting.SettingView'],
+	requires: ['cfa.view.setting.SettingView', 'cfa.model.User'],
 	
 	config: {
         routes: {
@@ -9,19 +9,30 @@ Ext.define('cfa.controller.setting.SettingController',{
 
         refs: {
             main: 'main',
-            resetDataButton: 'button[action = resetdatabtn]'
+            resetDataButton: 'button[action = resetdatabtn]',
+            saveUserDataButton: 'button[action = saveuserdata]'
         },
         
         control: {
             resetDataButton: {
                 tap: 'resetData'
+            },
+            
+            saveUserDataButton: {
+            	'tap': 'saveUserData'
             }
-        }
+        },
+        settingView: null,
     },
 	
 	showSettingPage: function(){
-		var settingView = Ext.create('cfa.view.setting.SettingView');
-		this.getMain().push(settingView);        						
+		this.setSettingView(Ext.create('cfa.view.setting.SettingView'));
+		this.getMain().push(this.getSettingView());
+		Ext.getStore('Users').load({callback: function(records, e, opt){
+			this.getSettingView().getComponent('settingformpanel').setRecord(records[0]);
+		}, scope: this});
+		
+		       						
 	},
     
     resetData: function() {
@@ -48,6 +59,19 @@ Ext.define('cfa.controller.setting.SettingController',{
             
             Ext.Msg.alert('Reset Data', 'Data has been reset successfully.', Ext.emptyFn, this);
         }
+    },
+    
+    saveUserData: function() {
+    	var store = Ext.getStore('Users').load(),
+    		firstname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('firstname').getValue(),
+    		lastname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('lastname').getValue();
+    	
+    	store.removeAll(false);
+    	store.add({'firstname': firstname, 'lastname': lastname});
+    	store.sync();
+    	Ext.Msg.alert('Save user data', 'Data has been saved successfully.', Ext.emptyFn, this);
     }
+    
+    
 
 })

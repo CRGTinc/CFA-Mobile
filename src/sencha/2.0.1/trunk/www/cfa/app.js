@@ -10,7 +10,7 @@ Ext.application({
 		'Ext.MessageBox'			
 	],
 	profiles : ['Tablet', 'Phone'],
-	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates'],
+	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates', 'Users'],
 
 	icon : {
 		'57' : 'resources/icons/Icon.png',

@@ -19,15 +19,26 @@ Ext.define('cfa.view.setting.SettingView', {
                                 xtype: 'textfield',
                                 name: 'firstname',
                                 label: 'First Name',
+                                itemId: 'firstname',
                                 autoCapitalize: true
                             }, {
                                 xtype: 'textfield',
                                 name: 'lastname',
+                                itemId: 'lastname',
                                 label: 'Last Name',
                                 autoCapitalize: true
-                            }
+                            }, 
                         ]
                     }, {
+		               xtype: 'panel',
+		               items: [{
+		                   xtype: 'button',
+		                   action : 'saveuserdata',
+		                   width: 200,
+		                   text: 'Save'
+		                   }
+		               ]
+		            }, {
                         xtype: 'fieldset',
                         itemId: 'aboutfieldset',
                         title: 'About',
