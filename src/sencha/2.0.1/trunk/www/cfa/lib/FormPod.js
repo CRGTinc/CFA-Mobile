@@ -150,8 +150,6 @@ var Formpod = {
             	if (view.getValue() && view.getValue().trim() != '') {
             		inputView.getComponent('inputfield').setValue(view.getValue());
             	}
-            	
-            	
             },
             
             updateText: function(view, e, eOpts) {
