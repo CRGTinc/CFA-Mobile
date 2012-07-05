@@ -65,7 +65,6 @@ var Formpod = {
 							}
 							
 							if (finfo.showPopup) {
-								console.log("here");
 								fitem.listeners = {
 									focus: { fn: Formpod.FormEngine.Utils.showPopupInput, scope: Formpod.FormEngine.Utils}
 								};
