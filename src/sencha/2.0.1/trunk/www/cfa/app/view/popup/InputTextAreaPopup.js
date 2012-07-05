@@ -2,25 +2,33 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 	extend : 'Ext.Panel',
 
 	config : {
-		referenceView : null,
+		layout : 'fit',
+		scrollable : {
+			direction : 'vertical',
+			directionLock : true
+		},
 		modal : true,
-		width : '60%',
-		height : '80%',
+		top: '60%',
+		left: '10%',
+		rigth: '10%',
+		height : '40%',
+		width : '80%',
 		hideOnMaskTap : true,
-		centered : true,
-		title : 'Input you text',
 		items : [{
 			xtype : 'toolbar',
 			docked : 'top',
-			title : 'Enter you text'
+			title : 'Notes'
 		}, {
 			xtype : 'textareafield',
-			maxRows : 18,
-			listeners: {
-				keyup: {fn:Formpod.FormEngine.Utils.updateText, scope: Formpod.FormEngine.Utils}
+			maxRows : 20,
+			listeners : {
+				keyup : {
+					fn : Formpod.FormEngine.Utils.updateText,
+					scope : Formpod.FormEngine.Utils
+				}
 			},
-			itemId: 'inputfield'
-		}]
+			itemId : 'inputfield'
+		}],
+		
 	},
-	
 })

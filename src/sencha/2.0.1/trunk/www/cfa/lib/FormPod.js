@@ -143,12 +143,15 @@ var Formpod = {
             
             showPopupInput: function(view, e, eOpts) {
             	var inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
-            	if (view.getValue() && view.getValue() != '') {
-            		inputView.getComponent('inputfield').setValue(view.getValue());
-            	}
             	referenceView = view;
             	Ext.Viewport.add(inputView);
             	Ext.Viewport.setActiveItem(1);
+            	
+            	if (view.getValue() && view.getValue().trim() != '') {
+            		inputView.getComponent('inputfield').setValue(view.getValue());
+            	}
+            	
+            	
             },
             
             updateText: function(view, e, eOpts) {

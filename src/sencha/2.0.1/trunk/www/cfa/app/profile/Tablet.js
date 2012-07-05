@@ -16,7 +16,7 @@ Ext.define('cfa.profile.Tablet', {
 		'cfa.controller.about.AboutController',
         'cfa.controller.help.HelpController',
 		],
-        views: ['Main']
+        views: ['Main', 'cfa.view.popup.InputTextAreaPopup']
     },
 
     isActive: function() {
