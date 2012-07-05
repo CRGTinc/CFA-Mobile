@@ -28,7 +28,7 @@ FD_Forms ['Case Form'] =
                     {name: "NonICENo", type: "textfield", label: "Non-ICE Case No.", value: "", required: false, source: "NonICENO", helpText: "Non-ICE Case No."},
                     {name: "ExamFor", type: "textfield", label: "Exam Conducted For", value: "", required: false, source: "ExamFor", helpText: "Who was the examination conducted for"},
                     {name: "InvestType", type: "selectfield", label: "Type of Investigation", value: [ {value: 'SW', name: 'Search Warrant'}, {value: 'BR', name: 'Border Response'}, {value: 'AR', name: 'Assistance Request'}], required: true, source: "InvestType", helpText: "Which type of investigation is this for"},
-                    {name: "Notes", type: "textareafield", label: "Notes", value: "", required: false, source: "Notes", helpText: "Notes about the case"},
+                    {name: "Notes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Notes about the case"},
                 {name: "efs", type: "endfieldset"},
                 {name: "fs", type: "fieldset", title: "Onsite", instructions: "Onsite Case Information"},
                     {name: "CaseAddress", type: "textfield", label: "Case Location/Address", value: "", required: false, source: "CaseAddress", helpText: "Help"},

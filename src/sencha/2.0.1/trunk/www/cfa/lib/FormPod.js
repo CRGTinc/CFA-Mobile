@@ -63,6 +63,13 @@ var Formpod = {
                                 	change: { fn:Formpod.FormEngine.Utils.allCap, scope:Formpod.FormEngine.Utils }
                                 }
 							}
+							
+							if (finfo.showPopup) {
+								console.log("here");
+								fitem.listeners = {
+									focus: { fn: Formpod.FormEngine.Utils.showPopupInput, scope: Formpod.FormEngine.Utils}
+								};
+							} 
 						}
 
 						return fitem;
@@ -121,6 +128,8 @@ var Formpod = {
 		},
         
         Utils: {
+        	referenceView: null,
+        	
             pascalCase: function(field, newVal, oldVal, opts) {
 				var str = newVal.replace(/(\S)(\S*)/g, function(g0,g1,g2) { 
 					return g1.toUpperCase() + g2.toLowerCase();
@@ -131,6 +140,20 @@ var Formpod = {
             allCap: function(field, newVal, oldVal, opts) {
                 var str = newVal.toUpperCase(); 
                 field.setValue(str);
+            },
+            
+            showPopupInput: function(view, e, eOpts) {
+            	var inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
+            	if (view.getValue() && view.getValue() != '') {
+            		inputView.getComponent('inputfield').setValue(view.getValue());
+            	}
+            	referenceView = view;
+            	Ext.Viewport.add(inputView);
+            	Ext.Viewport.setActiveItem(1);
+            },
+            
+            updateText: function(view, e, eOpts) {
+            	referenceView.setValue(view.getValue());
             }
         }
 	},
