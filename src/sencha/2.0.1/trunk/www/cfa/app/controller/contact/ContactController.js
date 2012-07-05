@@ -11,7 +11,8 @@ Ext.define('cfa.controller.contact.ContactController', {
 			main : 'main',
 			contactContainer : 'contact_view_container',
 			contactDetailView : 'contact_detail',
-			searchInputField : 'searchfield[id = "searchcontacinput"]'
+			searchInputField : 'searchfield[id = "searchcontacinput"]',
+			onEmailButtonClick : 'button[action = mailtoaction]'
 		},
 
 		control : {
@@ -22,6 +23,10 @@ Ext.define('cfa.controller.contact.ContactController', {
 
 			searchInputField : {
 				'keyup' : 'searchContactByKey'
+			},
+
+			onEmailButtonClick : {
+				'tap' : 'openEmailComposer'
 			}
 		},
 
@@ -54,5 +59,15 @@ Ext.define('cfa.controller.contact.ContactController', {
 					return record;
 			});
 		}
+	},
+
+	openEmailComposer : function() {
+		var emailAddress = this.getContactDetailView().getComponent(0).getComponent('email').getValue();
+
+		if (emailAddress)
+			window.plugins.emailComposer.showEmailComposer(null, null, null, emailAddress, null, null, null);
+		else
+			Ext.Msg.alert("Send mail", "Please chose a contact that you want to send mail to.");
+
 	}
 })
