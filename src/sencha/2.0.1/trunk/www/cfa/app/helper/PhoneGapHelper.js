@@ -25,7 +25,6 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 	},
 	/*End Connection wrapper*/
 
-
 	/*Begining of save file*/
 	saveFile : function(jsonString, filename, callback, scope) {
 		var me = this;
@@ -47,9 +46,26 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 		}, me.failOnSaveFile);
 	},
 	/*End of save file*/
-	
+
 	/*Fail on save file*/
 	failOnSaveFile : function(error) {
 		console.log(error.code);
 	},
-}); 
+
+	/*File size validation*/
+
+	fileSizeValidation : function(filename) {
+		var me = this;
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+			fileSystem.root.getFile(filename, {	create : false, exclusive : false}, 
+				function(fileEntry) {
+					fileEntry.file(function(file){
+						if ( file.size > (1024 * 10000)) {
+							return false;
+						}
+					}, me.failOnSaveFile);
+			}, me.failOnSaveFile);
+		}, me.failOnSaveFile);
+		return true;
+	}
+});

@@ -240,7 +240,12 @@ Ext.define('cfa.controller.case.CaseController', {
 							var filename = Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
-								window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+								if (cfa.helper.PhoneGapHelper.fileSizeValidation(filename)) {
+									window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+								} else {
+									Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
+								}
+								
 							});
 						});
 						actionSheet.hide();
