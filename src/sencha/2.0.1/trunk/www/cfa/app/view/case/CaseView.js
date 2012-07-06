@@ -3,6 +3,7 @@ Ext.define("cfa.view.case.CaseView", {
     xtype: 'case',
 
     config: {
+    	id: 'caseview',
         title: 'Case Data Management',
         layout: 'hbox',
         items: [{

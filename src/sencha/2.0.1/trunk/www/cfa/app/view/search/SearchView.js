@@ -5,7 +5,6 @@ Ext.define('cfa.view.search.SearchView', {
 
 	config:{
 		title: 'Search',
-		autoDestroy: false,
 		navigationBar:{
 			items: [
 				{

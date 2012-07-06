@@ -58,12 +58,14 @@ Ext.define('cfa.controller.search.SearchController', {
 		},
 
 		currentRecord : null,
-		resultListView: null
+		currentView : '',
+		resultListView : null
 	},
 
 	showReportPage : function() {
 		var reportView = Ext.create('cfa.view.search.SearchView');
 		this.getMain().push(reportView);
+		this.setCurrentView('SearchTemplate');
 	},
 
 	launch : function() {
@@ -81,7 +83,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			queryParam : record.getData().queryParam
 		}).load();
 
-		this.setResultListView (Ext.create('cfa.view.search.SearchResultList'));
+		this.setResultListView(Ext.create('cfa.view.search.SearchResultList'));
 		this.getResultListView().getComponent('resultlist').setStore(store);
 		var listener = {
 			disclose : {
@@ -93,6 +95,7 @@ Ext.define('cfa.controller.search.SearchController', {
 
 		this.getSearchInputField().setValue('');
 		this.getSearchView().push(this.getResultListView());
+		this.setCurrentView('ResultList');
 	},
 
 	setFilterByKey : function(field, event, opts) {
@@ -103,7 +106,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		} else {
 			store = this.getSearchTemplateList().getStore();
 		}
-		
+
 		store.clearFilter(false);
 		if (field.getValue() && field.getValue() != '') {
 			if (this.getResultListView()) {
@@ -120,7 +123,7 @@ Ext.define('cfa.controller.search.SearchController', {
 
 						} else if ( typeof formdata[key] == 'object') {
 							if (key != 'engineClass' && key != 'prototype') {
-								if(formdata[key] instanceof Date) {
+								if (formdata[key] instanceof Date) {
 									if (formdata[key].toString().indexOf(field.getValue()) > -1)
 										found = true;
 								}
@@ -136,7 +139,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				store.filter('text', field.getValue(), false, false);
 			}
 
-		} 
+		}
 	},
 
 	onResultsListItemDisclosure : function(list, record, target, index, event, eOpts) {
@@ -150,15 +153,18 @@ Ext.define('cfa.controller.search.SearchController', {
 		var form = engine.getForm();
 		deviceEditor.getComponent('editorpanel').add(form);
 		this.getSearchView().push(deviceEditor);
+		this.setCurrentView('DeviceEditor');
 	},
 
 	onPop : function(navigation, view, eOpts) {
 		if (view.getId() == 'deviceeditor') {
 			view.getComponent('editorpanel').removeAll(false);
-			this.getResultListView().getComponent('resultlist').deselectAll();
+			if (this.getCurrentView() == 'ResultList')
+				this.getResultListView().getComponent('resultlist').deselectAll();
 		} else {
 			this.setResultListView(null);
 		}
+		
 		view.destroy();
 	},
 
@@ -211,32 +217,38 @@ Ext.define('cfa.controller.search.SearchController', {
 	},
 
 	onBack : function() {
-		var currentRecord = this.getCurrentRecord();
-		var changed = false;
+		if (this.getCurrentView() == 'DeviceEditor') {
+			var currentRecord = this.getCurrentRecord();
+			var changed = false;
 
-		if (currentRecord) {
-			var currentData = currentRecord.getData().form;
-			var engine = currentData.engineClass, formData = engine.getFormObject();
+			if (currentRecord) {
+				var currentData = currentRecord.getData().form;
+				var engine = currentData.engineClass, formData = engine.getFormObject();
 
-			for (key in formData) {
-				if (formData[key] == '' && currentData[key] == null)
-					continue;
+				for (key in formData) {
+					if (formData[key] == '' && currentData[key] == null)
+						continue;
 
-				if (formData[key] == null && currentData[key] == '')
-					continue;
+					if (formData[key] == null && currentData[key] == '')
+						continue;
 
-				if (formData[key] != currentData[key]) {
-					changed = true;
-					break;
+					if (formData[key] != currentData[key]) {
+						changed = true;
+						break;
+					}
 				}
 			}
-		}
 
-		if (changed) {
-			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+			if (changed) {
+				Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+			}
 		}
 		
-
+		if (this.getCurrentView() == 'DeviceEditor') {
+			this.setCurrentView('ResultList');
+		} else if (this.getCurrentView() == 'ResultList') {
+			this.setCurrentView('SearchTemplate');
+		}
 	},
 
 	confirmFormChanged : function(button) {

@@ -30,6 +30,10 @@ Ext.define('cfa.controller.case.CaseController', {
 		},
 
 		control : {
+			main: {
+				'pop': 'onPop'	
+			},
+			
 			casesList : {
 				'itemtap' : 'caseItemTap',
 				'back' : 'casesListBackTap'
@@ -94,6 +98,13 @@ Ext.define('cfa.controller.case.CaseController', {
 		this.initForms();
 		var caseView = Ext.create('cfa.view.case.CaseView');
 		this.getMain().push(caseView);
+	},
+	
+	onPop : function(navigation, view, eOpts) {
+		if (view.getId() == 'caseview') 
+			view.getComponent(1).getComponent(0).getComponent('casecontentpanel').getComponent('caseformpanel').removeAll(false);
+		
+		view.destroy();
 	},
 
 	caseItemTap: function(nestedList, list, index, target, record, e, eOpts) {
