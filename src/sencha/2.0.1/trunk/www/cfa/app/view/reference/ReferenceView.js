@@ -8,6 +8,7 @@ Ext.define("cfa.view.reference.ReferenceView", {
 	
 	config: {
 		layout: 'fit',
+		title: 'References',
 		referenceStore: null
 	},
 	
