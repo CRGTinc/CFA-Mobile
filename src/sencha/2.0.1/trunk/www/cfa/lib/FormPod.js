@@ -128,6 +128,7 @@ var Formpod = {
         
         Utils: {
         	referenceView: null,
+        	inputView: null,
         	
             pascalCase: function(field, newVal, oldVal, opts) {
 				var str = newVal.replace(/(\S)(\S*)/g, function(g0,g1,g2) { 
@@ -142,8 +143,10 @@ var Formpod = {
             },
             
             showPopupInput: function(view, e, eOpts) {
-            	var inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
+            	inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
             	referenceView = view;
+            	inputView.getComponent('topbar').setTitle(view.getLabel());
+            	Ext.Viewport.removeAt(1);
             	Ext.Viewport.add(inputView);
             	Ext.Viewport.setActiveItem(1);
             	
@@ -154,6 +157,10 @@ var Formpod = {
             
             updateText: function(view, e, eOpts) {
             	referenceView.setValue(view.getValue());
+            },
+            
+            hidePopup: function(){
+            	inputView.hide();
             }
         }
 	},

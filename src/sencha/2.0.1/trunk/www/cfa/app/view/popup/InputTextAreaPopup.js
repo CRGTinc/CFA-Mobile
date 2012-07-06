@@ -16,8 +16,21 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 		hideOnMaskTap : true,
 		items : [{
 			xtype : 'toolbar',
+			itemId: 'topbar',
 			docked : 'top',
-			title : 'Notes'
+			layout: {
+				pack: 'right',
+				align: 'center'
+			},
+			items: [
+				{
+					xtype: 'button',
+					text: 'Done',
+					listeners: {
+						tap: {fn: Formpod.FormEngine.Utils.hidePopup, scope: Formpod.FormEngine.Utils}
+					}
+				}
+			]
 		}, {
 			xtype : 'textareafield',
 			maxRows : 20,
