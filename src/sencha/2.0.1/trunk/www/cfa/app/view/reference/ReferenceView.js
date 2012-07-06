@@ -16,22 +16,31 @@ Ext.define("cfa.view.reference.ReferenceView", {
 		cfa.app.helpUrl = "Reference";
 		var referencesList = {
 			xtype: 'references_list',
+			itemId: 'referenceslist',
 			store: this.getReferenceStore().load(),
 			listeners:{
 				select : {fn:this.onItemSelected, scope:this}
         	}
 		};
 		
-		var leftPanel = {
+		var contentPanel = {
 			xtype:'panel',
+			itemId: 'contentpanel',
 			layout:'fit',
 			flex:1,
 			items:[
+				{
+					xtype: 'searchfield',
+					id: 'referencesearchfield',
+					docked: 'top'
+				},
 				referencesList,
 			]			
 		};
 		
-		this.add(leftPanel);
+
+		
+		this.add(contentPanel);
 	},
 		
 	onItemSelected: function(list,record,opt) {
