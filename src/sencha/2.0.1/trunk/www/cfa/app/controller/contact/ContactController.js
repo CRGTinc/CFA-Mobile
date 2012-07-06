@@ -12,7 +12,7 @@ Ext.define('cfa.controller.contact.ContactController', {
 			contactContainer : 'contact_view_container',
 			contactDetailView : 'contact_detail',
 			searchInputField : 'searchfield[id = "searchcontacinput"]',
-			onEmailButtonClick : 'button[action = mailtoaction]'
+			emailField : 'urlfield[id = email]'
 		},
 
 		control : {
@@ -25,8 +25,8 @@ Ext.define('cfa.controller.contact.ContactController', {
 				'keyup' : 'searchContactByKey'
 			},
 
-			onEmailButtonClick : {
-				'tap' : 'openEmailComposer'
+			emailField : {
+				openmailcomposercommand : 'openEmailComposer'
 			}
 		},
 

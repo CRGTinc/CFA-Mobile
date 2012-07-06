@@ -4,7 +4,7 @@ Ext.define('cfa.view.contact.ContactDetail', {
 	requires : ['Ext.form.FieldSet'],
 
 	config : {
-		itemid: 'contactdetailpanel',
+		itemid : 'contactdetailpanel',
 		items : [{
 			xtype : "fieldset",
 			items : [{
@@ -19,10 +19,16 @@ Ext.define('cfa.view.contact.ContactDetail', {
 				readOnly : true
 			}, {
 				xtype : 'urlfield',
-				itemId: 'email',
+				id : 'email',
 				name : 'email',
 				label : 'Email',
-				readOnly : true
+				readOnly: true,
+				listeners : {
+					element : 'element',
+					touchstart : function() {
+						this.fireEvent('openmailcomposercommand', this);
+					}
+				}
 			}, {
 				xtype : 'textfield',
 				name : 'office_phone',
@@ -31,28 +37,47 @@ Ext.define('cfa.view.contact.ContactDetail', {
 			}, {
 				xtype : 'textfield',
 				name : 'mobile_phone',
-				label : 'Mobile Phone',
-				readOnly : true
-			}, {
-				xtype : 'textfield',
-				name : 'department',
-				label : 'Department',
+				label : 'Cell',
 				readOnly : true
 			}]
 		}, {
-			xtype : 'toolbar',
-			docked : 'bottom',
-			layout: {
-				pack: 'right',
-				align: 'center'
-			},
+			xtype : 'fieldset',
 			items : [{
-				xtype : 'button',
-				text : 'Email',
-				action : 'mailtoaction'
+				xtype : 'textfield',
+				name : 'SAC',
+				label : 'SAC',
+				readOnly : true
+			}, {
+				xtype : 'textfield',
+				name : 'RAC',
+				label : 'RAC',
+				readOnly : true
+			}, {
+				xtype : 'textfield',
+				name : 'street1',
+				label : 'Street 1',
+				readOnly : true
+			}, {
+				xtype : 'textfield',
+				name : 'street2',
+				label : 'Street 2',
+				readOnly : true
+			}, {
+				xtype : 'textfield',
+				name : 'city',
+				label : 'City',
+				readOnly : true
+			}, {
+				xtype : 'textfield',
+				name : 'state',
+				label : 'State',
+				readOnly : true
+			}, {
+				xtype : 'textfield',
+				name : 'zip',
+				label : 'Zip',
+				readOnly : true
 			}]
 		}]
-
 	}
-
 })

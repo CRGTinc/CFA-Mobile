@@ -13,7 +13,7 @@ Ext.define('cfa.store.Events',{
 		},
 		grouper: {			
 			groupFn: function(record) {
-				return Ext.util.Format.date(record.get('date'), 'm/d/Y');
+				return Ext.util.Format.date(record.get('start_date'), 'm/d/Y');
 			},
 			sortProperty: 'date',
     		direction: 'ASC'
