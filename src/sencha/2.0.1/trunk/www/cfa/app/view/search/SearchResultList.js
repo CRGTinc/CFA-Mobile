@@ -2,6 +2,7 @@ Ext.define('cfa.view.search.SearchResultList',{
 	extend: 'Ext.Panel',
 	
 	config:{
+		title: 'Search Results',
 		layout:'fit',
 		items:[
 			{
