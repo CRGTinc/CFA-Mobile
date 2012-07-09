@@ -406,7 +406,6 @@ Ext.define('cfa.controller.case.CaseController', {
 
 		engine.resetForm();
 		data.set('form', engine.getFormObject());
-		console.log(data);
 
 		if (engine.childForms && engine.childForms.length) {
 			data.set('leaf', false);
