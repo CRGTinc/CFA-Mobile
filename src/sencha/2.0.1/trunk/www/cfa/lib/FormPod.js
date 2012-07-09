@@ -255,7 +255,7 @@ var Formpod = {
 			this.FormTypes[def.formName] = new FormClass(def.formName, def.formDesc, def.formFields)
 			this.FormTypes[def.formName].displayProperty = def.displayProperty;
 			this.FormTypes[def.formName].childForms = def.childForms;
-            
+			this.FormTypes[def.formName].attachment = def.attachment;
             this.Forms.push(this.FormTypes[def.formName]);
 		}
 		this.generator = generator;

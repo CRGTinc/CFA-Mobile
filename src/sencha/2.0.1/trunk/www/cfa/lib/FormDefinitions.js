@@ -12,7 +12,7 @@ FD_Forms ['Case Form'] =
 	    formName: "Case Form",
 		formDesc : "Case Main Data Form",
 		displayProperty: "CaseTitle",
-        childForms: ['Assistance Request Form', 'Border Response Form', 'System', 'Storage', 'Media', 'Mobile'],
+        childForms: ['Assistance Request Form', 'Border Response Form', 'System', 'Storage', 'Media', 'Mobile', 'Photo'],
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "fs", type: "fieldset", title: "Case Information", instructions: "Case Information"},
@@ -50,7 +50,7 @@ FD_Forms ['System Form'] =
 	{
 		formName : "System",
 		formDesc : "Enter info for a new system",
-        childForms: ['Assistance Request Form', 'Border Response Form', 'Storage', 'Media', 'Mobile'],
+        childForms: ['Assistance Request Form', 'Border Response Form', 'Storage', 'Media', 'Mobile', 'Photo'],
         displayProperty: 'DevName',
         formFields: [
 			/* name, type, label, default value, required, data source, help text*/
@@ -110,6 +110,7 @@ FD_Forms ['Storage Form'] =
 	{
 		formName : "Storage",
 		formDesc : "Enter info for a new storage device",
+        childForms: ['Photo'],
         displayProperty: 'DevName',
         formFields: [
 			/* name, type, label, default value, required, data source, help text*/
@@ -154,6 +155,7 @@ FD_Forms ['Media Form'] =
 	{
 		formName : "Media",
 		formDesc : "Enter info for a new Media",
+        childForms: ['Photo'],
         displayProperty: 'DevName',
         formFields: [
 			/* name, type, label, default value, required, data source, help text*/
@@ -194,6 +196,7 @@ FD_Forms ['Mobile Form'] =
 	{
 		formName : "Mobile",
 		formDesc : "Enter info for a Mobile",
+        childForms: ['Photo'],
         displayProperty: 'DevName',
         formFields: [
 			/* name, type, label, default value, required, data source, help text*/
@@ -235,11 +238,25 @@ FD_Forms ['Mobile Form'] =
             {name: "efs", type: "endfieldset"},
         ]
 	};
+    
+FD_Forms ['Photo'] =
+	{
+		formName : "Photo",
+		formDesc : "Attach photo to object",
+        attachment: 'photo',
+        displayProperty: 'PhotoName',
+		formFields: [
+			/* name, type, label, default value, required, data source, help text */
+			{name: "PhotoName", type: "textfield", label: "Photo Name", value: "", required: true, source: "PhotoName", helpText: "Help"},
+			{name: "Notes", type: "textareafield", label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
+        ]
+	};
 
 FD_Forms ['AR Form'] =
 	{
 		formName : "Assistance Request Form",
 		formDesc: "Use to request support from another office",
+        childForms: ['Photo'],
 		displayProperty: 'ProsecutorName',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
@@ -263,8 +280,8 @@ FD_Forms ['BR Form'] =
 	{
 		formName : "Border Response Form",
 		formDesc : "Log a Border Response with this form",
-
-       displayProperty: 'SubjectName',
+        childForms: ['Photo'],
+        displayProperty: 'SubjectName',
 		formFields: [
 			/* name, type, label, default value, required, data source, help text */
 			{name: "SubjectName", type: "textfield", label: "Subject Name", value: "", required: false, source: "SubjectName", helpText: "Help"},

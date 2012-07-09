@@ -22,7 +22,8 @@ Ext.define('cfa.controller.case.CaseController', {
 			cancelCaseDataButton : 'button[action = cancelcasedata]',
 			caseFormList : 'list[id = "caseformlist"]',
 			exportCaseDataButton : 'button[action = exportcasedata]',
-			deleteCaseDataButton : 'button[action = deletecasedata]'
+			deleteCaseDataButton : 'button[action = deletecasedata]',
+			attachCaseDataButton : 'button[action = attachcasedata]'
 		},
 
 		control : {
@@ -38,7 +39,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			addCaseDataButton : {
 				'tap' : 'addCaseData'
 			},
-
+            
 			saveCaseDataButton : {
 				'tap' : 'saveCaseData'
 			},
@@ -57,7 +58,11 @@ Ext.define('cfa.controller.case.CaseController', {
 
 			deleteCaseDataButton : {
 				'tap' : 'deleteCaseData'
-			}
+			},
+            
+            attachCaseDataButton: {
+                'tap' : 'attachCaseData'
+            }
 		},
 
 		currentRecord : null,
@@ -269,6 +274,10 @@ Ext.define('cfa.controller.case.CaseController', {
 			Ext.Msg.alert("Delete Data", "You can not delete unsaved data.");
 		}
 	},
+    
+    attachCaseData: function() {
+        console.log('attach data');
+    },
 	
 	confirmDeleteData: function(button) {
         if (button == 'yes') {
@@ -344,15 +353,40 @@ Ext.define('cfa.controller.case.CaseController', {
 			this.getCaseFormPanel().removeAll(false);
 			this.getCaseFormPanel().add(form);
 			this.getCaseContentPanel().show();
-			this.getCaseToolbar().show();
 		} else {
 			this.getCaseFormPanel().removeAll(false);
 			this.getCaseContentPanel().hide();
-			this.getCaseToolbar().hide();
 		}
 
+        this.showEditToolbar(currentRecord);
 		this.showContextInfo(currentRecord);
 	},
+    
+    showEditToolbar: function(record) {
+		var toolbar = this.getCaseToolbar();
+        
+        if (record) {
+            /* if (record.phantom) {
+                this.getDeleteCaseDataButton().hide();
+                this.getExportCaseDataButton().hide();
+            } else {
+                this.getDeleteCaseDataButton().show();
+                this.getExportCaseDataButton().show();
+            } */
+            
+            var engine = record.get('form').engineClass;
+
+            if (engine.attachment) {
+                this.getAttachCaseDataButton().show();
+            } else {
+                this.getAttachCaseDataButton().hide();
+            }
+
+			toolbar.show();
+        } else {
+            toolbar.hide();
+        }
+    },
 
 	showContextInfo : function(record) {
 		if (record) {

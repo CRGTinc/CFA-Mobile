@@ -4,11 +4,5 @@
         "description": "Query for all devices",
         "queryType": "class",
         "queryParam": "System"
-    },
-    {
-        "text": "Media",
-        "description": "Query for all media",
-        "queryType": "class",
-        "queryParam": "System"
     }
 ]
