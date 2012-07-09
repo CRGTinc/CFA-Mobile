@@ -3,6 +3,6 @@
         "text": "All devices",
         "description": "Query for all devices",
         "queryType": "class",
-        "queryParam": "System"
+        "queryParam": "all"
     }
 ]  

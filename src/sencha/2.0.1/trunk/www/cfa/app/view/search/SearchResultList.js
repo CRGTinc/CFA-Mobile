@@ -1,5 +1,6 @@
 Ext.define('cfa.view.search.SearchResultList',{
 	extend: 'Ext.Panel',
+	alias: 'widget.searchsesultlist',
 	
 	config:{
 		title: 'Search Results',

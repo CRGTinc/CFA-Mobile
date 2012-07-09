@@ -1,6 +1,6 @@
 Ext.define('cfa.controller.search.SearchController', {
 	extend : 'Ext.app.Controller',
-	requires : ['cfa.view.search.SearchView', 'cfa.model.SearchTemplate', 'cfa.view.search.DeviceEditor', 'cfa.view.search.SearchResultList'],
+	requires : ['cfa.view.search.SearchView', 'cfa.model.SearchTemplate', 'cfa.view.search.DeviceEditor', 'cfa.view.search.SearchResultList', 'cfa.view.search.AllDeviceView'],
 
 	config : {
 		routes : {
@@ -10,6 +10,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		refs : {
 			main : 'main',
 			searchView : 'searchview',
+			allDeviceView : 'alldeviceview',
 			searchTemplateList : 'list[id = "searchtemplatelist"]',
 			resultList : 'list[id = "resultlist"]',
 			searchInputField : 'searchfield[id = "searchinputfield"]',
@@ -33,6 +34,10 @@ Ext.define('cfa.controller.search.SearchController', {
 			searchView : {
 				'pop' : 'onPop',
 				'back' : 'onBack',
+			},
+
+			allDeviceView : {
+				'activeitemchange' : 'onActiveItemChange'
 			},
 
 			onSaveDeviceButtonClick : {
@@ -59,6 +64,7 @@ Ext.define('cfa.controller.search.SearchController', {
 
 		currentRecord : null,
 		currentView : '',
+		currentListView : '',
 		resultListView : null
 	},
 
@@ -78,24 +84,64 @@ Ext.define('cfa.controller.search.SearchController', {
 	},
 
 	searchByTemplate : function(list, record, opt) {
-		var store = Ext.create('cfa.store.SearchCases', {
-			queryType : record.getData().queryType,
-			queryParam : record.getData().queryParam
-		}).load();
 
-		this.setResultListView(Ext.create('cfa.view.search.SearchResultList'));
-		this.getResultListView().getComponent('resultlist').setStore(store);
 		var listener = {
 			disclose : {
 				fn : this.onResultsListItemDisclosure,
 				scope : this
 			},
 		};
-		this.getResultListView().getComponent('resultlist').setListeners(listener);
+
+		if (record.getData().queryParam == 'all') {
+
+			var deviceStore = Ext.create('cfa.store.SearchCases', {
+				queryType : 'class',
+				queryParam : 'System'
+			}).load();
+
+			var storageStore = Ext.create('cfa.store.SearchCases', {
+				queryType : 'class',
+				queryParam : 'Storage'
+			}).load();
+
+			var mediaStore = Ext.create('cfa.store.SearchCases', {
+				queryType : 'class',
+				queryParam : 'Media'
+			}).load();
+
+			var mobileStore = Ext.create('cfa.store.SearchCases', {
+				queryType : 'class',
+				queryParam : 'Mobile'
+			}).load();
+
+			this.setResultListView(Ext.create('cfa.view.search.AllDeviceView'));
+			this.getResultListView().getComponent('devicelistview').getComponent('resultlist').setStore(deviceStore);
+			this.getResultListView().getComponent('storagelistview').getComponent('resultlist').setStore(storageStore);
+			this.getResultListView().getComponent('medialistview').getComponent('resultlist').setStore(mediaStore);
+			this.getResultListView().getComponent('mobilelistview').getComponent('resultlist').setStore(mobileStore);
+
+			this.getResultListView().getComponent('devicelistview').getComponent('resultlist').setListeners(listener);
+			this.getResultListView().getComponent('storagelistview').getComponent('resultlist').setListeners(listener);
+			this.getResultListView().getComponent('medialistview').getComponent('resultlist').setListeners(listener);
+			this.getResultListView().getComponent('mobilelistview').getComponent('resultlist').setListeners(listener);
+
+			this.setCurrentView('AllDeviceView');
+			this.setCurrentListView('devicelistview');
+
+		} else {
+			var store = Ext.create('cfa.store.SearchCases', {
+				queryType : record.getData().queryType,
+				queryParam : record.getData().queryParam
+			}).load();
+
+			this.getResultListView().getComponent('resultlist').setStore(store);
+			this.getResultListView().getComponent('resultlist').setListeners(listener);
+			this.setCurrentView('ResultList');
+		}
 
 		this.getSearchInputField().setValue('');
 		this.getSearchView().push(this.getResultListView());
-		this.setCurrentView('ResultList');
+
 	},
 
 	setFilterByKey : function(field, event, opts) {
@@ -159,17 +205,26 @@ Ext.define('cfa.controller.search.SearchController', {
 	onPop : function(navigation, view, eOpts) {
 		if (view.getId() == 'deviceeditor') {
 			view.getComponent('editorpanel').removeAll(false);
-			if (this.getCurrentView() == 'ResultList')
+			if (this.getCurrentView() == 'ResultList') {
 				this.getResultListView().getComponent('resultlist').deselectAll();
+			} else if (this.getCurrentView() == 'AllDeviceView') {
+				this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').deselectAll();
+			}
+
 		} else {
 			this.setResultListView(null);
 		}
-		
+
 		view.destroy();
 	},
 
+	onActiveItemChange : function(view, value, oldValue, eOpts) {
+		this.setCurrentListView(value.getItemId());
+	},
+
 	saveDeviceData : function() {
-		var currentRecord = this.getCurrentRecord();
+		var currentRecord = this.getCurrentRecord(),
+			store;
 
 		if (currentRecord) {
 			var errors = currentRecord.validate();
@@ -182,10 +237,14 @@ Ext.define('cfa.controller.search.SearchController', {
 				Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
 				return false;
 			}
-
-			var store = this.getResultListView().getComponent('resultlist').getStore();
+			
+			if (this.getCurrentView() == 'AllDeviceView') {
+				store = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getStore();
+			} else {
+				store = this.getResultListView().getComponent('resultlist').getStore();
+			}
+			
 			var form = currentRecord.get('form'), engine = form.engineClass;
-
 			form = engine.getFormObject();
 			currentRecord.beginEdit();
 			currentRecord.set('form', form);
@@ -243,9 +302,14 @@ Ext.define('cfa.controller.search.SearchController', {
 				Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
 			}
 		}
-		
+
 		if (this.getCurrentView() == 'DeviceEditor') {
-			this.setCurrentView('ResultList');
+			
+			if (this.getCurrentListView())
+				this.setCurrentView('AllDeviceView');
+			else 
+				this.setCurrentView('ResultList')
+				
 		} else if (this.getCurrentView() == 'ResultList') {
 			this.setCurrentView('SearchTemplate');
 		}
@@ -260,7 +324,10 @@ Ext.define('cfa.controller.search.SearchController', {
 	},
 
 	resetSelection : function() {
-		this.getResultListView().getComponent('resultlist').deselectAll();
+		if (this.getCurrentView() == 'ResultList')
+			this.getResultListView().getComponent('resultlist').deselectAll();
+		else
+			this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').deselectAll();
 	},
 
 	exportDeviceData : function() {
@@ -268,12 +335,20 @@ Ext.define('cfa.controller.search.SearchController', {
 			Ext.Msg.alert("Export Data", "Currently support only for iPad.");
 		} else {
 			var me = this;
-			var selectedItems = this.getResultListView().getComponent('resultlist').getSelection(), filename = Ext.util.Format.date(new Date(), 'Ymd');
+			var selectedItems;
+			var filename = Ext.util.Format.date(new Date(), 'Ymd');
+			
+			if (this.getCurrentView() == 'AllDeviceView') {
+				selectedItems = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getSelection();
+			} else {
+				selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
+			}
+
 			if (!(selectedItems && selectedItems.length > 0)) {
 				Ext.Msg.alert("Export Data", "Please select item(s) you want to export first.");
 				return;
 			}
-
+			
 			var actionSheet = Ext.create('Ext.ActionSheet', {
 				modal : false,
 				left : "60%",
@@ -350,7 +425,13 @@ Ext.define('cfa.controller.search.SearchController', {
 	},
 
 	deleteDeviceData : function() {
-		var selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
+		var selectedItems;
+
+		if (this.getCurrentView() == 'AllDeviceView') {
+			selectedItems = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getSelection();
+		} else {
+			selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
+		}
 
 		if (selectedItems && selectedItems.length > 0) {
 			Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
@@ -361,8 +442,17 @@ Ext.define('cfa.controller.search.SearchController', {
 
 	confirmDeleteData : function(button) {
 		if (button == 'yes') {
-			var selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
-			var store = this.getResultListView().getComponent('resultlist').getStore();
+			var selectedItems, store;
+			
+			if (this.getCurrentView() == 'AllDeviceView') {
+				selectedItems = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getSelection();
+				store = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getStore();
+			} else {
+				selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
+				store = this.getResultListView().getComponent('resultlist').getStore();
+			}
+			
+			
 			for (var i = 0; i < selectedItems.length; i++) {
 				store.remove(selectedItems[i]);
 				store.sync();
