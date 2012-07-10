@@ -22,27 +22,13 @@ Ext.define('cfa.controller.feedback.FeedbackController',{
     },
 	
 	showFeedbackPage: function() {
-        if (!this.feedbackView) {
-            this.feedbackView = Ext.create('cfa.view.feedback.FeedbackView');
-            Ext.Viewport.add(this.feedbackView);
-        }
-        
-        this.feedbackView.show();
+		if (Ext.os.is.Desktop) {
+			Ext.Msg.alert("Feedback", "Currently support only for iPad.");
+		} else {
+			window.plugins.emailComposer.showEmailComposer("CFA users' feedback", null, null, 'vbeaudoin@crgt.com', null, null, null);
+		}
+       
 	},
-    
-    sendFeedback: function() {
-        if (this.getFeedbackTextArea().getValue() == '') {
-            Ext.Msg.alert('Feedback', 'Please enter your feedback before sending.', Ext.emptyFn, this);            
-        } else {
-            Ext.Msg.alert('Feedback', 'Thank you for your feedback.', this.sentFeedback, this);
-        }
-    },
-    
-    sentFeedback: function() {
-        this.feedbackView.hide();
-        this.getFeedbackTextArea().setValue('');
-    }
-
 })
 
 
