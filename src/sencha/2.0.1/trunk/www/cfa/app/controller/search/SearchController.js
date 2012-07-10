@@ -139,6 +139,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			this.setCurrentView('ResultList');
 		}
 
+		this.getSearchInputField().show();
 		this.getSearchInputField().setValue('');
 		this.getSearchView().push(this.getResultListView());
 
@@ -148,10 +149,11 @@ Ext.define('cfa.controller.search.SearchController', {
 		var store;
 
 		if (this.getResultListView()) {
-			store = this.getResultListView().getComponent('resultlist').getStore();
-		} else {
-			store = this.getSearchTemplateList().getStore();
-		}
+			if (this.getCurrentListView())
+				store = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getStore();
+			else
+				store = this.getResultListView().getComponent('resultlist').getStore();
+		} 
 
 		store.clearFilter(false);
 		if (field.getValue() && field.getValue() != '') {
@@ -181,9 +183,7 @@ Ext.define('cfa.controller.search.SearchController', {
 						return record;
 					}
 				});
-			} else {
-				store.filter('text', field.getValue(), false, false);
-			}
+			} 
 
 		}
 	},
@@ -220,11 +220,11 @@ Ext.define('cfa.controller.search.SearchController', {
 
 	onActiveItemChange : function(view, value, oldValue, eOpts) {
 		this.setCurrentListView(value.getItemId());
+		this.getSearchInputField().setValue('');
 	},
 
 	saveDeviceData : function() {
-		var currentRecord = this.getCurrentRecord(),
-			store;
+		var currentRecord = this.getCurrentRecord(), store;
 
 		if (currentRecord) {
 			var errors = currentRecord.validate();
@@ -237,13 +237,13 @@ Ext.define('cfa.controller.search.SearchController', {
 				Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
 				return false;
 			}
-			
+
 			if (this.getCurrentView() == 'AllDeviceView') {
 				store = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getStore();
 			} else {
 				store = this.getResultListView().getComponent('resultlist').getStore();
 			}
-			
+
 			var form = currentRecord.get('form'), engine = form.engineClass;
 			form = engine.getFormObject();
 			currentRecord.beginEdit();
@@ -304,14 +304,15 @@ Ext.define('cfa.controller.search.SearchController', {
 		}
 
 		if (this.getCurrentView() == 'DeviceEditor') {
-			
+
 			if (this.getCurrentListView())
 				this.setCurrentView('AllDeviceView');
-			else 
+			else
 				this.setCurrentView('ResultList')
-				
-		} else if (this.getCurrentView() == 'ResultList') {
+
+		} else if (this.getCurrentView() == 'ResultList' || this.getCurrentView() == 'AllDeviceView') {
 			this.setCurrentView('SearchTemplate');
+			this.getSearchInputField().hide();
 		}
 	},
 
@@ -337,7 +338,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			var me = this;
 			var selectedItems;
 			var filename = Ext.util.Format.date(new Date(), 'Ymd');
-			
+
 			if (this.getCurrentView() == 'AllDeviceView') {
 				selectedItems = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getSelection();
 			} else {
@@ -348,7 +349,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				Ext.Msg.alert("Export Data", "Please select item(s) you want to export first.");
 				return;
 			}
-			
+
 			var actionSheet = Ext.create('Ext.ActionSheet', {
 				modal : false,
 				left : "60%",
@@ -443,7 +444,7 @@ Ext.define('cfa.controller.search.SearchController', {
 	confirmDeleteData : function(button) {
 		if (button == 'yes') {
 			var selectedItems, store;
-			
+
 			if (this.getCurrentView() == 'AllDeviceView') {
 				selectedItems = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getSelection();
 				store = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getStore();
@@ -451,8 +452,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
 				store = this.getResultListView().getComponent('resultlist').getStore();
 			}
-			
-			
+
 			for (var i = 0; i < selectedItems.length; i++) {
 				store.remove(selectedItems[i]);
 				store.sync();
