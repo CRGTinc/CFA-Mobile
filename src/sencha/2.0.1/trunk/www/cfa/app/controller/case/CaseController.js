@@ -529,8 +529,12 @@ Ext.define('cfa.controller.case.CaseController', {
 				
 			if (engine.attachment == "photo") {
 				this.getAttachCaseDataButton().show();
+				this.getDeleteAttachmentButton().show(); 
+				this.getClearAllAttachmentButton().show();
 			} else {
 				this.getAttachCaseDataButton().hide();
+				this.getDeleteAttachmentButton().hide(); 
+				this.getClearAllAttachmentButton().hide();
 			}
 
 			toolbar.show();
