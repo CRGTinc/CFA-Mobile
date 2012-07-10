@@ -336,7 +336,7 @@ Ext.define('cfa.controller.case.CaseController', {
 		}
 	},
 
-	attachCaseData: function() {        
+	attachCaseData: function() {
         var me = this;
         
         var onPhotoDataSuccess = function(imageData) {
@@ -486,7 +486,6 @@ Ext.define('cfa.controller.case.CaseController', {
 	addImageListById : function(id) {
 		this.setImageStore(undefined);
 		this.setImageList(undefined);
-		console.log("id: " + id);
 		if (id != undefined) 
 			{
 			var imageStore = Ext.create('cfa.store.LSImages');
