@@ -1,79 +1,76 @@
 Ext.define('cfa.view.setting.SettingView', {
-    extend: 'Ext.Panel',
-	xtype: 'setting',
-	
-	
-    config: {
-        title: 'Settings',
-        layout: 'fit',
-		items:[{
-                xtype: 'formpanel',
-                itemId: 'settingformpanel',
-                items: [{
-                        xtype: 'fieldset',
-                        title: 'General Information',
-                        defaults: {
-                            labelWidth: '20%'
-                        },
-                        items: [{
-                                xtype: 'textfield',
-                                name: 'firstname',
-                                label: 'First Name',
-                                itemId: 'firstname',
-                                autoCapitalize: true
-                            }, {
-                                xtype: 'textfield',
-                                name: 'lastname',
-                                itemId: 'lastname',
-                                label: 'Last Name',
-                                autoCapitalize: true
-                            }, 
-                        ]
-                    }, {
-		               xtype: 'panel',
-		               items: [{
-		                   xtype: 'button',
-		                   action : 'saveuserdata',
-		                   width: 200,
-		                   text: 'Save'
-		                   }
-		               ]
-		            }, {
-                        xtype: 'fieldset',
-                        itemId: 'aboutfieldset',
-                        title: 'About',
-                        defaults: {
-                            labelWidth: '20%'
-                        },
-                        items: [{
-                                xtype: 'textfield',
-                                itemId: 'versiontextfield',
-                                label: 'Version',
-                                value: '',
-                                readOnly: true
-                            }
-                        ]
-                    }, {
-                        xtype: 'panel',
-                        items: [{
-                                xtype: 'button',
-                                action : 'resetdatabtn',
-                                width: 200,
-                                text: 'Reset Data'
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-	
-	initialize: function() {
-        var settingFormPanel = this.getComponent('settingformpanel'),
-            aboutFieldSet = settingFormPanel.getComponent('aboutfieldset'),
-            versionTextField = aboutFieldSet.getComponent('versiontextfield');
+	extend : 'Ext.Panel',
+	xtype : 'setting',
 
-        versionTextField.setValue(cfa.app.application.buildVersion.version);
+	config : {
+		title : 'Settings',
+		layout : 'fit',
+		items : [{
+					xtype : 'formpanel',
+					itemId : 'settingformpanel',
+					items : [{
+								xtype : 'fieldset',
+								title : 'General Information',
+								defaults : {
+									labelWidth : '20%'
+								},
+								items : [{
+											xtype : 'textfield',
+											name : 'firstname',
+											label : 'First Name',
+											autoCapitalize : true
+										}, {
+											xtype : 'textfield',
+											name : 'lastname',
+											label : 'Last Name',
+											autoCapitalize : true
+										}]
+							}, {
+								xtype : 'panel',
+								items : [{
+											xtype : 'button',
+											action : 'saveuserdata',
+											width : 200,
+											text : 'Save'
+										}]
+							}, {
+								xtype : 'fieldset',
+								itemId : 'aboutfieldset',
+								title : 'About',
+								defaults : {
+									labelWidth : '20%'
+								},
+								items : [{
+											xtype : 'textfield',
+											itemId : 'versiontextfield',
+											label : 'Version',
+											value : '',
+											readOnly : true
+										}]
+							}, {
+								xtype : 'panel',
+								items : [{
+											xtype : 'button',
+											action : 'resetdatabtn',
+											width : 200,
+											text : 'Reset Data'
+										}, {
+											xtype : 'button',
+											action : 'importdatabtn',
+											width : 200,
+											margin : '20 0 0 0',
+											text : 'Import Data'
+										}]
+							}]
+				}]
+	},
+
+	initialize : function() {
+		var settingFormPanel = this.getComponent('settingformpanel'), aboutFieldSet = settingFormPanel
+				.getComponent('aboutfieldset'), versionTextField = aboutFieldSet
+				.getComponent('versiontextfield');
+
+		versionTextField.setValue(cfa.app.application.buildVersion.version);
 
 		cfa.app.helpUrl = "Setting";
 	}

@@ -7,7 +7,8 @@ Ext.application({
 	name : 'cfa',
 	helpUrl: 'root',
 	requires : [		
-		'Ext.MessageBox'			
+		'Ext.MessageBox',
+		'cfa.proxy.File'
 	],
 	profiles : ['Tablet', 'Phone'],
 	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates', 'Users'],

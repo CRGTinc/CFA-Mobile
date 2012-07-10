@@ -4,7 +4,8 @@ Ext.define('cfa.model.Image',{
 		identifier : 'uuid',	
 		fields:[
 			{name: 'formId', type: 'string'},			
-			{name: 'srcImage', type: 'string'},			
+			{name: 'srcImage', type: 'string'},		
+			{name: 'fullPath', type: 'string'}
 		]	
 	}	
 });

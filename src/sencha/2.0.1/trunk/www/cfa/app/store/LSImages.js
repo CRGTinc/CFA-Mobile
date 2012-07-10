@@ -6,8 +6,7 @@ Ext.define('cfa.store.LSImages',{
 	config:{	
 		model : "cfa.model.Image",
 		proxy:{
-			type: 'localstorage',
-			id : 'LSImages'
+			type: 'file'
 		}			
 	}
 	

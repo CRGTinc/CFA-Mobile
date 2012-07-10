@@ -104,6 +104,14 @@ Ext.define("cfa.view.case.CaseView", {
                                         xtype: 'button',
                                         action: 'attachcasedata',
                                         text: 'Attach'
+                                    },{
+                                        xtype: 'button',
+                                        action: 'deleteattachmentdata',
+                                        text: 'Delete Photo'
+                                    }, {
+                                        xtype: 'button',
+                                        action: 'clearattachmentdata',
+                                        text: 'Clear Photos'
                                     }, {
                                         xtype: 'spacer'
                                     }, {
