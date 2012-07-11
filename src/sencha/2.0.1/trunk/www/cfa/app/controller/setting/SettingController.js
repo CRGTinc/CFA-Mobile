@@ -68,7 +68,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 					console.log("Error: " + error.code);
 				}
 
-				var onItemTap = function(view, index, target, record, e, eOpts) {
+				var onItemDisclosure = function(list, record, target, index, event, eOpts) {
 					if (record.getData().type.toUpperCase() == 'CASE') {
 						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
 								function(fileSystem) {
@@ -106,7 +106,10 @@ Ext.define('cfa.controller.setting.SettingController', {
 
 					} else {
 						if (me.getCasesStore() == undefined) {
-							var store = Ext.create('cfa.store.Cases');
+							var store = Ext.create('cfa.store.SearchCases', {
+								queryType : 'class',
+								queryParam : 'Case Form'
+							}).load();
 							me.setCasesStore(store);
 							var caselist = {
 								xtype : 'panel',
@@ -118,19 +121,14 @@ Ext.define('cfa.controller.setting.SettingController', {
 							}
 							me.setCasesList(caselist);
 						}
-						me.getCasesStore().load({
-									callback : function(records, peration,
-											success) {
-										me.getImportList().push(me.getCasesList());
-									},
-									scope : me
-								});
+						me.getImportList().getComponent('importview').push(me.getCasesList());
 					}
 
 				}
 
-				var importList = Ext.create('Ext.navigation.View', {
+				var importList = Ext.create('Ext.Panel', {
 							modal : true,
+							layout: 'fit',
 							hideOnMaskTap : true,
 							hidden : true,
 							top : 0,
@@ -140,21 +138,25 @@ Ext.define('cfa.controller.setting.SettingController', {
 							scrollable : true,
 
 							items : [{
-
+								xtype: 'navigationview',
+								itemId: 'importview',
+								items: [{
 										xtype : 'list',
 										title : 'Import list',
 										fullScreen : true,
 										itemTpl : "{name}",
 										store : me.getImportStore(),
 										grouped : true,
+										onItemDisclosure: true,
 										listeners : {
-											itemtap : {
-												fn : onItemTap,
+											disclose : {
+												fn : onItemDisclosure,
 												scope : me
 											}
 										}
 
 									}]
+							}]
 						});
 				me.setImportList(importList);
 				Ext.Viewport.add(me.getImportList());
