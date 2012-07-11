@@ -291,7 +291,7 @@ Ext.define('cfa.controller.search.SearchController', {
 						var jsonArray = '[', i, count = 0, ids = '';
 
 						for ( i = 0; i < selectedItems.length; i++) {
-							ids = i + '-' + selectedItems[i].getData().form.id;
+							ids = ids + '-' + selectedItems[i].getData().form.id;
 
 							Formpod.exportData(selectedItems[i].getData().form, function(jsonString) {
 								jsonArray = jsonArray + jsonString + ',';
@@ -319,7 +319,7 @@ Ext.define('cfa.controller.search.SearchController', {
 					handler : function() {
 						var jsonArray = '[', i, count = 0, ids = '';
 						for ( i = 0; i < selectedItems.length; i++) {
-							ids = i + '-' + selectedItems[i].getData().form.id;
+							ids = ids + '-' + selectedItems[i].getData().form.id;
 							Formpod.exportData(selectedItems[i].getData().form, function(jsonString) {
 								jsonArray = jsonArray.concat(jsonString + ',');
 
