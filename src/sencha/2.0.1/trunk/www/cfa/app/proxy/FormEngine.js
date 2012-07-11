@@ -48,11 +48,21 @@ Ext.define('cfa.proxy.FormEngine', {
 
         if (queryType) {
         	 if (queryType == 'class') {
-                Formpod.findObjectsByClass(queryParam, function (objs) {
-                    me.applyDataToModels(objs, Model, function (records) {
-                        me.completeRead(operation, callback, scope, records);
-                    });
-                });        	
+        	 	if (queryParam == 'all') {
+        	 		var formClasses = ['System', 'Storage', 'Mobile', 'Media'];
+        	 		Formpod.findAllObjectsByClasses(formClasses, [],function (objs) {
+	                    me.applyDataToModels(objs, Model, function (records) {
+	                        me.completeRead(operation, callback, scope, records);
+	                    });
+	                }); 
+        	 	} else {
+        	 		Formpod.findObjectsByClass(queryParam, function (objs) {
+	                    me.applyDataToModels(objs, Model, function (records) {
+	                        me.completeRead(operation, callback, scope, records);
+	                    });
+	                }); 
+        	 	}
+                       	
         	 }
         } else {
 	        if (params[idProperty] !== undefined) {

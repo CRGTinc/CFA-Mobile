@@ -361,6 +361,7 @@ var Formpod = {
 			}
 		);
 	},
+	
 	getMultipleInstances: function (formClass, ids, callback) {
 		function FormInstance() {};
 		var objectList = [];		
@@ -395,6 +396,7 @@ var Formpod = {
 			}
 		);
 	},
+	
 	saveInstance: function (o, callback) {
 		var insertClassAttrs = {};
 		var modifyClassAttrs = {};
@@ -596,6 +598,54 @@ var Formpod = {
 			}	
 		); //Close Transaction
 	},
+	
+	findAllObjectsByClasses: function(formClasses,result,callback) {
+		var resultArray = result, 
+			index = 0,
+			count = 0;
+		var formInstance = [];
+		
+		for (var j = 0; j < formClasses.length; j++) {
+			formInstance[j] = Formpod.FormTypes[formClasses[j]];
+		}
+		
+		var objIds = [],
+		 	objects = [];
+			count++;
+					
+		var formName = formInstance[0].name;
+		this.db.transaction( 
+			function(t) {
+				t.executeSql("select id from obj where class = ? ",[formName],
+							function(t, rs) {
+								for (var i = 0; i < rs.rows.length; i++) {
+									var row = rs.rows.item(i);
+									objIds.push(row.id);
+								}
+							}
+				);
+			},
+			function (error) {
+				console.log(error);
+			}, 
+			function() { 
+				Formpod.getMultipleInstances(formInstance[0], objIds, function (objs) {
+					for (var i = 0 ; i < objs.length; i++) {
+						resultArray.push(objs[i]);
+					}
+					index++;
+					
+					if(count == formClasses.length){
+						callback(resultArray);
+					} else {
+						Formpod.findAllObjectsByClasses(formClasses.slice(index, formClasses.length),resultArray, callback);
+					}
+				});
+			}	
+		); //Close Transaction
+		return 0;
+	},
+	
 	findRelatedObjects: function(o, callback) {		
 		var objIds = [];
 		if (typeof o.id !== 'number') {

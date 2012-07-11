@@ -10,7 +10,6 @@ Ext.define('cfa.controller.search.SearchController', {
 		refs : {
 			main : 'main',
 			searchView : 'searchview',
-			allDeviceView : 'alldeviceview',
 			searchTemplateList : 'list[id = "searchtemplatelist"]',
 			resultList : 'list[id = "resultlist"]',
 			searchInputField : 'searchfield[id = "searchinputfield"]',
@@ -34,10 +33,6 @@ Ext.define('cfa.controller.search.SearchController', {
 			searchView : {
 				'pop' : 'onPop',
 				'back' : 'onBack',
-			},
-
-			allDeviceView : {
-				'activeitemchange' : 'onActiveItemChange'
 			},
 
 			onSaveDeviceButtonClick : {
@@ -64,7 +59,6 @@ Ext.define('cfa.controller.search.SearchController', {
 
 		currentRecord : null,
 		currentView : '',
-		currentListView : '',
 		resultListView : null
 	},
 
@@ -92,52 +86,15 @@ Ext.define('cfa.controller.search.SearchController', {
 			},
 		};
 
-		if (record.getData().queryParam == 'all') {
-
-			var deviceStore = Ext.create('cfa.store.SearchCases', {
-				queryType : 'class',
-				queryParam : 'System'
-			}).load();
-
-			var storageStore = Ext.create('cfa.store.SearchCases', {
-				queryType : 'class',
-				queryParam : 'Storage'
-			}).load();
-
-			var mediaStore = Ext.create('cfa.store.SearchCases', {
-				queryType : 'class',
-				queryParam : 'Media'
-			}).load();
-
-			var mobileStore = Ext.create('cfa.store.SearchCases', {
-				queryType : 'class',
-				queryParam : 'Mobile'
-			}).load();
-
-			this.setResultListView(Ext.create('cfa.view.search.AllDeviceView'));
-			this.getResultListView().getComponent('devicelistview').getComponent('resultlist').setStore(deviceStore);
-			this.getResultListView().getComponent('storagelistview').getComponent('resultlist').setStore(storageStore);
-			this.getResultListView().getComponent('medialistview').getComponent('resultlist').setStore(mediaStore);
-			this.getResultListView().getComponent('mobilelistview').getComponent('resultlist').setStore(mobileStore);
-
-			this.getResultListView().getComponent('devicelistview').getComponent('resultlist').setListeners(listener);
-			this.getResultListView().getComponent('storagelistview').getComponent('resultlist').setListeners(listener);
-			this.getResultListView().getComponent('medialistview').getComponent('resultlist').setListeners(listener);
-			this.getResultListView().getComponent('mobilelistview').getComponent('resultlist').setListeners(listener);
-
-			this.setCurrentView('AllDeviceView');
-			this.setCurrentListView('devicelistview');
-
-		} else {
-			var store = Ext.create('cfa.store.SearchCases', {
-				queryType : record.getData().queryType,
-				queryParam : record.getData().queryParam
-			}).load();
-
-			this.getResultListView().getComponent('resultlist').setStore(store);
-			this.getResultListView().getComponent('resultlist').setListeners(listener);
-			this.setCurrentView('ResultList');
-		}
+		var store = Ext.create('cfa.store.SearchCases', {
+			queryType : record.getData().queryType,
+			queryParam : record.getData().queryParam
+		}).load();
+		
+		this.setResultListView(Ext.create('cfa.view.search.SearchResultList'));
+		this.getResultListView().getComponent('resultlist').setStore(store);
+		this.getResultListView().getComponent('resultlist').setListeners(listener);
+		this.setCurrentView('ResultList');
 
 		this.getSearchInputField().show();
 		this.getSearchInputField().setValue('');
@@ -149,11 +106,8 @@ Ext.define('cfa.controller.search.SearchController', {
 		var store;
 
 		if (this.getResultListView()) {
-			if (this.getCurrentListView())
-				store = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getStore();
-			else
-				store = this.getResultListView().getComponent('resultlist').getStore();
-		} 
+			store = this.getResultListView().getComponent('resultlist').getStore();
+		}
 
 		store.clearFilter(false);
 		if (field.getValue() && field.getValue() != '') {
@@ -183,7 +137,7 @@ Ext.define('cfa.controller.search.SearchController', {
 						return record;
 					}
 				});
-			} 
+			}
 
 		}
 	},
@@ -205,22 +159,14 @@ Ext.define('cfa.controller.search.SearchController', {
 	onPop : function(navigation, view, eOpts) {
 		if (view.getId() == 'deviceeditor') {
 			view.getComponent('editorpanel').removeAll(false);
-			if (this.getCurrentView() == 'ResultList') {
+			if (this.getCurrentView() == 'ResultList') 
 				this.getResultListView().getComponent('resultlist').deselectAll();
-			} else if (this.getCurrentView() == 'AllDeviceView') {
-				this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').deselectAll();
-			}
 
 		} else {
 			this.setResultListView(null);
 		}
 
 		view.destroy();
-	},
-
-	onActiveItemChange : function(view, value, oldValue, eOpts) {
-		this.setCurrentListView(value.getItemId());
-		this.getSearchInputField().setValue('');
 	},
 
 	saveDeviceData : function() {
@@ -238,11 +184,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				return false;
 			}
 
-			if (this.getCurrentView() == 'AllDeviceView') {
-				store = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getStore();
-			} else {
-				store = this.getResultListView().getComponent('resultlist').getStore();
-			}
+			store = this.getResultListView().getComponent('resultlist').getStore();
 
 			var form = currentRecord.get('form'), engine = form.engineClass;
 			form = engine.getFormObject();
@@ -304,13 +246,8 @@ Ext.define('cfa.controller.search.SearchController', {
 		}
 
 		if (this.getCurrentView() == 'DeviceEditor') {
-
-			if (this.getCurrentListView())
-				this.setCurrentView('AllDeviceView');
-			else
-				this.setCurrentView('ResultList')
-
-		} else if (this.getCurrentView() == 'ResultList' || this.getCurrentView() == 'AllDeviceView') {
+			this.setCurrentView('ResultList')
+		} else if (this.getCurrentView() == 'ResultList') {
 			this.setCurrentView('SearchTemplate');
 			this.getSearchInputField().hide();
 		}
@@ -325,10 +262,7 @@ Ext.define('cfa.controller.search.SearchController', {
 	},
 
 	resetSelection : function() {
-		if (this.getCurrentView() == 'ResultList')
-			this.getResultListView().getComponent('resultlist').deselectAll();
-		else
-			this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').deselectAll();
+		this.getResultListView().getComponent('resultlist').deselectAll();
 	},
 
 	exportDeviceData : function() {
@@ -339,11 +273,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			var selectedItems;
 			var filename = Ext.util.Format.date(new Date(), 'Ymd');
 
-			if (this.getCurrentView() == 'AllDeviceView') {
-				selectedItems = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getSelection();
-			} else {
-				selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
-			}
+			selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
 
 			if (!(selectedItems && selectedItems.length > 0)) {
 				Ext.Msg.alert("Export Data", "Please select item(s) you want to export first.");
@@ -428,11 +358,7 @@ Ext.define('cfa.controller.search.SearchController', {
 	deleteDeviceData : function() {
 		var selectedItems;
 
-		if (this.getCurrentView() == 'AllDeviceView') {
-			selectedItems = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getSelection();
-		} else {
-			selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
-		}
+		selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
 
 		if (selectedItems && selectedItems.length > 0) {
 			Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
@@ -442,16 +368,10 @@ Ext.define('cfa.controller.search.SearchController', {
 	},
 
 	confirmDeleteData : function(button) {
+		var selectedItems, store;
 		if (button == 'yes') {
-			var selectedItems, store;
-
-			if (this.getCurrentView() == 'AllDeviceView') {
-				selectedItems = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getSelection();
-				store = this.getResultListView().getComponent(this.getCurrentListView()).getComponent('resultlist').getStore();
-			} else {
-				selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
-				store = this.getResultListView().getComponent('resultlist').getStore();
-			}
+			selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
+			store = this.getResultListView().getComponent('resultlist').getStore();
 
 			for (var i = 0; i < selectedItems.length; i++) {
 				store.remove(selectedItems[i]);
