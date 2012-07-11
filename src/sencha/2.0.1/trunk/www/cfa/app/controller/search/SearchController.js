@@ -1,6 +1,6 @@
 Ext.define('cfa.controller.search.SearchController', {
 	extend : 'Ext.app.Controller',
-	requires : ['cfa.view.search.SearchView', 'cfa.model.SearchTemplate', 'cfa.view.search.DeviceEditor', 'cfa.view.search.SearchResultList', 'cfa.view.search.AllDeviceView'],
+	requires : ['cfa.view.search.SearchView', 'cfa.model.SearchTemplate', 'cfa.view.search.DeviceEditor', 'cfa.view.search.SearchResultList', 'cfa.view.search.NotesReportView'],
 
 	config : {
 		routes : {
@@ -59,7 +59,8 @@ Ext.define('cfa.controller.search.SearchController', {
 
 		currentRecord : null,
 		currentView : '',
-		resultListView : null
+		resultListView : null,
+		currentList : ''
 	},
 
 	showReportPage : function() {
@@ -90,11 +91,16 @@ Ext.define('cfa.controller.search.SearchController', {
 			queryType : record.getData().queryType,
 			queryParam : record.getData().queryParam
 		}).load();
-		
+
 		this.setResultListView(Ext.create('cfa.view.search.SearchResultList'));
 		this.getResultListView().getComponent('resultlist').setStore(store);
 		this.getResultListView().getComponent('resultlist').setListeners(listener);
 		this.setCurrentView('ResultList');
+		if (record.getData().queryParam != 'Case Form') {
+			this.setCurrentList('DeviceList');
+		} else {
+			this.setCurrentList('CaseList');
+		}
 
 		this.getSearchInputField().show();
 		this.getSearchInputField().setValue('');
@@ -142,24 +148,10 @@ Ext.define('cfa.controller.search.SearchController', {
 		}
 	},
 
-	onResultsListItemDisclosure : function(list, record, target, index, event, eOpts) {
-		this.setCurrentRecord(record);
-		var deviceEditor = Ext.create('cfa.view.search.DeviceEditor');
-		var formData = record.get('form');
-		data = formData;
-		var engine = formData.engineClass;
-		engine.resetForm();
-		engine.loadForm(data);
-		var form = engine.getForm();
-		deviceEditor.getComponent('editorpanel').add(form);
-		this.getSearchView().push(deviceEditor);
-		this.setCurrentView('DeviceEditor');
-	},
-
 	onPop : function(navigation, view, eOpts) {
 		if (view.getId() == 'deviceeditor') {
 			view.getComponent('editorpanel').removeAll(false);
-			if (this.getCurrentView() == 'ResultList') 
+			if (this.getCurrentView() == 'ResultList')
 				this.getResultListView().getComponent('resultlist').deselectAll();
 
 		} else {
@@ -245,7 +237,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			}
 		}
 
-		if (this.getCurrentView() == 'DeviceEditor') {
+		if (this.getCurrentView() == 'DeviceEditor' || this.getCurrentView() == 'NotesReport') {
 			this.setCurrentView('ResultList')
 		} else if (this.getCurrentView() == 'ResultList') {
 			this.setCurrentView('SearchTemplate');
@@ -378,5 +370,100 @@ Ext.define('cfa.controller.search.SearchController', {
 				store.sync();
 			}
 		}
+	},
+
+	showNotesForCase : function(formsArray, fieldsArray, notesArray) {
+		this.setCurrentView("NotesView")
+		var notesView = Ext.create('cfa.view.search.NotesReportView', {
+			title: formsArray[0]
+		});
+
+		for (var i = 0; i < notesArray.length; i++) {
+
+			var notePanel = Ext.create('Ext.form.FieldSet', {
+				title : fieldsArray[i]
+			});
+
+			var noteField = Ext.create('Ext.field.TextArea', {
+				readOnly : true
+			});
+
+			noteField.setValue(notesArray[i]);
+			notePanel.add(noteField);
+			notesView.add(notePanel);
+		}
+
+		this.getSearchView().push(notesView);
+
+	},
+
+	onResultsListItemDisclosure : function(list, record, target, index, event, eOpts) {
+		var me = this;
+		this.setCurrentRecord(record);
+
+		if (this.getCurrentList == 'DeviceList') {
+			var deviceEditor = Ext.create('cfa.view.search.DeviceEditor');
+			var formData = record.get('form');
+			data = formData;
+			var engine = formData.engineClass;
+			engine.resetForm();
+			engine.loadForm(data);
+			var form = engine.getForm();
+			deviceEditor.getComponent('editorpanel').add(form);
+			this.getSearchView().push(deviceEditor);
+			this.setCurrentView('DeviceEditor');
+		} else {
+			me.getNotesForCase(this.getCurrentRecord().getData().form, [], [], [], function(formsArray, fieldsArray, notesArray) {
+				me.showNotesForCase(formsArray, fieldsArray, notesArray);
+			});
+
+			this.setCurrentView('NotesReport');
+		}
+
+	},
+
+	getNotesForCase : function(formData, forms, fields, notes, callback) {
+		var me = this;
+		//get data for first note
+		var fieldsArray = fields;
+		var notesArray = notes;
+		var formArray = forms;
+		
+		if (formArray.length == 0) {
+			formArray.push(formData['CaseTitle']);
+		} else {
+			formArray.push(formData['DevName']);
+		}
+		
+		for (key in formData) {
+			if ( typeof formData[key] != 'object') {
+				if (key.indexOf('Notes') > -1) {
+					notesArray.push(formData[key]);
+					fieldsArray.push(formData['id'] + '-' + key)
+				}
+			}
+		}
+
+		//get data of all childs
+		Formpod.findRelatedObjectsWithType(formData, 'hasChild', true, function(objs) {
+			var processed = 0, i;
+			var length = objs.length;
+
+			for (i = 0; i < objs.length; i++) {
+				me.getNotesForCase(objs[i], formArray,fieldsArray, notesArray, function() {
+
+					processed++;
+					if (processed == length && typeof callback === 'function') {
+						callback(formArray, fieldsArray, notesArray);
+					}
+
+				});
+			}
+
+			if (processed == length && typeof callback === 'function') {
+				callback(fieldsArray, notesArray);
+			}
+
+		});
 	}
 })

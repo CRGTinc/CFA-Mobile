@@ -8,7 +8,7 @@
     
     {
         "text": "System",
-        "description": "Query for all System",
+        "description": "Query for all Systems",
         "queryType": "class",
         "queryParam": "System"
     },
@@ -29,8 +29,15 @@
     
     {
         "text": "Mobile",
-        "description": "Query for all Mobile",
+        "description": "Query for all Mobiles",
         "queryType": "class",
         "queryParam": "Mobile"
+    },
+    
+    {
+        "text": "Notes Report",
+        "description": "Query for all notes in a case",
+        "queryType": "class",
+        "queryParam": "Case Form"
     }
 ]  
