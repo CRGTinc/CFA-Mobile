@@ -325,7 +325,7 @@ Ext.define('cfa.proxy.File', {
 			fileSytem.root.getDirectory(imagePath, {
 						create : true
 					}, function(parent) {
-						var fileName = "" + new Date().getTime() + ".png";
+						var fileName = "" + new Date().getTime() + ".cfaimage";
 						parent.getFile( fileName,{
 									create : true
 								}, gotFileEntry, fail);

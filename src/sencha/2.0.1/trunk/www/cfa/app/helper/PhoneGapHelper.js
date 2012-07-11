@@ -80,10 +80,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 		}
 
 		var onFileSystemSuccess = function(fileSytem) {
-			var importDataPath = "/importData/";
-			fileSytem.root.getDirectory(importDataPath, {
-						create : true
-					});
+			var importDataPath = "/";
 			fileSytem.root.getDirectory(importDataPath, {
 						create : true
 					}, function(directory) {
@@ -121,5 +118,149 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
 				onFileSystemSuccess, fail);
+	},
+	
+	getImagesByFormId : function(formId, successCallBack, failCallBack) {
+		var fail = function(error) {
+			console.log(error);
+			failCallBack(error);
+		}
+
+		var onFileSystemSuccess = function(fileSytem) {
+			var imagePath = "/images/";
+			fileSytem.root.getDirectory(imagePath, {
+						create : true
+					});
+			imagePath = imagePath + formId;
+			fileSytem.root.getDirectory(imagePath, {
+						create : true
+					}, function(parent) {
+						var directoryReader = parent.createReader();
+						directoryReader.readEntries(function(entries) {
+									successCallBack(entries);
+								}, fail)
+					}, fail);
+
+		}
+
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+				onFileSystemSuccess, fail);
+	},
+	
+	getJsonStringFromImages : function(formId, successCallBack, failCallBack) {
+		var me = this;	
+		var fail = function(error) {
+			console.log(error);
+			if (typeof failCallBack == 'function') {
+				failCallBack(error);
+			}
+
+		}
+		
+		
+		me.getImagesByFormId(formId, function(objs) {
+					var length = objs.length;
+					var obj;
+					var result = "[";
+					var apply = function(index) {
+						if (index < length) {
+							obj = objs[index];
+							obj.file(function(file) {
+										var reader = new FileReader();
+										reader.onloadend = function(evt) {
+											result += '{"name": "' + obj.name
+													+ '",';
+											result += '"formId": "' + formId
+													+ '",';
+											result += '"data": "'
+													+ evt.target.result + '"},';
+											index++;
+											apply(index);
+										};
+										reader.readAsText(file);
+									}, fail);
+						} else {
+							if (result[result.length - 1] == ',') {
+								result = result.slice(0, -1) + "]";
+							} else {
+								result += "]";
+							}
+							if (typeof successCallBack == 'function') {
+								successCallBack(result);
+							}
+						}
+					}
+					apply(0);
+				}, fail);
+	},
+	
+	addImageByFullPath : function(formId, imageData, success, failCallBack) {
+		var fail = function(error) {
+			console.log(error);
+			failCallBack(error);
+		}
+
+		var gotFileEntry = function(fileEntry) {
+		
+			fileEntry.createWriter(gotFileWriter, fail);
+		}
+
+		var gotFileWriter = function(writer) {
+			writer.onwrite = function(evt) {
+				success();
+			};
+			writer.onError = function(){
+				console.log('error write');
+			}
+			writer.write(imageData);
+		}
+
+		var onFileSystemSuccess = function(fileSytem) {
+		
+			var imagePath = "/images/";
+			fileSytem.root.getDirectory(imagePath, {
+						create : true
+					});
+			imagePath = imagePath + formId;
+			fileSytem.root.getDirectory(imagePath, {
+						create : true
+					}, function(parent) {
+						var fileName = "" + new Date().getTime() + ".cfaimage";
+						parent.getFile( fileName,{
+									create : true
+								}, gotFileEntry, fail);
+					}, fail);
+		}
+		
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+				onFileSystemSuccess, fail);
+	},
+	
+	saveImagesByJsonObjs: function(objArray,successCallBack,failCallBack){
+		var data = objArray;
+		var length = data.length;
+		var me = this;	
+		var fail = function(error) {
+			console.log(error);
+			if (typeof failCallBack == 'function') {
+				failCallBack(error);
+			}
+		}
+		
+		var saveData = function(index) {
+			if (index < length) {
+				obj = data[index];
+				me.addImageByFullPath(obj.formId,obj.data,function(){
+					index++;
+					saveData(index);
+				},fail)
+			} else {
+				if (typeof successCallBack == 'function') {
+					successCallBack();
+				}
+			}
+		};
+		saveData(0);
 	}
+		
 });

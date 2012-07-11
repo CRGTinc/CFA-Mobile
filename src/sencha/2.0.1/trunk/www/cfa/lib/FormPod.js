@@ -449,10 +449,13 @@ var Formpod = {
 								if (insertClassAttrs[attr] === true)
 								t.executeSql("insert into attr(objid, name, value) values(?,?,?)", [o.id, attr, o[attr]],
                                     function(t, rs) {
-                                        if (typeof callback === 'function')
-                                            callback(o);
+                                        //if (typeof callback === 'function')
+                                        //    callback(o);
                                     });
-							};	
+							};
+							
+							if (typeof callback === 'function')
+							    callback(o);
 						}
 					);
 				}
@@ -752,116 +755,145 @@ var Formpod = {
 	},
     
     importData: function(data, callback) {
-        var me = this,
-            importData = data;
-        
-        try {
-            if (typeof importData == 'string')
-                importData = Ext.decode(importData);
-        } catch(error) {
-            return '1';
-        }
-        
-        delete importData.id;
-            
-        me.saveInstance(importData, function(obj) {
-            
-            var length = obj.children ? obj.children.length : 0,
-                i, count = 0;
+        var me = this,
+            importedData = data;
+        
+        try {
+            if (typeof importedData == 'string')
+                importedData = Ext.decode(importedData);
+        } catch(error) {
+            return '1';
+        }
+        
+        delete importedData.id;
+     
+        me.saveInstanceWithImages(importedData, function(obj) {
+           	
+            var length = obj.children ? obj.children.length : 0,
+               count = 0;
+ 			var childCallback = function(childObj) {
+                count++;
+                me.relateObject(obj, childObj, 'hasChild');
+                
+                if (count != length)
+                    return;
+                
+                if (typeof callback == 'function')
+                    callback(obj);
+            }
+            
+            for (var i = 0; i < length; i++) {
+                var child = obj.children[i];
+                me.importData(child, childCallback);
+            }
+            
+            if (length == 0 && typeof callback == 'function') {
+                callback(obj);
+            }
 
-            var childCallback = function(childObj) {
-                count++;
-                me.relateObject(obj, childObj, 'hasChild');
-                
-                if (count != length)
-                    return;
-                
-                if (typeof callback == 'function')
-                    callback(obj);
-            }
-            
-            for (i = 0; i < length; i++) {
-                var child = obj.children[i];
-                me.importData(child, childCallback);
-            }
-            
-            if (length == 0 && typeof callback == 'function') {
-                callback(obj);
-            }
-
-        });
-        
-        return '0';
-    },
-	
-	exportData: function(form, callback) {
-		var jsonString = Formpod.getFormInstanceData(form);
-		
-    	Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {    		
-   			var childData = [],
-   				processed = 0,
-   				length = objs.length,
-   				i;
-   			  			
-   			for (i = 0; i < length; i++){
-   				Formpod.exportData(objs[i], function(data) {
-    				childData.push(data);
-    				processed++;
-    				
-    				if (processed == length) {
-                        jsonString = jsonString.slice(0, -1);
-			   			jsonString = jsonString.concat(', "children": [' + childData + ']}');
-			   			
-				        if (typeof callback === 'function')
-            				callback(jsonString);
-    				}
-   				});
-   			}
-   			
-	        if (length == 0 && typeof callback === 'function') {
-	        	callback(jsonString);
-   			}
-    	}); 
+        });
+        
+        return '0';
+    },
+ 
+	saveInstanceWithImages : function(importData, callback) {
+		var me = this;
+		var fail = function(error){
+			console.log(error);
+		}
+		me.saveInstance(importData, function(obj) {
+					if (obj && obj.dataimg && obj.dataimg.length > 0) {
+						cfa.helper.PhoneGapHelper.saveImagesByJsonObjs(
+								obj.dataimg, function() {
+									callback(obj);
+								}, fail)
+					}else{
+						callback(obj);
+					}
+				});
 	},
 	
-	getFormInstanceData: function(formInstance) {
-    	var formdata = '{',
-            engine = formInstance.engineClass,
-            definition = engine.definition,
-            index;
-        
-		formdata = formdata.concat('"id": "' + formInstance['id'] + '",');
-		formdata = formdata.concat('"engineClass": { "name": "' + formInstance['engineClass'].name + '" },');
+	exportData : function(form, callback) {
+		Formpod.getFormInstanceData(form, function(jsonString) {
+			Formpod.findRelatedObjectsWithType(form, 'hasChild', true,
+					function(objs) {
+						var childData = [], processed = 0, length = objs.length, i;
 
-        for (index in definition) {
+						for (i = 0; i < length; i++) {
+							Formpod.exportData(objs[i], function(data) {
+										childData.push(data);
+										processed++;
+
+										if (processed == length) {
+											jsonString = jsonString
+													.slice(0, -1);
+											jsonString = jsonString
+													.concat(', "children": ['
+															+ childData + ']}');
+
+											if (typeof callback === 'function')
+												callback(jsonString);
+										}
+									});
+						}
+
+						if (length == 0 && typeof callback === 'function') {
+							callback(jsonString);
+						}
+					});
+		});
+
+	},
+	
+	getFormInstanceData : function(formInstance,successCallBack) {
+		var formdata = '{', engine = formInstance.engineClass, definition = engine.definition, index;
+
+		formdata = formdata.concat('"id": "' + formInstance['id'] + '",');
+		formdata = formdata.concat('"engineClass": { "name": "'
+				+ formInstance['engineClass'].name + '" },');
+
+		for (index in definition) {
 			var field = definition[index];
-            
-            if (field.type == 'fieldset' || field.type == 'endfieldset')
-                continue;
-                
-            var value = formInstance[field.name];
-            
-            if (!value) {
-                value = '';
-            }
-            
-            if (typeof value == 'object') {
-                if (field.type == 'datepickerfield') {
-                    value = Ext.Date.format(value, this.dateFormat);
-                    formdata = formdata.concat('"' + field.name + '": "' + value + '",');
-                }
-            } else {
-                formdata = formdata.concat('"' + field.name + '": "' + value + '",');
-            }
+
+			if (field.type == 'fieldset' || field.type == 'endfieldset')
+				continue;
+
+			var value = formInstance[field.name];
+
+			if (!value) {
+				value = '';
+			}
+
+			if (typeof value == 'object') {
+				if (field.type == 'datepickerfield') {
+					value = Ext.Date.format(value, this.dateFormat);
+					formdata = formdata.concat('"' + field.name + '": "'
+							+ value + '",');
+				}
+			} else {
+				formdata = formdata.concat('"' + field.name + '": "' + value
+						+ '",');
+			}
 		}
-        
-        if (formdata[formdata.length - 1] == ',') {
-            formdata = formdata.slice(0, -1);
-        }
-        
-     	formdata = formdata.concat('}');
-     	return formdata;
-    },
+
+		if (engine.attachment == "photo") {
+			var fail = function(error) {
+				console.log('error:' + error);
+			}
+			//images can be added here to json string 
+			cfa.helper.PhoneGapHelper.getJsonStringFromImages(
+					formInstance['PhotoId'], function(result) {
+						formdata = formdata.concat('"dataimg":' + result + '}');
+						successCallBack(formdata);
+					}, fail)
+		} else {
+			if (formdata[formdata.length - 1] == ',') {
+				formdata = formdata.slice(0, -1);
+			}
+			formdata = formdata.concat('}');
+			successCallBack(formdata);
+		}
+	},
     
     deleteCaseData: function(node) { 
     	Formpod.deleteObjectWithId(node.id)
