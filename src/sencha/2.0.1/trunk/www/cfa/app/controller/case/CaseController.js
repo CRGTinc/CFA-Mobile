@@ -184,6 +184,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	saveCaseData : function() {
 		var currentRecord = this.getCurrentRecord();
+		
 
 		if (currentRecord) {
 			var errors = currentRecord.validate();
@@ -207,6 +208,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			var form = currentRecord.get('form'), engine = form.engineClass;
 
 			form = engine.getFormObject();
+			console.log(form);
 			currentRecord.beginEdit();
 			currentRecord.set('form', form);
 			currentRecord.set('text',
@@ -270,10 +272,9 @@ Ext.define('cfa.controller.case.CaseController', {
 				items : [{
 					text : 'Via email',
 					handler : function() {
-
 						Formpod.exportData(currentRecord.getData().form,
 								function(data) {
-									var filename = currentRecord.getData().form.engineClass.name.replace(' ','') + '-' + Ext.util.Format.date(
+									var filename = currentRecord.getData().form.engineClass.name.replace(' ','').replace('/','')  + '-' + Ext.util.Format.date(
 											new Date(), 'Ymd')
 											+ "-"
 											+ currentRecord.getData().form.id
@@ -296,7 +297,7 @@ Ext.define('cfa.controller.case.CaseController', {
 					handler : function() {
 						Formpod.exportData(currentRecord.getData().form,
 								function(data) {
-									var filename = currentRecord.getData().form.engineClass.name.replace(' ','') + '-' +Ext.util.Format.date(
+									var filename = currentRecord.getData().form.engineClass.name.replace(' ','').replace('/','') + '-' +Ext.util.Format.date(
 											new Date(), 'Ymd')
 											+ "-"
 											+ currentRecord.getData().form.id
