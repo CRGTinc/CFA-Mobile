@@ -401,7 +401,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		var me = this;
 		this.setCurrentRecord(record);
 
-		if (this.getCurrentList == 'DeviceList') {
+		if (this.getCurrentList() == 'DeviceList') {
 			var deviceEditor = Ext.create('cfa.view.search.DeviceEditor');
 			var formData = record.get('form');
 			data = formData;
@@ -439,7 +439,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			if ( typeof formData[key] != 'object') {
 				if (key.indexOf('Notes') > -1) {
 					notesArray.push(formData[key]);
-					fieldsArray.push(formData['id'] + '-' + key)
+					fieldsArray.push(formData.engineClass.name + '-' + key)
 				}
 			}
 		}
@@ -461,7 +461,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			}
 
 			if (processed == length && typeof callback === 'function') {
-				callback(fieldsArray, notesArray);
+				callback(formArray,fieldsArray, notesArray);
 			}
 
 		});
