@@ -1,6 +1,6 @@
 Ext.define('cfa.controller.setting.SettingController', {
 	extend : 'Ext.app.Controller',
-	requires : ['cfa.view.setting.SettingView', 'cfa.model.Import', 'cfa.model.User'],
+	requires : ['cfa.view.setting.SettingView', 'cfa.model.Import', 'cfa.model.User', 'cfa.view.setting.ImportDataView'],
 
 	config : {
 		routes : {
@@ -11,7 +11,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 			main : 'main',
 			resetDataButton : 'button[action = resetdatabtn]',
 			importDataButton : 'button[action = importdatabtn]',
-			saveUserDataButton: 'button[action = saveuserdata]'
+			saveUserDataButton : 'button[action = saveuserdata]',
 		},
 
 		control : {
@@ -21,165 +21,174 @@ Ext.define('cfa.controller.setting.SettingController', {
 			importDataButton : {
 				tap : 'importData'
 			},
-			saveUserDataButton: {
-            	'tap': 'saveUserData'
-            }
+			saveUserDataButton : {
+				'tap' : 'saveUserData'
+			},
+
+			deleteImportButton : {
+				'tap' : 'deleteImportItems'
+			}
 
 		},
-		importList : undefined,
+		importListView : undefined,
 		importStore : undefined,
 		casesStore : undefined,
 		casesList : undefined,
-		settingView: null
+		settingView : null,
+		currentImportFile : '',
 	},
 
-	showSettingPage: function(){
+	showSettingPage : function() {
 		this.setSettingView(Ext.create('cfa.view.setting.SettingView'));
 		this.getMain().push(this.getSettingView());
-		Ext.getStore('Users').load({callback: function(records, e, opt){
-			this.getSettingView().getComponent('settingformpanel').setRecord(records[0]);
-		}, scope: this});
-		
-		       						
-	},
-
-	resetData : function() {
-		Ext.Msg.confirm("Reset Data", "Do you want to reset data?",
-				this.confirmResetData, this);
-	},
-
-	importData : function() {
-		var me = this;
-		cfa.helper.PhoneGapHelper.loadImportedData(function(result) {
-			if (me.getImportStore() == undefined) {
-				var importDataStore = Ext.create('Ext.data.Store', {
-							model : 'cfa.model.Import',
-							data : result,
-							grouper : {
-								groupFn : function(record) {
-									return record.get('type');
-								}
-							}
-						});
-				me.setImportStore(importDataStore);
-				me.getImportStore().load();
-
-				var fail = function(error) {
-					console.log("Error: " + error.code);
-				}
-
-				var onItemDisclosure = function(list, record, target, index, event, eOpts) {
-					if (record.getData().type.toUpperCase() == 'CASE') {
-						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-								function(fileSystem) {
-									fileSystem.root.getFile(
-											record.getData().fullPath, {
-												create : false
-											}, function(entry) {
-												entry.file(function(file) {
-													var reader = new FileReader();
-													reader.onloadend = function(
-															evt) {
-														Formpod
-																.importData(
-																		evt.target.result,
-																		function() {
-																			Ext.Msg
-																					.alert(
-																							"Import Data",
-																							"Import data succesfully",
-																							function() {
-																								me
-																										.getImportList()
-																										.hide();
-																							},
-																							me);
-
-																		});
-													};
-													reader.readAsText(file);
-
-												}, fail);
-											}, fail);
-
-								}, fail);
-
-					} else {
-						if (me.getCasesStore() == undefined) {
-							var store = Ext.create('cfa.store.SearchCases', {
-								queryType : 'class',
-								queryParam : 'Case Form'
-							}).load();
-							me.setCasesStore(store);
-							var caselist = {
-								xtype : 'panel',
-								layout : 'fit',
-								items : [{
-											xtype : 'list',
-											store : me.getCasesStore()
-										}]
-							}
-							me.setCasesList(caselist);
-						}
-						me.getImportList().getComponent('importview').push(me.getCasesList());
-					}
-
-				}
-
-				var importList = Ext.create('Ext.Panel', {
-							modal : true,
-							layout: 'fit',
-							hideOnMaskTap : true,
-							hidden : true,
-							top : 0,
-							left : 0,
-							width : 400,
-							height : 400,
-							scrollable : true,
-
-							items : [{
-								xtype: 'navigationview',
-								itemId: 'importview',
-								items: [{
-										xtype : 'list',
-										title : 'Import list',
-										fullScreen : true,
-										itemTpl : "{name}",
-										store : me.getImportStore(),
-										grouped : true,
-										onItemDisclosure: true,
-										listeners : {
-											disclose : {
-												fn : onItemDisclosure,
-												scope : me
-											}
-										}
-
-									}]
-							}]
-						});
-				me.setImportList(importList);
-				Ext.Viewport.add(me.getImportList());
-			} else {
-				me.getImportStore().setData(Ext.JSON.decode(result));
-			}
-			me.getImportList().showBy(me.getImportDataButton());
-		}, function() {
-			Ext.Msg.alert('Import Data', 'This may be cause error....',
-					Ext.emptyFn, this);
+		Ext.getStore('Users').load({
+			callback : function(records, e, opt) {
+				this.getSettingView().getComponent('settingformpanel').setRecord(records[0]);
+			},
+			scope : this
 		});
 	},
 
-	confirmResetData : function(button) {
-		if (button == 'yes') {
-			Ext.Msg
-					.confirm(
-							"Reset Data",
-							"This action can not be reverted, do you really want to reset data?",
-							this.confirmResetData2, this);
-		}
+	resetData : function() {
+		Ext.Msg.confirm("Reset Data", "Do you want to reset data?", this.confirmResetData, this);
 	},
 
+	onImportListItemDisclosure : function(list, record, target, index, event, eOpts) {
+		var me = this, fail = function(error) {
+			console.log("Error: " + error.code);
+		};
+
+		if (record.getData().type.toUpperCase() == 'CASE') {
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+				fileSystem.root.getFile(record.getData().fullPath, {
+					create : false
+				}, function(entry) {
+					entry.file(function(file) {
+						var reader = new FileReader();
+						reader.onloadend = function(evt) {
+							Formpod.importData(evt.target.result, function() {
+								Ext.Msg.alert("Import Data", "Import data succesfully", function() {
+									me.getImportListView().hide();
+								}, me);
+
+							});
+						};
+						reader.readAsText(file);
+
+					}, fail);
+				}, fail);
+
+			}, fail);
+
+		} else {
+			if (me.getCasesStore() == undefined) {
+				var store = Ext.create('cfa.store.SearchCases', {
+					queryType : 'class',
+					queryParam : 'Case Form'
+				}).load();
+
+				me.setCasesStore(store);
+
+				var caselist = {
+					xtype : 'panel',
+					layout : 'fit',
+					items : [{
+						xtype : 'list',
+						store : me.getCasesStore(),
+						listeners : {
+							itemtap : {
+								fn : me.onCaseListItemTap,
+								scope : this
+							}
+						}
+					}]
+				}
+				me.setCasesList(caselist);
+			}
+			me.getImportListView().getComponent('importlistcontainer').push(me.getCasesList());
+			me.setCurrentImportFile(record.getData().fullPath);
+		};
+	},
+
+	onCaseListItemTap : function(view, index, target, record, e, eOpts) {
+
+		var me = this;
+		var fail = function(error) {
+			console.log("Error: " + error);
+		};
+
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+			fileSystem.root.getFile(me.getCurrentImportFile(), {
+				create : false
+			}, function(entry) {
+				console.log('A');
+				entry.file(function(file) {
+					console.log('B');
+					var reader = new FileReader();
+					reader.onloadend = function(evt) {
+						console.log('C');
+						Formpod.importDevice(record.getData().form,evt.target.result, function() {
+							Ext.Msg.alert("Import Data", "Import data succesfully", function() {
+									me.getImportListView().hide();
+								}, me);
+						});
+					};
+					reader.readAsText(file);
+
+				}, fail);
+			}, fail);
+
+		}, fail);
+
+	},
+
+	importData : function() {
+		
+		if (Ext.os.is.Desktop) {
+			Ext.Msg.alert("Import Data", "Currently support only for iPad.");
+			return;
+		}
+		
+		var me = this;
+
+		var listener = {
+			disclose : {
+				fn : this.onImportListItemDisclosure,
+				scope : me
+			},
+		};
+
+		cfa.helper.PhoneGapHelper.loadImportedData(function(result) {
+			if (me.getImportStore() == undefined) {
+				var importDataStore = Ext.create('Ext.data.Store', {
+					model : 'cfa.model.Import',
+					data : result,
+					grouper : {
+						groupFn : function(record) {
+							return record.get('type');
+						}
+					}
+				});
+
+				me.setImportStore(importDataStore);
+				me.getImportStore().load();
+				me.setImportListView(Ext.create('cfa.view.setting.ImportDataView'))
+				me.getImportListView().getComponent('importlistcontainer').getComponent('importlist').setListeners(listener);
+				me.getImportListView().getComponent('importlistcontainer').getComponent('importlist').setStore(me.getImportStore());
+				Ext.Viewport.add(me.getImportListView());
+			} else {
+				me.getImportStore().setData(Ext.JSON.decode(result));
+			}
+			me.getImportListView().showBy(me.getImportDataButton());
+		}, function() {
+			Ext.Msg.alert('Import Data', 'This may be cause error....', Ext.emptyFn, this);
+		});
+	},
+	confirmResetData : function(button) {
+		if (button == 'yes') {
+			Ext.Msg.confirm("Reset Data", "This action can not be reverted, do you really want to reset data?", this.confirmResetData2, this);
+		}
+	},
 	confirmResetData2 : function(button) {
 		if (button == 'yes') {
 			var casesStore = Ext.getStore('Cases');
@@ -188,24 +197,22 @@ Ext.define('cfa.controller.setting.SettingController', {
 
 			var imageStore = Ext.create('cfa.store.LSImages');
 			imageStore.load(function() {
-						imageStore.removeAll();
-						imageStore.sync();
-					});
+				imageStore.removeAll();
+				imageStore.sync();
+			});
 
-			Ext.Msg.alert('Reset Data', 'Data has been reset successfully.',
-					Ext.emptyFn, this);
+			Ext.Msg.alert('Reset Data', 'Data has been reset successfully.', Ext.emptyFn, this);
 		}
 	},
-	
-	 saveUserData: function() {
-    	var store = Ext.getStore('Users').load(),
-    		firstname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('firstname').getValue(),
-    		lastname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('lastname').getValue();
-    	
-    	store.removeAll(false);
-    	store.add({'firstname': firstname, 'lastname': lastname});
-    	store.sync();
-    	Ext.Msg.alert('Save user data', 'Data has been saved successfully.', Ext.emptyFn, this);
-    }
+	saveUserData : function() {
+		var store = Ext.getStore('Users').load(), firstname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('firstname').getValue(), lastname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('lastname').getValue();
 
+		store.removeAll(false);
+		store.add({
+			'firstname' : firstname,
+			'lastname' : lastname
+		});
+		store.sync();
+		Ext.Msg.alert('Save user data', 'Data has been saved successfully.', Ext.emptyFn, this);
+	}
 })

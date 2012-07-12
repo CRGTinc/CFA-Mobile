@@ -753,6 +753,51 @@ var Formpod = {
         if (typeof callback === 'function')
             callback(objectList);
 	},
+	
+	importDevice:function(parentNode ,data, callback) {
+		
+		var importedData = data;
+		var me = this;
+		
+		try {
+          	if ((typeof importedData) == "string")
+                importedData = Ext.decode(importedData);
+        } catch(error) {
+            return '1';
+        }
+ 
+ 		delete importedData.id;
+ 		
+ 		me.saveInstanceWithImages(importedData, function(obj) {
+ 			
+ 			me.relateObject(parentNode, obj, 'hasChild');
+  			var length = obj.children ? obj.children.length : 0,
+               	count = 0;
+ 
+            
+            for (var i = 0; i < length; i++) {
+ 	
+                var child = obj.children[i];
+ 
+                me.importDevice(obj, child, function(childObj) {
+	                count++;
+	                if (count != length)
+	                    return;
+	                
+	                if (typeof callback == 'function')
+	                    callback(obj);
+	 
+	            });
+            }
+            
+            if (length == 0 && typeof callback == 'function') {
+                callback(obj);
+            }
+
+        });
+        
+        return '0';
+	},
     
     importData: function(data, callback) {
         var me = this,

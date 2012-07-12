@@ -208,11 +208,9 @@ Ext.define('cfa.controller.case.CaseController', {
 			var form = currentRecord.get('form'), engine = form.engineClass;
 
 			form = engine.getFormObject();
-			console.log(form);
 			currentRecord.beginEdit();
 			currentRecord.set('form', form);
-			currentRecord.set('text',
-					form[Formpod.FormTypes[engine.name].displayProperty]);
+			currentRecord.set('text',form[Formpod.FormTypes[engine.name].displayProperty]);
 			currentRecord.endEdit();
 
 			if (!phantomRecord) {
@@ -234,12 +232,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			if (this.getImageStore() != undefined) {
 				this.getImageStore().sync();
 			}
-		}
-
-		var currentRecord = this.getCurrentRecord();
-		if (currentRecord) {
-			var formData = currentRecord.get('form');
-			var engine = formData.engineClass;
+			
 			engine.scrollFormToTop();
 		}
 
@@ -430,8 +423,15 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	caseFormSelected : function(list, index, target, record, e, eOpts) {
 		this.getFormSelectionView().hide();
-
+		
 		var formType = record.get('name'), data = Ext.create('cfa.model.Case'), engine = Formpod.FormTypes[formType];
+		
+		if (formType == 'Photo/Attachment') {
+			if (Ext.os.is.Desktop) {
+				Ext.Msg.alert("Export Data", "Currently support only for iPad.");
+				return;
+			}
+		}
 
 		engine.resetForm();
 		data.set('form', engine.getFormObject());
