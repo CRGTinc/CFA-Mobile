@@ -86,9 +86,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 					}, function(directory) {
 						var directoryReader = directory.createReader();
 						directoryReader.readEntries(function(entries) {
-							console.log("Entries length "  + entries.length);
 									for (var i = 0; i < entries.length; i++) {
-										console.log("Entries length "  + entries.length);
 										if (entries[i].isFile) {
 											var data = "";
 											if (entries[i].name.toUpperCase()
