@@ -145,7 +145,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 				onFileSystemSuccess, fail);
 	},
 	
-	getJsonStringFromImages : function(formId, successCallBack, failCallBack) {
+	getJsonStringFromImages : function(formId,newFormId, successCallBack, failCallBack) {
 		var me = this;	
 		var fail = function(error) {
 			console.log(error);
@@ -168,7 +168,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 										reader.onloadend = function(evt) {
 											result += '{"name": "' + obj.name
 													+ '",';
-											result += '"formId": "' + formId
+											result += '"formId": "' + newFormId
 													+ '",';
 											result += '"data": "'
 													+ evt.target.result + '"},';
@@ -244,7 +244,6 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 				failCallBack(error);
 			}
 		}
-		
 		var saveData = function(index) {
 			if (index < length) {
 				obj = data[index];

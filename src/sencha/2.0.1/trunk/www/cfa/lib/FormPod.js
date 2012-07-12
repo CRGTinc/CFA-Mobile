@@ -891,6 +891,8 @@ var Formpod = {
 	},
 	
 	getFormInstanceData : function(formInstance,successCallBack) {
+		var me = this;
+		var newPhotoId = "";
 		var formdata = '{', engine = formInstance.engineClass, definition = engine.definition, index;
 
 		formdata = formdata.concat('"id": "' + formInstance['id'] + '",');
@@ -916,8 +918,15 @@ var Formpod = {
 							+ value + '",');
 				}
 			} else {
-				formdata = formdata.concat('"' + field.name + '": "' + value
+				if(engine.attachment == "photo" && field.name=="PhotoId"){
+					newPhotoId = me.randomUUID();
+					console.log(newPhotoId);
+					formdata = formdata.concat('"' + field.name + '": "' + newPhotoId
 						+ '",');
+				}else{
+					formdata = formdata.concat('"' + field.name + '": "' + value
+						+ '",');
+				}
 			}
 		}
 
@@ -927,7 +936,7 @@ var Formpod = {
 			}
 			//images can be added here to json string 
 			cfa.helper.PhoneGapHelper.getJsonStringFromImages(
-					formInstance['PhotoId'], function(result) {
+					formInstance['PhotoId'],newPhotoId, function(result) {
 						formdata = formdata.concat('"dataimg":' + result + '}');
 						successCallBack(formdata);
 					}, fail)
