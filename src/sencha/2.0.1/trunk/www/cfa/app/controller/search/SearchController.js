@@ -372,29 +372,53 @@ Ext.define('cfa.controller.search.SearchController', {
 		}
 	},
 
-	showNotesForCase : function(formsArray, fieldsArray, notesArray) {
+	showNotesForCase : function(formData) {
+		var me = this;
 		this.setCurrentView("NotesView")
-		var notesView = Ext.create('cfa.view.search.NotesReportView', {
-			title: formsArray[0]
-		});
+		var notesView =Ext.create('cfa.view.search.NotesReportView');
+		console.log(formData);
+		
+		var setView = function(formData, level) {
+			for (var i = 0; i < formData.length; i++) {
+				var view = Ext.create('Ext.form.FieldSet', {
+					title : formData[i].data.name.replace(/"/g, ''),
+					margin: '0 0 0 '  + level*25,
+					padding: 10,
+				});
 
-		for (var i = 0; i < notesArray.length; i++) {
+				var notes = formData[i].data.values;
+				view = me.createNotePanel(notes, view);
 
-			var notePanel = Ext.create('Ext.form.FieldSet', {
-				title : fieldsArray[i]
-			});
-
-			var noteField = Ext.create('Ext.field.TextArea', {
-				readOnly : true
-			});
-
-			noteField.setValue(notesArray[i]);
-			notePanel.add(noteField);
-			notesView.add(notePanel);
+				notesView.add(view);
+				
+				if (formData[i].childs) {
+					level++;
+					setView(formData[i].childs, level);
+				}
+			}
 		}
+		
+		setView(formData,1);	
 
-		this.getSearchView().push(notesView);
+		me.getSearchView().push(notesView);
 
+	},
+
+	createNotePanel : function(caseNotes, view) {
+		var notesView = view;
+		for (key in caseNotes) {
+			var notesSection = {
+				xtype : 'fieldset',
+				title : key.replace(/"/g, ''),
+				items : [{
+					xtype : 'textareafield',
+					readOnly : true,
+					value : caseNotes[key]
+				}]
+			};
+			notesView.add(notesSection);
+		}
+		return notesView;
 	},
 
 	onResultsListItemDisclosure : function(list, record, target, index, event, eOpts) {
@@ -413,8 +437,10 @@ Ext.define('cfa.controller.search.SearchController', {
 			this.getSearchView().push(deviceEditor);
 			this.setCurrentView('DeviceEditor');
 		} else {
-			me.getNotesForCase(this.getCurrentRecord().getData().form, [], [], [], function(formsArray, fieldsArray, notesArray) {
-				me.showNotesForCase(formsArray, fieldsArray, notesArray);
+			me.getNotesForCase(this.getCurrentRecord().getData().form, function(formsArray) {
+				var formData = [];
+				formData.push(formsArray);
+				me.showNotesForCase(formData);
 			});
 
 			this.setCurrentView('NotesReport');
@@ -422,48 +448,61 @@ Ext.define('cfa.controller.search.SearchController', {
 
 	},
 
-	getNotesForCase : function(formData, forms, fields, notes, callback) {
-		var me = this;
-		//get data for first note
-		var fieldsArray = fields;
-		var notesArray = notes;
-		var formArray = forms;
-		
-		if (formArray.length == 0) {
-			formArray.push(formData['CaseTitle']);
-		} else {
-			formArray.push(formData['DevName']);
-		}
-		
+	getFormNotes : function(formData, callback) {
+		var values = {};
+		var formArray = {};
 		for (key in formData) {
 			if ( typeof formData[key] != 'object') {
 				if (key.indexOf('Notes') > -1) {
-					notesArray.push(formData[key]);
-					fieldsArray.push(formData.engineClass.name + '-' + key)
+					values['"' + key + '"'] = formData[key];
 				}
 			}
 		}
+		formArray['data'] = {};
+		
+ 		formArray['data']['values'] = values;
 
-		//get data of all childs
-		Formpod.findRelatedObjectsWithType(formData, 'hasChild', true, function(objs) {
-			var processed = 0, i;
-			var length = objs.length;
+		if (formData.engineClass.name == "Case Form") {
+			formArray['data']['name'] =  formData['CaseTitle'];
+		} else if (formData.engineClass.name == "System" || formData.engineClass.name == "Storage" || formData.engineClass.name == "Media" || formData.engineClass.name == "Mobile") {
+			formArray['data']['name'] =  formData['DevName'];
+		}
+		
+		if ( typeof callback === 'function') {
+			callback(formArray);
+		}
 
-			for (i = 0; i < objs.length; i++) {
-				me.getNotesForCase(objs[i], formArray,fieldsArray, notesArray, function() {
+	},
 
-					processed++;
-					if (processed == length && typeof callback === 'function') {
-						callback(formArray, fieldsArray, notesArray);
+	getNotesForCase : function(formData, callback) {
+		var me = this;
+		this.getFormNotes(formData, function(formArray) {
+			Formpod.findRelatedObjectsWithType(formData, 'hasChild', true, function(objs) {
+				var processed = 0, i;
+				var length = objs.length;
+				var childData = [];
+
+				if (length > 0) {
+					var getChildNodes = function(index) {
+						if (index == length && typeof callback === 'function') {
+							formArray['childs'] = childData;
+							callback(formArray);
+						} else {
+							me.getNotesForCase(objs[index], function(childFormNotes) {
+								childData.push(childFormNotes);
+								index++;
+								getChildNodes(index);
+
+							});
+						}
 					}
+					getChildNodes(0);
+				}
 
-				});
-			}
-
-			if (processed == length && typeof callback === 'function') {
-				callback(formArray,fieldsArray, notesArray);
-			}
-
+				if (processed == length && typeof callback === 'function') {
+					callback(formArray);
+				}
+			});
 		});
 	}
 })
