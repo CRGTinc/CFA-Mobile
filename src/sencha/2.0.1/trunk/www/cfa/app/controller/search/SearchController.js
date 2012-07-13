@@ -204,9 +204,6 @@ Ext.define('cfa.controller.search.SearchController', {
 			var engine = formData.engineClass;
 			engine.resetForm();
 			engine.loadForm(data);
-
-			var formData = currentRecord.get('form');
-			var engine = formData.engineClass;
 			engine.scrollFormToTop();
 		}
 	},
