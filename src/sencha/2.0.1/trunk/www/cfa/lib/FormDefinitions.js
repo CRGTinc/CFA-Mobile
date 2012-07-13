@@ -82,7 +82,7 @@ FD_Forms ['System Form'] =
 			        {name: "DevType", type: "textfield", label: "System Type", value: "", required: false, source: "DevType", helpText: "Help"},
 			        {name: "SystOS", type: "selectfield", label: "System OS", value: [ {value:'WinXP', name:'Windows XP'}, {value:'Win7', name:'Windows 7'}, {value:'Win8', name:'Windows 8'}, {value:'WinVista', name:'Windows Vista'}, {value:'OSX', name:'Mac OS X'}, {value:'Linux', name:'Linux'}, {value:'Solaris', name:'Solaris'}, {value:'Other', name:'Other (please add note)'}], required: false, source: "SystOS", helpText: "Help"},
 			        {name: "SystBootOrder", type: "textfield", label: "System Boot Order", value: "", required: false, source: "SystBootOrder", helpText: "Help"},
-			        {name: "Notes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
+			        {name: "SystemNotes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
 				{name: "efs", type: "endfieldset"},
 				{name: "fs", type: "fieldset", title: "Onsite", instructions: "System Onsite Information"},
 				    {name: "SystLocation", type: "textfield", label: "System Location", value: "", required: false, source: "SystLocation", helpText: "Help"},

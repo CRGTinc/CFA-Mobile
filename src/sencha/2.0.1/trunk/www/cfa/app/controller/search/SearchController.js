@@ -449,7 +449,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		for (key in formData) {
 			if ( typeof formData[key] != 'object') {
 				if (key.indexOf('Notes') > -1) {
-					values['"' + key + '"'] = formData[key];
+					values['"' + this.getSectionNameForKey(key) + '"'] = formData[key];
 				}
 			}
 		}
@@ -461,11 +461,40 @@ Ext.define('cfa.controller.search.SearchController', {
 			formArray['data']['name'] =  formData['CaseTitle'];
 		} else if (formData.engineClass.name == "System" || formData.engineClass.name == "Storage" || formData.engineClass.name == "Media" || formData.engineClass.name == "Mobile") {
 			formArray['data']['name'] =  formData['DevName'];
+		} else if (formData.engineClass.name == "Photo/Attachment") {
+			formArray['data']['name'] =  formData['AlbumName'];
+		} else if (formData.engineClass.name == "Assistance Request Form") {
+			formArray['data']['name'] =  formData['ProsecutorName'];
+		} else if (formData.engineClass.name == "Border Response Form") {
+			formArray['data']['name'] =  formData['SubjectName'];
 		}
 		
 		if ( typeof callback === 'function') {
 			callback(formArray);
 		}
+	},
+	
+	getSectionNameForKey: function(key) {
+		if (key == 'GeneralNotes')
+			return 'General';
+		else if (key == 'OnsiteNotes')
+			return 'Onsite';
+		else if (key == 'CompletionNotes')
+			return 'Completion';
+		else if (key == 'SystemNotes')
+			return 'System';
+		else if (key == 'SeizureNotes')
+			return 'Seizure';
+		else if (key == 'SystemInformationNotes')
+			return 'System Information';
+		else if (key == 'StorageNotes')
+			return 'Storage';
+		else if (key == 'MediaNotes')
+			return 'Media';
+		else if (key == 'MobileNotes')
+			return 'Mobile';
+		else if (key == 'Notes')
+			return 'Notes';
 	},
 
 	getNotesForCase : function(formData, callback) {
