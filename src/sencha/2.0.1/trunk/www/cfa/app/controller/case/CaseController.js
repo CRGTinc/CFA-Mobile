@@ -331,51 +331,51 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	attachCaseData: function() {
-        var me = this;
-        
-        var onPhotoDataSuccess = function(imageData) {
-            var currentRecord = me.getCurrentRecord(),
-                imageStore = me.getImageStore();
-        
-            var formId = currentRecord.get('form').PhotoId;
-            imageStore.add({ formId: formId, srcImage: "data:image/png;base64,"+ imageData });
-        }
-        
-        var onPhotoDataError = function(message) {
-            console.log('Photo data error:', message);
-        }
-
-        var actionSheet = Ext.create('Ext.ActionSheet', {
-            modal : false,
-            left : "40%",
-            right : "40%",
-            bottom : "6%",
-
-            items : [{
-                    text : 'From Camera',
-                    handler : function() {
-                        navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG });
-                        actionSheet.hide();
-                    }
-                }, {
-                    text : 'From Photo Library',
-                    handler : function() {
-                        navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, { quality: 50, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG });
-                        actionSheet.hide();
-                    }
-                }, {
-                    text : 'Cancel',
-                    ui : 'confirm',
-                    handler : function() {
-                        actionSheet.hide();
-                    }
-                }
-            ]
-        });
-
-        Ext.Viewport.add(actionSheet);
-        actionSheet.show();
-    },
+		var me = this;
+		
+		var onPhotoDataSuccess = function( imageData) {
+			var currentRecord = me.getCurrentRecord(),
+				imageStore = me.getImageStore();
+				
+			var formId = currentRecord.get('form').PhotoId;
+			imageStore.add({formId: formId, srcImage: "data:image/png;base64," + imageData});
+		}
+		
+		var onPhotoDataError = function(message) {
+			console.log('Photo data error: ', message);
+		}
+		
+		var actionSheet = Ext.create('Ext.ActionSheet', {
+			modal: false,
+			left: '40%',
+			right: '40%',
+			bottom: '6%',
+			
+			items: [{
+				text: 'From Camera',
+				handler: function() {
+					navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, {quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG});
+					actionSheet.hide();
+				}
+			}, {
+				text: 'From Photo Library',
+				handler: function() {
+					navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, {quality: 50, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY , destinationType: navigator.camera.DestinationType.DATA_URL, encodingType: navigator.camera.EncodingType.PNG});
+					actionSheet.hide();
+				}
+			}, {
+				text: 'Cancel',
+				ui: 'confirm',
+				handler: function() {
+					actionSheet.hide();
+				}
+			}]
+			
+		});
+		
+		Ext.Viewport.add(actionSheet);
+		actionSheet.show();
+	},
 
 	confirmDeleteData : function(button) {
 		if (button == 'yes') {

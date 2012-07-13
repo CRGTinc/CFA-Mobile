@@ -375,8 +375,7 @@ Ext.define('cfa.controller.search.SearchController', {
 	showNotesForCase : function(formData) {
 		var me = this;
 		this.setCurrentView("NotesView")
-		var notesView =Ext.create('cfa.view.search.NotesReportView');
-		console.log(formData);
+		var notesView = Ext.create('cfa.view.search.NotesReportView');
 		
 		var setView = function(formData, level) {
 			for (var i = 0; i < formData.length; i++) {
@@ -399,9 +398,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		}
 		
 		setView(formData,1);	
-
 		me.getSearchView().push(notesView);
-
 	},
 
 	createNotePanel : function(caseNotes, view) {
@@ -442,10 +439,8 @@ Ext.define('cfa.controller.search.SearchController', {
 				formData.push(formsArray);
 				me.showNotesForCase(formData);
 			});
-
 			this.setCurrentView('NotesReport');
 		}
-
 	},
 
 	getFormNotes : function(formData, callback) {
@@ -471,7 +466,6 @@ Ext.define('cfa.controller.search.SearchController', {
 		if ( typeof callback === 'function') {
 			callback(formArray);
 		}
-
 	},
 
 	getNotesForCase : function(formData, callback) {

@@ -41,7 +41,7 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 				}
 			},
 			itemId : 'inputfield'
-		}],
+		}]
 		
-	},
+	}
 })

@@ -14,9 +14,6 @@ Ext.define('cfa.view.search.SearchView', {
 					hidden: true
 				}
 			],
-			
-			
-					
 		},
 		
 		items: [
@@ -25,7 +22,7 @@ Ext.define('cfa.view.search.SearchView', {
 				title: 'Search Templates',
 				id: 'searchtemplatelist',
 				itemTpl: '</pre><div>{text}</div><div><font size="-1">{description}</font></div><pre>',
-				store: 'SearchTemplates',
+				store: 'SearchTemplates'
 			},
 		]
 	},

@@ -35,7 +35,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 		casesStore : undefined,
 		casesList : undefined,
 		settingView : null,
-		currentImportFile : '',
+		currentImportFile : ''
 	},
 
 	showSettingPage : function() {
@@ -121,12 +121,9 @@ Ext.define('cfa.controller.setting.SettingController', {
 			fileSystem.root.getFile(me.getCurrentImportFile(), {
 				create : false
 			}, function(entry) {
-				console.log('A');
 				entry.file(function(file) {
-					console.log('B');
 					var reader = new FileReader();
 					reader.onloadend = function(evt) {
-						console.log('C');
 						Formpod.importDevice(record.getData().form,evt.target.result, function() {
 							Ext.Msg.alert("Import Data", "Import data succesfully", function() {
 									me.getImportListView().hide();

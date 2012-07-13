@@ -9,7 +9,7 @@ Ext.define('cfa.model.Event',{
 			{name: 'event_name', type: 'string'},
 			{name: 'time', type: 'string'},
 			{name: 'location', type: 'string'},
-			{name: 'event_description', type: 'string'},		
+			{name: 'event_description', type: 'string'}		
 		]	
 	}	
 })

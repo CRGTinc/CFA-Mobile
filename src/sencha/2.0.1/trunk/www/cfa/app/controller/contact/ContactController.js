@@ -18,7 +18,7 @@ Ext.define('cfa.controller.contact.ContactController', {
 		control : {
 			contactContainer : {
 				contactDetailCommand : 'displayContactDetail',
-				reloadContactCommand : 'reloadContact',
+				reloadContactCommand : 'reloadContact'
 			},
 
 			searchInputField : {

@@ -9,7 +9,5 @@ Ext.define('cfa.model.SearchTemplate',{
 			{name: 'queryType', type: 'string'},
 			{name: 'queryParam', type: 'string'}
 		]
-		
 	}
-	
 })

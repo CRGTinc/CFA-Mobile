@@ -7,7 +7,7 @@ Ext.define("cfa.view.search.DeviceEditor", {
 		items : [{
 			xtype: 'panel',
 			itemId : 'editorpanel',
-			layout : 'fit',
+			layout : 'fit'
 		}, {
 			xtype : 'toolbar',
 			docked : 'bottom',
@@ -27,6 +27,5 @@ Ext.define("cfa.view.search.DeviceEditor", {
 				ui : 'decline'
 			}]
 		}]
-
 	}
 });

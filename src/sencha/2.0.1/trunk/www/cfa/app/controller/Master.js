@@ -20,7 +20,7 @@ Ext.define('cfa.controller.Master', {
 			},
 			fedbtn: {
 			   tap: 'goToFed'
-			},
+			}
 		}
     },
 	
@@ -39,6 +39,6 @@ Ext.define('cfa.controller.Master', {
     
 	goToFed: function(){
         this.redirectTo('feedback');
-	},
+	}
 	
 });

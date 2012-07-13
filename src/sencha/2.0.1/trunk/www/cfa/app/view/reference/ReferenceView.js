@@ -19,35 +19,29 @@ Ext.define("cfa.view.reference.ReferenceView", {
 			xtype: 'references_list',
 			itemId: 'referenceslist',
 			store: this.getReferenceStore().load(),
-			listeners:{
-				select : {fn:this.onItemSelected, scope:this}
+			listeners: {
+				select : {fn: this.onItemSelected, scope: this}
         	}
 		};
 		
 		var contentPanel = {
-			xtype:'panel',
+			xtype: 'panel',
 			itemId: 'contentpanel',
-			layout:'fit',
-			flex:1,
-			items:[
+			layout: 'fit',
+			flex: 1,
+			items: [
 				{
 					xtype: 'searchfield',
 					id: 'referencesearchfield',
 					docked: 'top'
 				},
-				referencesList,
+				referencesList
 			]			
 		};
-		
-
-		
 		this.add(contentPanel);
 	},
 		
-	onItemSelected: function(list,record,opt) {
-		this.fireEvent('openReferenceSourceCommand',this,record);
+	onItemSelected: function(list, record, opt) {
+		this.fireEvent('openReferenceSourceCommand', this, record);
 	},
-	
-	 
-	
 });

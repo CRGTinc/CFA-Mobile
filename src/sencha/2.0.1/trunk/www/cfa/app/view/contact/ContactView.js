@@ -15,18 +15,18 @@ Ext.define("cfa.view.contact.ContactView", {
 		this.callParent(arguments);
 		cfa.app.helpUrl = "Contact";
 		var topTitle = {
-			xtype:'toolbar',
-			title:"Contacts",
-			docked:'top',
-			layout :{
+			xtype: 'toolbar',
+			title: "Contacts",
+			docked: 'top',
+			layout : {
 				pack: 'right',
 				align: 'center'	
 			},
 			items:[
 				{
-					xtype:'button',
-					iconMask:true,
-					iconCls:'refresh',
+					xtype: 'button',
+					iconMask: true,
+					iconCls: 'refresh',
 					handler: this.reloadContactClick, scope: this
 				},				
 			],
@@ -42,7 +42,7 @@ Ext.define("cfa.view.contact.ContactView", {
 			xtype: 'contact_list',
 			itemId: 'contactlist',
 			store: this.getContactStore().load(),
-			listeners:{
+			listeners: {
 				select : {fn:this.onItemSelected, scope:this}
         	}
 		};
@@ -55,7 +55,7 @@ Ext.define("cfa.view.contact.ContactView", {
 			items: [
 				topTitle,
 				contactSearchField,
-				contactsList,
+				contactsList
 			]			
 		};
 		
@@ -64,16 +64,16 @@ Ext.define("cfa.view.contact.ContactView", {
 			flex: 2
 		}
 		
-		this.add([leftPanel,contactDetail]);
+		this.add([leftPanel, contactDetail]);
 				
 	},
 		
-	onItemSelected: function(list,record,opt){
-		this.fireEvent('contactDetailCommand',this,record);
+	onItemSelected: function(list, record, opt){
+		this.fireEvent('contactDetailCommand', this, record);
 	},
 	
 	reloadContactClick: function(){
-		this.fireEvent('reloadContactCommand',this);	
-	}, 
+		this.fireEvent('reloadContactCommand', this);	
+	}
 	
 });

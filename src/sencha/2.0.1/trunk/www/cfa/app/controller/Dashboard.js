@@ -47,5 +47,5 @@ Ext.define('cfa.controller.Dashboard', {
 	goHome: function(){		
 		this.getMain().reset();
 		cfa.app.helpUrl = "root"
-	},
+	}
 });

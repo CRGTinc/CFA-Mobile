@@ -16,6 +16,6 @@ Ext.define("cfa.store.References",{
 			groupFn: function(record) {
 				return record.get('title')[0];
 			}
-		},
+		}
 	}	
 })

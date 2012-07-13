@@ -79,7 +79,7 @@ Ext.define("cfa.view.case.CaseView", {
                                     {
                                         xtype: 'panel',
                                         layout: 'vbox',
-                                        id: 'caseformpanel',									
+                                        id: 'caseformpanel'									
                                     }
 								]
                             }, {

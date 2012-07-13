@@ -9,11 +9,4 @@ Ext.define('cfa.model.Reference',{
 			{name: 'url', type: 'string'},
 		]	
 	}	
-		
-		
-		
-		
-	
-	
-	
 })

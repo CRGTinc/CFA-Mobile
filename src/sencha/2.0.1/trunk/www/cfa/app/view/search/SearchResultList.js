@@ -10,7 +10,7 @@ Ext.define('cfa.view.search.SearchResultList',{
 				xtype: 'list',
 				itemId: 'resultlist',
 				mode: 'MULTI',
-				onItemDisclosure: true,
+				onItemDisclosure: true
 			}, {
 				xtype: 'toolbar',
 				docked: 'bottom',
@@ -31,11 +31,9 @@ Ext.define('cfa.view.search.SearchResultList',{
 						xtype: 'button',
 						text: 'Reset',
 						action: 'resetselection'
-					},
-					
+					}
 				]
 			}
-			
 		]
 	}
 })

@@ -23,7 +23,4 @@ Ext.define('cfa.store.SearchCases', {
     updateQueryParam: function(newParam, oldParam) {
     	this.getProxy().setQueryParam(newParam);
     }
-    
-   
-    
 });

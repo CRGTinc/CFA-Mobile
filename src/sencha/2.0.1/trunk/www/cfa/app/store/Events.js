@@ -17,6 +17,6 @@ Ext.define('cfa.store.Events',{
 			},
 			sortProperty: 'date',
     		direction: 'ASC'
-		},
+		}
 	}	
 })

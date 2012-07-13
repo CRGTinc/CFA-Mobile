@@ -15,7 +15,7 @@ Ext.define('cfa.model.Contact',{
 			{name: 'sreet2', type: 'string'},
 			{name: 'city', type: 'string'},
 			{name: 'state', type: 'string'},
-			{name: 'zip', type: 'int'},
+			{name: 'zip', type: 'int'}
 		]	
 	}	
 });

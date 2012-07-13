@@ -8,7 +8,7 @@ Ext.define("cfa.view.event.EventView", {
 	config: {
 		title:'Events',
 		layout: 'hbox',
-		eventStore: null,
+		eventStore: null
 	},
 	
 	
@@ -17,19 +17,18 @@ Ext.define("cfa.view.event.EventView", {
 		this.callParent(arguments);
 		cfa.app.helpUrl = "Event";
 		var topTitle = {
-			xtype:'toolbar',
-			title:"Events",
-			docked:'top',
-			
+			xtype: 'toolbar',
+			title: "Events",
+			docked: 'top'
 		};
 		
 		var bottombar = {
 			xtype:'toolbar',
 			items:[
-				{xtype:'button',align:'left',iconMask:true,iconCls:'refresh',handler:this.onRefreshClick, scope:this},
-				{xtype:'spacer'},
-				{xtype:'button',text:"Month",align:'right', handler:this.monthGroupClick, scope:this},
-				{xtype:'button',text:"Location",align:'right', handler:this.officeGroupClick, scope:this},
+				{xtype: 'button', align: 'left', iconMask: true, iconCls: 'refresh', handler: this.onRefreshClick, scope: this},
+				{xtype: 'spacer'},
+				{xtype: 'button', text: "Month", align: 'right', handler: this.monthGroupClick, scope: this},
+				{xtype: 'button', text: "Location", align: 'right', handler: this.officeGroupClick, scope: this}
 				
 			],
 			docked:'bottom',
@@ -38,16 +37,16 @@ Ext.define("cfa.view.event.EventView", {
 		var eventsList = {
 			xtype: 'events_list',
 			store: this.getEventStore().load(),
-			listeners:{
-				select : {fn:this.onItemSelected, scope:this}
+			listeners: {
+				select : {fn: this.onItemSelected, scope: this}
         	}
 		};
 		
 		var leftPanel = {
-			xtype:'panel',
-			layout:'fit',
-			flex:1,
-			items:[
+			xtype: 'panel',
+			layout: 'fit',
+			flex: 1,
+			items: [
 				topTitle,
 				eventsList,
 				bottombar
@@ -59,23 +58,22 @@ Ext.define("cfa.view.event.EventView", {
 			flex: 2
 		}
 		
-		this.add([leftPanel,eventDetail])		
+		this.add([leftPanel, eventDetail])		
 	},
 		
-	onItemSelected: function(list,record,opt){
-		this.fireEvent('displayEventDetailCommand',this,record);
+	onItemSelected: function(list, record, opt){
+		this.fireEvent('displayEventDetailCommand', this, record);
 	},
 	
 	onRefreshClick: function(){
-		this.fireEvent('reloadDataCommand',this);		
+		this.fireEvent('reloadDataCommand', this);		
 	},
 	
 	monthGroupClick: function(){
-		this.fireEvent('groupByMonthCommand',this);		
+		this.fireEvent('groupByMonthCommand', this);		
 	},
 	
 	officeGroupClick: function(){
-		this.fireEvent('groupByOfficeCommand',this);
-	},	 
-	
+		this.fireEvent('groupByOfficeCommand', this);
+	}
 });

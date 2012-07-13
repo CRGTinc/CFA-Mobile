@@ -50,7 +50,7 @@ Ext.define('cfa.controller.event.EventController',{
 		Ext.getStore("Events").load();		
 	},
 	
-	groupByOffice: function(obj){
+	groupByOffice: function(obj) {
 		var store  = obj.getEventStore().load();
 		var grouper = {
 			groupFn: function(record) {
@@ -61,5 +61,5 @@ Ext.define('cfa.controller.event.EventController',{
 		};
 		store.setGrouper(grouper);		
 		Ext.getStore("Events").load();
-	},
+	}
 })

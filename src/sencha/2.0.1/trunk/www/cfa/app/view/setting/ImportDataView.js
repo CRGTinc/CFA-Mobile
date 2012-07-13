@@ -21,7 +21,7 @@ Ext.define('cfa.view.setting.ImportDataView', {
 				id: 'importlist',
 				itemTpl : "{name}",
 				onItemDisclosure: true,
-				grouped : true,
+				grouped : true
 			}]
 		}]
 
