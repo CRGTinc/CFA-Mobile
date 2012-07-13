@@ -67,9 +67,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 						var reader = new FileReader();
 						reader.onloadend = function(evt) {
 							Formpod.importData(evt.target.result, function() {
-								Ext.Msg.alert("Import Data", "Import data succesfully", function() {
-									me.getImportListView().hide();
-								}, me);
+								Ext.Msg.alert("Import Data", "Import data succesfully", Ext.emptyFn, me);
 
 							});
 						};
@@ -79,6 +77,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 				}, fail);
 
 			}, fail);
+			me.getImportListView().hide();
 
 		} else {
 			if (me.getCasesStore() == undefined) {

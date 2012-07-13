@@ -158,9 +158,8 @@ var Formpod = {
 				inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
 				referenceView = view;
 				inputView.getComponent('topbar').setTitle(view.getLabel());
-				Ext.Viewport.removeAt(1);
 				Ext.Viewport.add(inputView);
-				Ext.Viewport.setActiveItem(1);
+				inputView.show();
 
 				if (view.getValue() && view.getValue().trim() != '') {
 					inputView.getComponent('inputfield').setValue(view.getValue());
@@ -722,6 +721,29 @@ var Formpod = {
 		} catch(error) {
 			return 0;
 		}
+
+		if ( importedData instanceof Array) {
+			var processed = 0;
+			var length = importedData.length;
+
+			for (var i = 0; i < importedData.length; i++) {
+				this.doImportDevice(parentNode, importedData[i], function(obj) {
+					processed++;
+
+					if (processed == length && typeof (callback) == 'function') {
+						callback();
+					}
+				})
+			}
+		} else {
+			this.doImportDevice(parentNode, importedData, callback);
+		}
+
+	},
+
+	doImportDevice : function(parentNode, data, callback) {
+		var me = this;
+		var importedData = data;
 		delete importedData.id;
 
 		me.saveInstanceWithImages(importedData, function(obj) {
@@ -742,11 +764,10 @@ var Formpod = {
 
 			if (length == 0 && typeof (callback) == 'function')
 				callback(obj);
-
-			return 0;
 		});
+		return 0;
 	},
-	
+
 	importData : function(data, callback) {
 		console.log("here");
 
@@ -759,7 +780,6 @@ var Formpod = {
 		} catch(error) {
 			return 1;
 		}
-		
 		delete importedData.id;
 
 		me.saveInstanceWithImages(importedData, function(obj) {
