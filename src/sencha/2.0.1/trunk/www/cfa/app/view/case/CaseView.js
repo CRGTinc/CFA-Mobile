@@ -66,7 +66,7 @@ Ext.define("cfa.view.case.CaseView", {
                                         xtype: 'label',
                                         id: 'casecontextlabel'
                                     }
-                                ],
+                                ]
                             }, {
                                 xtype: 'panel',
                                 baseCls: 'panel-shadow',

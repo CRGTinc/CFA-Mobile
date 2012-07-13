@@ -19,7 +19,7 @@ Ext.define('cfa.controller.event.EventController',{
 				reloadDataCommand : 'reloadData',
 				groupByOfficeCommand : 'groupByOffice',
 				groupByMonthCommand : 'groupByMonth'				
-			},
+			}
 		}		
     },
 	

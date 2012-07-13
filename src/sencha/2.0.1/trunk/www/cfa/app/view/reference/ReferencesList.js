@@ -8,7 +8,7 @@ Ext.define('cfa.view.reference.ReferencesList',{
 		loadingText: "Loading reference...",
 	    itemTpl: '</pre><div>{title}</div><div><font size="-1">{description}</font></div><pre>',
 		grouped: true			
-    },
+    }
 
 	
 })

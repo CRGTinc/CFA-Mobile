@@ -9,12 +9,12 @@ Ext.define('cfa.controller.Dashboard', {
 
         control: {
             dashboards: {
-                itemtap: 'onDashboardItemTap',
+                itemtap: 'onDashboardItemTap'
             },
             
 			homebtn: {
 			   tap: 'goHome'
-			},			
+			}
         },
 
         currentRecord: null,

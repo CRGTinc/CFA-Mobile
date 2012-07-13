@@ -45,7 +45,7 @@ FD_Forms ['Case Form'] =
                     {name: "SubmDate", type: "datepickerfield", label: "Submitted Date", value: "", required: false, source: "SubmDate", helpText: "Help"},
                     {name: "CompletionNotes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
                 {name: "efs", type: "endfieldset"},
-            {name: "efs", type: "endfieldset"},
+            {name: "efs", type: "endfieldset"}
         ]
 	};
 	
@@ -80,7 +80,7 @@ FD_Forms ['System Form'] =
 			        {name: "DevModel", type: "textfield", label: "System Model", value: "", required: false, source: "DevModel", helpText: "Help"},
 			        {name: "DevSN", type: "textfield", label: "System SN#", value: "", required: false, source: "DevSN", helpText: "Help"},
 			        {name: "DevType", type: "textfield", label: "System Type", value: "", required: false, source: "DevType", helpText: "Help"},
-			        {name: "SystOS", type: "selectfield", label: "System OS", value: [ {value:'WinXP', name:'Windows XP'}, {value:'Win7', name:'Windows 7'}, {value:'Win8', name:'Windows 8'}, {value:'WinVista', name:'Windows Vista'}, {value:'OSX', name:'Mac OS X'}, {value:'Linux', name:'Linux'}, {value:'Solaris', name:'Solaris'}, {value:'Other', name:'Other (please add note)'},], required: false, source: "SystOS", helpText: "Help"},
+			        {name: "SystOS", type: "selectfield", label: "System OS", value: [ {value:'WinXP', name:'Windows XP'}, {value:'Win7', name:'Windows 7'}, {value:'Win8', name:'Windows 8'}, {value:'WinVista', name:'Windows Vista'}, {value:'OSX', name:'Mac OS X'}, {value:'Linux', name:'Linux'}, {value:'Solaris', name:'Solaris'}, {value:'Other', name:'Other (please add note)'}], required: false, source: "SystOS", helpText: "Help"},
 			        {name: "SystBootOrder", type: "textfield", label: "System Boot Order", value: "", required: false, source: "SystBootOrder", helpText: "Help"},
 			        {name: "Notes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
 				{name: "efs", type: "endfieldset"},
@@ -119,7 +119,7 @@ FD_Forms ['System Form'] =
 				    {name: "CustodyFlag", type: "checkboxfield", label: "System Is In My Custody", value: "", required: false, source: "CustodyFlag", helpText: "Help"},
 				    {name: "SeizureNotes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
 				{name: "efs", type: "endfieldset"},
-			{name: "efs", type: "endfieldset"},
+			{name: "efs", type: "endfieldset"}
         
 		]
 	
@@ -185,7 +185,7 @@ FD_Forms ['Storage Form'] =
 				    {name: "SeizureNotes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
 		        {name: "efs", type: "endfieldset"},
             
-		    {name: "efs", type: "endfieldset"},
+		    {name: "efs", type: "endfieldset"}
 		]
 	
 	};
@@ -248,7 +248,7 @@ FD_Forms ['Media Form'] =
 				    {name: "SeizureNotes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
 			    {name: "efs", type: "endfieldset"},
 
-           {name: "efs", type: "endfieldset"},
+           {name: "efs", type: "endfieldset"}
 
        ]
 	};
@@ -313,7 +313,7 @@ FD_Forms ['Mobile Form'] =
 				    {name: "CustodyFlag", type: "checkboxfield", label: "Mobile Device Is In My Custody", value: "", required: false, source: "CustodyFlag", helpText: "Help"},
 				    {name: "SeizureNotes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
 		        {name: "efs", type: "endfieldset"},
-		    {name: "efs", type: "endfieldset"},
+		    {name: "efs", type: "endfieldset"}
 		]
 	
 	};
@@ -365,7 +365,7 @@ FD_Forms ['AR Form'] =
             {name: "SpecialConsiderations", type: "textareafield", showPopup: true, label: "Special Timing Considerations", value: "", required: false, source: "SpecialConsiderations", helpText: "Help"},
             {name: "SpecialSupport", type: "textareafield", showPopup: true, label: "Special Support Request", value: "", required: false, source: "SpecialSupport", helpText: "Help"},
             {name: "Keywords", type: "textfield", label: "Keyword List", value: "", required: false, source: "Keyword", helpText: "Help"},
-            {name: "Notes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
+            {name: "Notes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"}
 		]
 	};	
 	
@@ -383,6 +383,6 @@ FD_Forms ['BR Form'] =
             {name: "PoE", type: "textfield", label: "Port of Entry", value: "", required: false, source: "PoE", helpText: "Help"},
             {name: "SearchStart", type: "textfield", label: "Search Initiated Date/Time", value: "", required: false, source: "SearchStart", helpText: "Help"},
             {name: "SearchEnd", type: "textfield", label: "Search Completed Date/Time", value: "", required: false, source: "SearchEnd", helpText: "Help"},
-            {name: "Notes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"},
+            {name: "Notes", type: "textareafield", showPopup: true, label: "Notes", value: "", required: false, source: "Notes", helpText: "Help"}
         ]
 	};

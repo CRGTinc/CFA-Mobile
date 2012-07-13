@@ -17,7 +17,7 @@ Ext.define('cfa.view.feedback.FeedbackView', {
                         xtype: 'fieldset',
                         title: 'Please enter your feedback below:',
                         defaults: {
-                            required: true,
+                            required: true
                         },
                         items: [{
                                 xtype: 'textareafield',

@@ -34,7 +34,7 @@ var Formpod = {
 								store : {
 									data : finfo.value
 								},
-								labelWrap : true,
+								labelWrap : true
 							};
 						} else {
 							fitem = {

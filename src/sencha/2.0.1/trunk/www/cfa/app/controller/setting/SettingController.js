@@ -11,7 +11,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 			main : 'main',
 			resetDataButton : 'button[action = resetdatabtn]',
 			importDataButton : 'button[action = importdatabtn]',
-			saveUserDataButton : 'button[action = saveuserdata]',
+			saveUserDataButton : 'button[action = saveuserdata]'
 		},
 
 		control : {
@@ -152,7 +152,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 			disclose : {
 				fn : this.onImportListItemDisclosure,
 				scope : me
-			},
+			}
 		};
 
 		cfa.helper.PhoneGapHelper.loadImportedData(function(result) {

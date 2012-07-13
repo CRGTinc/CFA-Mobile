@@ -30,7 +30,7 @@ Ext.define('cfa.controller.contact.ContactController', {
 			}
 		},
 
-		contactView : null,
+		contactView : null
 	},
 
 	displayContactDetail : function(list, record) {

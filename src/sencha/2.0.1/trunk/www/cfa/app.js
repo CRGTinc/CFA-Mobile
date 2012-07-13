@@ -49,7 +49,7 @@ Ext.application({
 					else {
 						return Ext.create('cfa.store.LSContacts');
 					}
-				},
+				}
 				
 			},
 			
@@ -63,7 +63,7 @@ Ext.application({
 					else {					
 						return Ext.create('cfa.store.EventsLocal' );
 					}
-				},
+				}
 					
 			},
 			
@@ -77,7 +77,7 @@ Ext.application({
 					else {					
 						return Ext.create('cfa.store.ReferencesLocal' );
 					}
-				},
+				}
 			}
 		   	
     	});    	

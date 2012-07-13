@@ -9,7 +9,7 @@ Ext.define('cfa.store.Events',{
 			url : "data/Events.csv",
 			reader : {
 				type:"csv"
-			},	
+			}
 		},
 		grouper: {			
 			groupFn: function(record) {

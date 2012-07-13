@@ -25,7 +25,7 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 			}
 		},
 		
-		referenceView: null,
+		referenceView: null
     },
 	
 	openReferenceResource: function(list, record) {

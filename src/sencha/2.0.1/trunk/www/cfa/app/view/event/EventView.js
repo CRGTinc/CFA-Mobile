@@ -31,7 +31,7 @@ Ext.define("cfa.view.event.EventView", {
 				{xtype: 'button', text: "Location", align: 'right', handler: this.officeGroupClick, scope: this}
 				
 			],
-			docked:'bottom',
+			docked:'bottom'
 		};
 		
 		var eventsList = {

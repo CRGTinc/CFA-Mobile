@@ -32,7 +32,7 @@ Ext.define('cfa.controller.search.SearchController', {
 
 			searchView : {
 				'pop' : 'onPop',
-				'back' : 'onBack',
+				'back' : 'onBack'
 			},
 
 			onSaveDeviceButtonClick : {
@@ -84,7 +84,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			disclose : {
 				fn : this.onResultsListItemDisclosure,
 				scope : this
-			},
+			}
 		};
 
 		var store = Ext.create('cfa.store.SearchCases', {
