@@ -13,6 +13,7 @@ Ext.define('cfa.view.search.SearchResultList',{
 				onItemDisclosure: true
 			}, {
 				xtype: 'toolbar',
+				itemId: 'actionbar',
 				docked: 'bottom',
 				layout: {
 					align: 'center',

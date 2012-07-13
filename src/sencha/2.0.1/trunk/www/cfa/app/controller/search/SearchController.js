@@ -100,6 +100,8 @@ Ext.define('cfa.controller.search.SearchController', {
 			this.setCurrentList('DeviceList');
 		} else {
 			this.setCurrentList('CaseList');
+			this.getResultListView().getComponent('actionbar').hide();
+			this.getResultListView().getComponent('resultlist').setMode('SINGLE');
 		}
 
 		this.getSearchInputField().show();
