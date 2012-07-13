@@ -339,6 +339,8 @@ Ext.define('cfa.controller.case.CaseController', {
 				
 			var formId = currentRecord.get('form').PhotoId;
 			imageStore.add({formId: formId, srcImage: "data:image/png;base64," + imageData});
+			var length = me.getImageStore().getData().length - 1 ;
+			me.getImageList().getScrollable().getScroller().scrollTo( 330 * length,0);
 		}
 		
 		var onPhotoDataError = function(message) {
@@ -498,13 +500,10 @@ Ext.define('cfa.controller.case.CaseController', {
 				inline : {
 					wrap : false
 				},
-				layout : 'fit',
-				height : 330,
-				flex : 2,
-				scrollable : {
-					direction : 'horizontal',
-					directionLock : true
+				scrollable: {
+					direction: 'horizontal'
 				},
+				flex : 2,
 				store : this.getImageStore()
 			});
 			
