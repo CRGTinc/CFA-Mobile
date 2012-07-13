@@ -263,7 +263,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		} else {
 			var me = this;
 			var selectedItems;
-			var filename = Ext.util.Format.date(new Date(), 'Ymd');
+			var filename = 'Device-'+Ext.util.Format.date(new Date(), 'Ymd');
 
 			selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
 
