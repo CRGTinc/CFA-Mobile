@@ -769,8 +769,6 @@ var Formpod = {
 	},
 
 	importData : function(data, callback) {
-		console.log("here");
-
 		var me = this;
 		var importedData = data;
 
@@ -882,7 +880,6 @@ var Formpod = {
 			} else {
 				if (engine.attachment == "photo" && field.name == "PhotoId") {
 					newPhotoId = me.randomUUID();
-					console.log(newPhotoId);
 					formdata = formdata.concat('"' + field.name + '": "' + newPhotoId + '",');
 				} else {
 					formdata = formdata.concat('"' + field.name + '": "' + value + '",');

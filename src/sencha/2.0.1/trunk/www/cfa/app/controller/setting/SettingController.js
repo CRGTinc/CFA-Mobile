@@ -188,8 +188,8 @@ Ext.define('cfa.controller.setting.SettingController', {
 	confirmResetData2 : function(button) {
 		if (button == 'yes') {
 			var casesStore = Ext.getStore('Cases');
-			casesStore.getProxy().clear();
-			casesStore.load();
+			casesStore.getNode().removeAll();
+			casesStore.sync();
 
 			var imageStore = Ext.create('cfa.store.LSImages');
 			imageStore.load(function() {

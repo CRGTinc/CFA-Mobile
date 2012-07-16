@@ -89,7 +89,9 @@ Ext.define('cfa.controller.case.CaseController', {
 
 		recordsPath : [],
 
-		formSelectionView : null
+		formSelectionView : null,
+		
+		imageStoreChanged: false,
 	},
 
 	initForms : function() {
@@ -175,7 +177,7 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	saveCaseData : function() {
-
+		var me = this;
 		if (this.formChanged()) {
 			var currentRecord = this.getCurrentRecord();
 
@@ -209,25 +211,28 @@ Ext.define('cfa.controller.case.CaseController', {
 				if (!phantomRecord) {
 					currentRecord.setDirty(true);
 				}
-				
-				console.log('store', store);
-				var operations = store.sync();
 
-				if (phantomRecord) {
-					var parentId = currentRecord.get('parentId');
+				var operations = store.sync({
+					callback : function() {
+						me.showCurrentRecord();
 
-					if (parentId) {
-						store.getNodeById(parentId).appendChild(currentRecord);
-					} else {
-						store.getNode().appendChild(currentRecord);
+						if (phantomRecord) {
+							var parentId = currentRecord.get('parentId');
+
+							if (parentId) {
+								store.getNodeById(parentId).appendChild(currentRecord);
+							} else {
+								store.getNode().appendChild(currentRecord);
+							}
+						}
 					}
-				}
+				});
 
 				if (this.getImageStore() != undefined) {
 					this.getImageStore().sync();
+					this.setImageStoreChanged(false);
 				}
 
-				this.showCurrentRecord();
 				engine.scrollFormToTop();
 			}
 
@@ -324,6 +329,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			});
 			var length = me.getImageStore().getData().length - 1;
 			me.getImageList().getScrollable().getScroller().scrollTo(330 * length, 0);
+			me.setImageStoreChanged(true);
 		}
 		var onPhotoDataError = function(message) {
 			console.log('Photo data error: ', message);
@@ -544,7 +550,7 @@ Ext.define('cfa.controller.case.CaseController', {
 		}
 	},
 
-	formChanged: function() {
+	formChanged : function() {
 		var currentRecord = this.getCurrentRecord();
 		var changed = false;
 
@@ -565,11 +571,14 @@ Ext.define('cfa.controller.case.CaseController', {
 				}
 			}
 		}
+		
+		if(this.getImageStoreChanged())
+			changed = true;
 
 		return changed;
 	},
 
-	confirmFormChanged: function(button) {
+	confirmFormChanged : function(button) {
 		if (button == 'yes') {
 			if (!this.saveCaseData()) {
 				return;
@@ -610,10 +619,13 @@ Ext.define('cfa.controller.case.CaseController', {
 		for (var i = 0; i < record.length; i++) {
 			imageStore.remove(record[i])
 		}
+		
+		this.setImageStoreChanged(true);
 	},
 
 	clearAttachmentData : function() {
 		var imageStore = this.getImageStore();
 		imageStore.removeAll();
+		this.setImageStoreChanged(true);
 	}
 });
