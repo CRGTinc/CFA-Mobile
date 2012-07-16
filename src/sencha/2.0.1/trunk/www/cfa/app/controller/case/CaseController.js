@@ -90,8 +90,8 @@ Ext.define('cfa.controller.case.CaseController', {
 		recordsPath : [],
 
 		formSelectionView : null,
-		
-		imageStoreChanged: false,
+
+		imageStoreChanged : false,
 	},
 
 	initForms : function() {
@@ -142,7 +142,7 @@ Ext.define('cfa.controller.case.CaseController', {
 		store.load({
 			node : currentNode,
 			scope : this,
-			callback : function() {
+			callback : function(records, operation, success) {
 				store.removed = [];
 			}
 		});
@@ -177,13 +177,12 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	saveCaseData : function() {
-		var me = this;
 		if (this.formChanged()) {
+			var me = this;
 			var currentRecord = this.getCurrentRecord();
 
 			if (currentRecord) {
 				var errors = currentRecord.validate();
-
 				if (!errors.isValid()) {
 					var errorString = '';
 					Ext.each(errors.items, function(rec, i) {
@@ -212,19 +211,22 @@ Ext.define('cfa.controller.case.CaseController', {
 					currentRecord.setDirty(true);
 				}
 
+				if (phantomRecord) {
+
+					var parentId = currentRecord.get('parentId');
+
+					if (parentId) {
+						store.getNodeById(parentId).appendChild(currentRecord);
+					} else {
+						store.getNode().appendChild(currentRecord);
+					}
+				}
+
 				var operations = store.sync({
 					callback : function() {
 						me.showCurrentRecord();
 
-						if (phantomRecord) {
-							var parentId = currentRecord.get('parentId');
-
-							if (parentId) {
-								store.getNodeById(parentId).appendChild(currentRecord);
-							} else {
-								store.getNode().appendChild(currentRecord);
-							}
-						}
+						Ext.Msg.alert("Save Data", "Data is saved successfully");
 					}
 				});
 
@@ -235,7 +237,6 @@ Ext.define('cfa.controller.case.CaseController', {
 
 				engine.scrollFormToTop();
 			}
-
 			return true;
 		}
 
@@ -557,7 +558,6 @@ Ext.define('cfa.controller.case.CaseController', {
 		if (currentRecord) {
 			var currentData = currentRecord.getData().form;
 			var engine = currentData.engineClass, formData = engine.getFormObject();
-
 			for (key in formData) {
 				if (formData[key] == '' && currentData[key] == null)
 					continue;
@@ -571,8 +571,8 @@ Ext.define('cfa.controller.case.CaseController', {
 				}
 			}
 		}
-		
-		if(this.getImageStoreChanged())
+
+		if (this.getImageStoreChanged())
 			changed = true;
 
 		return changed;
@@ -619,7 +619,7 @@ Ext.define('cfa.controller.case.CaseController', {
 		for (var i = 0; i < record.length; i++) {
 			imageStore.remove(record[i])
 		}
-		
+
 		this.setImageStoreChanged(true);
 	},
 
