@@ -36,9 +36,8 @@ Ext.define('cfa.store.CFAStore', {
         	var listeners = me.getBatchListeners(),
         		defaultCompleteFn = listeners.complete,
         		batch;
-        		
 	        listeners.complete = function() {
-        		Ext.callback(defaultCompleteFn, listeners.scope, batch);
+        		Ext.callback(defaultCompleteFn, listeners.scope, [batch]);
         		Ext.callback(config.callback, config.scope, [this, operations]);
     	    };
         		

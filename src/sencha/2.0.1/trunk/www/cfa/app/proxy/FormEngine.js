@@ -188,11 +188,15 @@ Ext.define('cfa.proxy.FormEngine', {
 		Formpod.saveInstance(rawData, function(obj) {
         	formData['id'] = obj.id;
         	record.set('id', obj.id);
-        	record.set('form', formData);
         	record.commit();
                     
-        	if (formData.parentId)
-	        	Formpod.relateObject(formData.id,formData.parentId, 'hasChild');
+        	if (record.get('parentId')) {
+        		var parentId = parseInt(record.get('parentId'));
+        		
+        		if (parentId != NaN) {
+	        		Formpod.relateObjectById(parentId, obj.id, 'hasChild');
+	        	}
+	        }
 
 	        if (typeof callback == 'function') {
     	        callback(record);
