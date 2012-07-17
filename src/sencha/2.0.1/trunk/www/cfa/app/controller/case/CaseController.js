@@ -354,7 +354,9 @@ Ext.define('cfa.controller.case.CaseController', {
 					navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, {
 						quality : 50,
 						destinationType : navigator.camera.DestinationType.DATA_URL,
-						encodingType : navigator.camera.EncodingType.PNG
+						encodingType : navigator.camera.EncodingType.PNG,
+						sourceType : Camera.PictureSourceType.CAMERA,						
+						correctOrientation: true,
 					});
 					actionSheet.hide();
 				}
