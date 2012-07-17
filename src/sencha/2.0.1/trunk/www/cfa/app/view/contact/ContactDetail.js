@@ -36,7 +36,7 @@ Ext.define('cfa.view.contact.ContactDetail', {
 				readOnly : true
 			}, {
 				xtype : 'textfield',
-				name : 'mobile_phone',
+				name : 'cell',
 				label : 'Cell',
 				readOnly : true
 			}]
