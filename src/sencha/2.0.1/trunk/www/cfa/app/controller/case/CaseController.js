@@ -92,6 +92,8 @@ Ext.define('cfa.controller.case.CaseController', {
 		formSelectionView : null,
 
 		imageStoreChanged : false,
+		
+		caseView: null,
 	},
 
 	initForms : function() {
@@ -109,8 +111,8 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	showCasePage : function() {
 		this.initForms();
-		var caseView = Ext.create('cfa.view.case.CaseView');
-		this.getMain().push(caseView);
+		this.setCaseView(Ext.create('cfa.view.case.CaseView'));
+		this.getMain().push(this.getCaseView());
 	},
 
 	onPop : function(navigation, view, eOpts) {
@@ -222,10 +224,15 @@ Ext.define('cfa.controller.case.CaseController', {
 					}
 				}
 
+				this.getCaseView().setMasked({
+					xtype : 'loadmask',
+					message : 'Saving...'
+				});
+
 				var operations = store.sync({
 					callback : function() {
 						me.showCurrentRecord();
-
+						me.getCaseView().unmask();
 						Ext.Msg.alert("Save Data", "Data saved successfully");
 					}
 				});
@@ -509,14 +516,6 @@ Ext.define('cfa.controller.case.CaseController', {
 		var toolbar = this.getCaseToolbar();
 
 		if (record) {
-			/* if (record.phantom) {
-			 this.getDeleteCaseDataButton().hide();
-			 this.getExportCaseDataButton().hide();
-			 } else {
-			 this.getDeleteCaseDataButton().show();
-			 this.getExportCaseDataButton().show();
-			 } */
-
 			var engine = record.get('form').engineClass;
 
 			if (engine.attachment == "photo") {
