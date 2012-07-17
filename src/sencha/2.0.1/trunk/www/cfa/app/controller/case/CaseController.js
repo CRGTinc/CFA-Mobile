@@ -226,7 +226,7 @@ Ext.define('cfa.controller.case.CaseController', {
 					callback : function() {
 						me.showCurrentRecord();
 
-						Ext.Msg.alert("Save Data", "Data is saved successfully");
+						Ext.Msg.alert("Save Data", "Data saved successfully");
 					}
 				});
 
