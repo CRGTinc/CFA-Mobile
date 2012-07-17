@@ -155,7 +155,6 @@ Ext.define('cfa.controller.search.SearchController', {
 			view.getComponent('editorpanel').removeAll(false);
 			if (this.getCurrentView() == 'ResultList')
 				this.getResultListView().getComponent('resultlist').deselectAll();
-
 		} else {
 			this.setResultListView(null);
 		}
@@ -164,35 +163,42 @@ Ext.define('cfa.controller.search.SearchController', {
 	},
 
 	saveDeviceData : function() {
-		var currentRecord = this.getCurrentRecord(), store;
+		if (this.formChanged()) {
+			var currentRecord = this.getCurrentRecord(), store, me = this;
 
-		if (currentRecord) {
-			var errors = currentRecord.validate();
-
-			if (!errors.isValid()) {
-				var errorString = '';
-				Ext.each(errors.items, function(rec, i) {
-					errorString += rec.getMessage() + "<br>";
+			if (currentRecord) {
+				this.getSearchView().getComponent('deviceeditor').setMasked({
+					xtype : 'loadmask',
+					message : 'Saving...'
 				});
-				Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
-				return false;
+				var errors = currentRecord.validate();
+
+				if (!errors.isValid()) {
+					var errorString = '';
+					Ext.each(errors.items, function(rec, i) {
+						errorString += rec.getMessage() + "<br>";
+					});
+					Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
+					return false;
+				}
+
+				store = this.getResultListView().getComponent('resultlist').getStore();
+
+				var form = currentRecord.get('form'), engine = form.engineClass;
+				form = engine.getFormObject();
+				currentRecord.beginEdit();
+				currentRecord.set('form', form);
+				currentRecord.set('text', form[Formpod.FormTypes[engine.name].displayProperty]);
+				currentRecord.endEdit();
+
+				store.sync({
+					callback : function() {
+						me.getSearchView().getComponent('deviceeditor').unmask();
+						engine.scrollFormToTop();
+						Ext.Msg.alert("Save Data", "Data saved successfully");
+					}
+				});
 			}
-
-			store = this.getResultListView().getComponent('resultlist').getStore();
-
-			var form = currentRecord.get('form'), engine = form.engineClass;
-			form = engine.getFormObject();
-			currentRecord.beginEdit();
-			currentRecord.set('form', form);
-			currentRecord.set('text', form[Formpod.FormTypes[engine.name].displayProperty]);
-			currentRecord.endEdit();
-			store.sync();
-		}
-
-		if (currentRecord) {
-			var formData = currentRecord.get('form');
-			var engine = formData.engineClass;
-			engine.scrollFormToTop();
 		}
 	},
 
@@ -210,38 +216,44 @@ Ext.define('cfa.controller.search.SearchController', {
 
 	onBack : function() {
 		if (this.getCurrentView() == 'DeviceEditor') {
-			var currentRecord = this.getCurrentRecord();
-			var changed = false;
-
-			if (currentRecord) {
-				var currentData = currentRecord.getData().form;
-				var engine = currentData.engineClass, formData = engine.getFormObject();
-
-				for (key in formData) {
-					if (formData[key] == '' && currentData[key] == null)
-						continue;
-
-					if (formData[key] == null && currentData[key] == '')
-						continue;
-
-					if (formData[key] != currentData[key]) {
-						changed = true;
-						break;
-					}
-				}
-			}
-
-			if (changed) {
-				Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+			if (this.formChanged()) {
+				Ext.Msg.confirm("Data Changed", "Do you want to save changes information?", this.confirmFormChanged, this);
 			}
 		}
 
 		if (this.getCurrentView() == 'DeviceEditor' || this.getCurrentView() == 'NotesReport') {
 			this.setCurrentView('ResultList')
+			this.getResultListView().getComponent('resultlist').getStore().clearFilter(false);
+			this.getSearchInputField().show();
 		} else if (this.getCurrentView() == 'ResultList') {
 			this.setCurrentView('SearchTemplate');
 			this.getSearchInputField().hide();
 		}
+	},
+
+	formChanged : function() {
+		var currentRecord = this.getCurrentRecord();
+		var changed = false;
+
+		if (currentRecord) {
+			var currentData = currentRecord.getData().form;
+			var engine = currentData.engineClass, formData = engine.getFormObject();
+
+			for (key in formData) {
+				if (formData[key] == '' && currentData[key] == null)
+					continue;
+
+				if (formData[key] == null && currentData[key] == '')
+					continue;
+
+				if (formData[key] != currentData[key]) {
+					changed = true;
+					break;
+				}
+			}
+		}
+
+		return changed;
 	},
 
 	confirmFormChanged : function(button) {
@@ -262,7 +274,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		} else {
 			var me = this;
 			var selectedItems;
-			var filename = 'Device-'+Ext.util.Format.date(new Date(), 'Ymd');
+			var filename = 'Device-' + Ext.util.Format.date(new Date(), 'Ymd');
 
 			selectedItems = this.getResultListView().getComponent('resultlist').getSelection();
 
@@ -375,28 +387,27 @@ Ext.define('cfa.controller.search.SearchController', {
 		var me = this;
 		this.setCurrentView("NotesView")
 		var notesView = Ext.create('cfa.view.search.NotesReportView');
-		
+
 		var setView = function(formData, level) {
 			for (var i = 0; i < formData.length; i++) {
 				var view = Ext.create('Ext.form.FieldSet', {
 					title : formData[i].data.name.replace(/"/g, ''),
-					margin: '0 0 0 '  + level*25,
-					padding: 10,
+					margin : '0 0 0 ' + level * 25,
+					padding : 10,
 				});
 
 				var notes = formData[i].data.values;
 				view = me.createNotePanel(notes, view);
 
 				notesView.add(view);
-				
+
 				if (formData[i].childs) {
 					level++;
 					setView(formData[i].childs, level);
 				}
 			}
 		}
-		
-		setView(formData,1);	
+		setView(formData, 1);
 		me.getSearchView().push(notesView);
 	},
 
@@ -455,27 +466,27 @@ Ext.define('cfa.controller.search.SearchController', {
 			}
 		}
 		formArray['data'] = {};
-		
- 		formArray['data']['values'] = values;
+
+		formArray['data']['values'] = values;
 
 		if (formData.engineClass.name == "Case Form") {
-			formArray['data']['name'] =  formData['CaseTitle'];
+			formArray['data']['name'] = formData['CaseTitle'];
 		} else if (formData.engineClass.name == "System" || formData.engineClass.name == "Storage" || formData.engineClass.name == "Media" || formData.engineClass.name == "Mobile") {
-			formArray['data']['name'] =  formData['DevName'];
+			formArray['data']['name'] = formData['DevName'];
 		} else if (formData.engineClass.name == "Photo/Attachment") {
-			formArray['data']['name'] =  formData['AlbumName'];
+			formArray['data']['name'] = formData['AlbumName'];
 		} else if (formData.engineClass.name == "Assistance Request Form") {
-			formArray['data']['name'] =  formData['ProsecutorName'];
+			formArray['data']['name'] = formData['ProsecutorName'];
 		} else if (formData.engineClass.name == "Border Response Form") {
-			formArray['data']['name'] =  formData['SubjectName'];
+			formArray['data']['name'] = formData['SubjectName'];
 		}
-		
+
 		if ( typeof callback === 'function') {
 			callback(formArray);
 		}
 	},
-	
-	getSectionNameForKey: function(key) {
+
+	getSectionNameForKey : function(key) {
 		if (key == 'GeneralNotes')
 			return 'General';
 		else if (key == 'OnsiteNotes')

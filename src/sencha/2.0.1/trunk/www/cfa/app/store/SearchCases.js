@@ -3,7 +3,8 @@ Ext.define('cfa.store.SearchCases', {
 
     requires: [
         'cfa.model.Case',
-        'cfa.proxy.FormEngine'
+        'cfa.proxy.FormEngine',
+        'cfa.store.CFACustomStore'
     ],
 
     config :{
