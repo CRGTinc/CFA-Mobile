@@ -66,9 +66,13 @@ Ext.define('cfa.controller.setting.SettingController', {
 					entry.file(function(file) {
 						var reader = new FileReader();
 						reader.onloadend = function(evt) {
+							me.getSettingView().setMasked({
+								xtype : 'loadmask',
+								message : 'Importing...'
+							});
 							Formpod.importData(evt.target.result, function() {
 								Ext.Msg.alert("Import Data", "Import data succesfully", Ext.emptyFn, me);
-
+								me.getSettingView().unmask();
 							});
 						};
 						reader.readAsText(file);
@@ -123,9 +127,14 @@ Ext.define('cfa.controller.setting.SettingController', {
 				entry.file(function(file) {
 					var reader = new FileReader();
 					reader.onloadend = function(evt) {
-						Formpod.importDevice(record.getData().form,evt.target.result, function() {
+						me.getSettingView().setMasked({
+							xtype : 'loadmask',
+							message : 'Importing...'
+						});
+						Formpod.importDevice(record.getData().form, evt.target.result, function() {
 							Ext.Msg.alert("Import Data", "Import data succesfully", function() {
-								}, me);
+							}, me);
+							me.getSettingView().unmask();
 						});
 					};
 					reader.readAsText(file);
@@ -139,12 +148,12 @@ Ext.define('cfa.controller.setting.SettingController', {
 	},
 
 	importData : function() {
-		
+
 		if (Ext.os.is.Desktop) {
 			Ext.Msg.alert("Import Data", "Currently support only for iPad.");
 			return;
 		}
-		
+
 		var me = this;
 
 		var listener = {
