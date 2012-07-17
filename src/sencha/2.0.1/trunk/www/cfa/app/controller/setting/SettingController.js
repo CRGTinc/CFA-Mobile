@@ -125,7 +125,6 @@ Ext.define('cfa.controller.setting.SettingController', {
 					reader.onloadend = function(evt) {
 						Formpod.importDevice(record.getData().form,evt.target.result, function() {
 							Ext.Msg.alert("Import Data", "Import data succesfully", function() {
-									me.getImportListView().hide();
 								}, me);
 						});
 					};
@@ -135,6 +134,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 			}, fail);
 
 		}, fail);
+		me.getImportListView().hide();
 
 	},
 
