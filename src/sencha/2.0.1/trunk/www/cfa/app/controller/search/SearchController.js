@@ -432,6 +432,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			deviceEditor.getComponent('editorpanel').add(form);
 			this.getSearchView().push(deviceEditor);
 			this.setCurrentView('DeviceEditor');
+			this.getSearchInputField().hide();
 		} else {
 			me.getNotesForCase(this.getCurrentRecord().getData().form, function(formsArray) {
 				var formData = [];
@@ -439,6 +440,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				me.showNotesForCase(formData);
 			});
 			this.setCurrentView('NotesReport');
+			this.getSearchInputField().hide();
 		}
 	},
 
