@@ -495,7 +495,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			imageStore.load();
 			this.setImageStore(imageStore);
 			var imageList = Ext.create('Ext.List', {
-				itemTpl : new Ext.XTemplate('<img src="{srcImage}"  width="320" height="240"/>'),
+				itemTpl : new Ext.XTemplate('<img src="{srcImage}"  style = "max-width:320px; max-height:240px;"/>'),
 				inline : {
 					wrap : false
 				},
