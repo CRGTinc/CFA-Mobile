@@ -18,6 +18,8 @@ $active-color: #3f4c68;
 @include sencha-layout;
 @include sencha-form;
 @include sencha-sheet;
+@include sencha-loading-spinner;
+@include sencha-msgbox;
 
 
 
@@ -119,10 +121,8 @@ $active-color: #3f4c68;
   border-radius: 12px;
   margin: 10px;
 }
+
 #email .x-input-url {
   color: #0000FF;
   text-decoration: underline;
 }
-
-
-
