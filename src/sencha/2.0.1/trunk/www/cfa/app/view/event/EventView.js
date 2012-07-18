@@ -27,7 +27,7 @@ Ext.define("cfa.view.event.EventView", {
 			items:[
 				{xtype: 'button', align: 'left', iconMask: true, iconCls: 'refresh', handler: this.onRefreshClick, scope: this},
 				{xtype: 'spacer'},
-				{xtype: 'button', text: "Month", align: 'right', handler: this.monthGroupClick, scope: this},
+				{xtype: 'button', text: "Date", align: 'right', handler: this.monthGroupClick, scope: this},
 				{xtype: 'button', text: "Location", align: 'right', handler: this.officeGroupClick, scope: this}
 				
 			],
