@@ -110,7 +110,6 @@ Ext.define('cfa.proxy.File', {
 	 */
 
 	setRecord : function(records, callback) {
-		console.log("set record");
 		var me = this;
 		var length = records.length;
 		var record;
@@ -143,7 +142,6 @@ Ext.define('cfa.proxy.File', {
 	},
 
 	removeRecord : function(records, callback, scope) {
-		console.log("remove record");
 		var i = 0;
 		var formId = this.getFormId();
 		var length = records.length;
@@ -154,8 +152,6 @@ Ext.define('cfa.proxy.File', {
 		}
 
 		var remove = function(index) {
-			console.log("length " + length);
-			console.log("remove " + index);
 			if (index < length) {
 				me.deleteImageByFullPath(formId,
 						records[index].getData().fullPath, function() {
@@ -228,8 +224,6 @@ Ext.define('cfa.proxy.File', {
 					}, function(parent) {
 						var directoryReader = parent.createReader();
 						directoryReader.readEntries(function(entries) {
-									console.log("success read entries"
-											+ entries);
 									success(entries);
 								}, fail)
 					}, fail);
@@ -305,7 +299,6 @@ Ext.define('cfa.proxy.File', {
 		}
 
 		var gotFileWriter = function(writer) {
-			console.log('on gotFileWriter');
 			writer.onwrite = function(evt) {
 				success();
 			};
