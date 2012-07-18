@@ -167,10 +167,20 @@ Ext.define('cfa.controller.search.SearchController', {
 			var currentRecord = this.getCurrentRecord(), store, me = this;
 
 			if (currentRecord) {
-				this.getSearchView().getComponent('deviceeditor').setMasked({
-					xtype : 'loadmask',
-					message : 'Saving...'
-				});
+				var view;
+				if (this.getCurrentView() == 'DeviceEditor') {
+					view = this.getSearchView().getComponent('deviceeditor')
+				} else if (this.getCurrentView() == 'ResultList') {
+					view = this.getResultListView();
+				}
+
+				if (view) {
+					view.setMasked({
+						xtype : 'loadmask',
+						message : 'Saving...'
+					});
+				}
+
 				var errors = currentRecord.validate();
 
 				if (!errors.isValid()) {
@@ -193,7 +203,9 @@ Ext.define('cfa.controller.search.SearchController', {
 
 				store.sync({
 					callback : function() {
-						me.getSearchView().getComponent('deviceeditor').unmask();
+						if (view) {
+							view.unmask();
+						}
 						engine.scrollFormToTop();
 						Ext.Msg.alert("Save Data", "Data saved successfully");
 					}
