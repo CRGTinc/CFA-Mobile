@@ -7,8 +7,8 @@ Ext.define("cfa.view.case.CaseView", {
         title: 'Case Data Management',
         layout: 'hbox',
         items: [{
-                xtype: 'tabpanel',
-                tabBarPosition: 'bottom',
+                xtype: 'panel',
+                layout: 'fit',
                 flex: 1,
                 items: [{
                         xtype: 'nestedlist',
@@ -34,14 +34,6 @@ Ext.define("cfa.view.case.CaseView", {
                                 }
                             ]
                         }
-                    }, {
-                        xtype: 'list',
-                        title: 'Devices',
-                        iconCls: 'settings'
-                    }, {
-                        xtype: 'panel',
-                        title: 'Search',
-                        iconCls: 'search'
                     }
                 ]
             }, {
