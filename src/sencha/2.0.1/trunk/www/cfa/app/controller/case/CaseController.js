@@ -116,9 +116,17 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	onPop : function(navigation, view, eOpts) {
-		if (view.getId() == 'caseview')
-			view.getComponent(1).getComponent(0).getComponent('casecontentpanel').getComponent('caseformpanel').removeAll(false);
-
+		if (view.getId() == 'caseview') {
+			var imagelist = Ext.getCmp('imagelist');
+			
+			if (imagelist) {
+				this.setImageStoreChanged(false);
+				this.getCaseFormPanel().removeAll(true);
+			} else {
+				this.getCaseFormPanel().removeAll(false);
+			}
+		}
+		
 		view.destroy();
 	},
 
@@ -497,6 +505,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			imageStore.load();
 			this.setImageStore(imageStore);
 			var imageList = Ext.create('Ext.List', {
+				id:'imagelist',
 				itemTpl : new Ext.XTemplate('<img src="{srcImage}"  style = "max-width:320px; max-height:240px;"/>'),
 				inline : {
 					wrap : false
