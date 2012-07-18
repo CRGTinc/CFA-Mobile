@@ -15,7 +15,7 @@ Ext.define("cfa.view.event.EventView", {
 	
 	initialize: function() {
 		this.callParent(arguments);
-		cfa.app.helpUrl = "Event";
+		cfa.app.helpUrl = "EventHelp";
 		var topTitle = {
 			xtype: 'toolbar',
 			title: "Events",

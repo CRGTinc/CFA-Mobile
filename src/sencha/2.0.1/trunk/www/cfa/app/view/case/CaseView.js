@@ -128,6 +128,6 @@ Ext.define("cfa.view.case.CaseView", {
     
     initialize: function(){
         this.callParent(arguments);
-        cfa.app.helpUrl = "Cases";
+        cfa.app.helpUrl = "CaseHelp";
     }
 });
