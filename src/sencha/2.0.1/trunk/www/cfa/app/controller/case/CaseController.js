@@ -92,8 +92,10 @@ Ext.define('cfa.controller.case.CaseController', {
 		formSelectionView : null,
 
 		imageStoreChanged : false,
-		
+				
 		caseView: null,
+		
+		currentActionSheet: null,
 	},
 
 	initForms : function() {
@@ -125,6 +127,10 @@ Ext.define('cfa.controller.case.CaseController', {
 			} else {
 				this.getCaseFormPanel().removeAll(false);
 			}
+		}
+		
+		if (this.getCurrentActionSheet()) {
+			this.getCurrentActionSheet().hide();
 		}
 		
 		view.destroy();
@@ -319,6 +325,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 			Ext.Viewport.add(actionSheet);
 			actionSheet.show();
+			this.setCurrentActionSheet(actionSheet);
 		}
 	},
 
@@ -430,6 +437,10 @@ Ext.define('cfa.controller.case.CaseController', {
 			Ext.Array.remove(recordsPath, recordsPath[recordsPath.length - 1]);
 			this.setCurrentRecord(null);
 			this.showCurrentRecord();
+		}
+		
+		if (this.getCurrentActionSheet()) {
+			this.getCurrentActionSheet().hide();
 		}
 	},
 
