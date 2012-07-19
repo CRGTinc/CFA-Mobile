@@ -259,7 +259,7 @@ Ext.define('cfa.controller.search.SearchController', {
 					
 				if ( typeof formData[key] == 'object') {
 					if (formData[key] instanceof Date) {
-						if (formData[key].toString() != currentData[key].toString())
+						if (Ext.Date.format(formData[key], Formpod.dateFormat) != Ext.Date.format(currentData[key], Formpod.dateFormat))
 							changed = true;
 					} 
 				} else if ( typeof formData[key] == 'string') {
