@@ -643,9 +643,11 @@ Ext.define('cfa.controller.case.CaseController', {
 					continue;
 
 				if ( typeof formData[key] == 'object') {
-					if (formData[key] instanceof Date) {
+					if ( typeof currentData[key] != 'undefined') {
 						if (Ext.Date.format(formData[key], Formpod.dateFormat) != Ext.Date.format(currentData[key], Formpod.dateFormat))
 							changed = true;
+					} else {
+						changed = true;
 					}
 				} else if ( typeof formData[key] == 'string') {
 					if (formData[key] != currentData[key]) {

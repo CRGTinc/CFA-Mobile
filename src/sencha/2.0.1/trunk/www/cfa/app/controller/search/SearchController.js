@@ -247,6 +247,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		var changed = false;
 
 		if (currentRecord) {
+
 			var currentData = currentRecord.getData().form;
 			var engine = currentData.engineClass, formData = engine.getFormObject();
 
@@ -256,12 +257,16 @@ Ext.define('cfa.controller.search.SearchController', {
 
 				if (formData[key] == null && currentData[key] == '')
 					continue;
-					
+
 				if ( typeof formData[key] == 'object') {
 					if (formData[key] instanceof Date) {
-						if (Ext.Date.format(formData[key], Formpod.dateFormat) != Ext.Date.format(currentData[key], Formpod.dateFormat))
+						if ( typeof currentData[key] != 'undefined') {
+							if (Ext.Date.format(formData[key], Formpod.dateFormat) != Ext.Date.format(currentData[key], Formpod.dateFormat))
+								changed = true;
+						} else {
 							changed = true;
-					} 
+						}
+					}
 				} else if ( typeof formData[key] == 'string') {
 					if (formData[key] != currentData[key]) {
 						changed = true;
