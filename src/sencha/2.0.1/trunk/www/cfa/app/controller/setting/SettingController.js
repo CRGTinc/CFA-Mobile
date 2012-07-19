@@ -71,7 +71,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 								message : 'Importing...'
 							});
 							Formpod.importData(evt.target.result, function() {
-								Ext.Msg.alert("Import Data", "Import data succesfully", Ext.emptyFn, me);
+								Ext.Msg.alert("Import Data", "Data imported successfully", Ext.emptyFn, me);
 								me.getSettingView().unmask();
 							});
 						};
@@ -132,7 +132,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 							message : 'Importing...'
 						});
 						Formpod.importDevice(record.getData().form, evt.target.result, function() {
-							Ext.Msg.alert("Import Data", "Import data succesfully", function() {
+							Ext.Msg.alert("Import Data", "Data imported successfully", function() {
 							}, me);
 							me.getSettingView().unmask();
 						});
