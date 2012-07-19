@@ -52,10 +52,12 @@ Ext.define('cfa.controller.contact.ContactController', {
 		store.clearFilter();
 
 		if (view.getValue && view.getValue != '') {
+			var temp = view.getValue().toLowerCase();
 			store.filterBy(function(record) {
-				if (record.getData().firstname.toLowerCase().indexOf(view.getValue().toLowerCase()) > -1)
+				var fullname = record.getData().firstname + ' ' +  record.getData().lastname;
+				if ( record.getData().firstname.toLowerCase().indexOf(temp) > -1 || record.getData().lastname.toLowerCase().indexOf(temp) > -1)
 					return record;
-				else if (record.getData().lastname.toLowerCase().indexOf(view.getValue().toLowerCase()) > -1)
+				else if (fullname.toLowerCase().indexOf(temp) > -1 )
 					return record;
 			});
 		}
