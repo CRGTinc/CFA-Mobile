@@ -45,7 +45,7 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		var store = this.getReferenceView().getComponent('contentpanel').getComponent('referenceslist').getStore();
 		store.clearFilter();
 		store.filterBy(function(record){
-			if (record.getData().title.toLowerCase().indexOf(view.getValue()) > -1) {
+			if (record.getData().title.toLowerCase().indexOf(view.getValue().toLowerCase()) > -1) {
 				return record;
 			}
 		});
