@@ -146,7 +146,6 @@ Ext.define('cfa.controller.search.SearchController', {
 					}
 				});
 			}
-
 		}
 	},
 
@@ -245,6 +244,7 @@ Ext.define('cfa.controller.search.SearchController', {
 
 	formChanged : function() {
 		var currentRecord = this.getCurrentRecord();
+		console.log(currentRecord);
 		var changed = false;
 
 		if (currentRecord) {
@@ -257,10 +257,17 @@ Ext.define('cfa.controller.search.SearchController', {
 
 				if (formData[key] == null && currentData[key] == '')
 					continue;
-
-				if (formData[key] != currentData[key]) {
-					changed = true;
-					break;
+					
+				if ( typeof formData[key] == 'object') {
+					if (formData[key] instanceof Date) {
+						if (formData[key].toString() != currentData[key].toString())
+							changed = true;
+					} 
+				} else if ( typeof formData[key] == 'string') {
+					if (formData[key] != currentData[key]) {
+						changed = true;
+						break;
+					}
 				}
 			}
 		}
