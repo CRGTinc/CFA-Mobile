@@ -8,12 +8,13 @@ Ext.define('cfa.store.Base',{
 	updateOfflineStore : function(newOfflineStore, oldOfflineStore) {
 		if (newOfflineStore != null) {		
 			this.addListener('load', function(me, records, successful, operation, eOpts) {
-				if (successful) {									
-					var offlineStore = me.getOfflineStore();									
-					offlineStore.removeAll(offlineStore.getRange());									
+				if (successful) {				
+					var offlineStore = me.getOfflineStore();
+					offlineStore.getProxy().clear();
 					for (var i = 0; i < records.length; i++) {
 						offlineStore.add(records[i]);										
 					};
+					console.log(offlineStore);		
 					offlineStore.sync();										
 				}
 			});
