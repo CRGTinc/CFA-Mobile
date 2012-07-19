@@ -152,7 +152,8 @@ Ext.define('cfa.controller.case.CaseController', {
 				this.getMain().doPop();
 			}
 		} else {
-			this.getMain().doPop();;
+			this.getMain().doPop();
+			;
 		}
 	},
 
@@ -633,6 +634,7 @@ Ext.define('cfa.controller.case.CaseController', {
 		if (currentRecord) {
 			var currentData = currentRecord.getData().form;
 			var engine = currentData.engineClass, formData = engine.getFormObject();
+
 			for (key in formData) {
 				if (formData[key] == '' && currentData[key] == null)
 					continue;
@@ -640,9 +642,16 @@ Ext.define('cfa.controller.case.CaseController', {
 				if (formData[key] == null && currentData[key] == '')
 					continue;
 
-				if (formData[key] != currentData[key]) {
-					changed = true;
-					break;
+				if ( typeof formData[key] == 'object') {
+					if (formData[key] instanceof Date) {
+						if (formData[key].toString() != currentData[key].toString())
+							changed = true;
+					}
+				} else if ( typeof formData[key] == 'string') {
+					if (formData[key] != currentData[key]) {
+						changed = true;
+						break;
+					}
 				}
 			}
 		}
