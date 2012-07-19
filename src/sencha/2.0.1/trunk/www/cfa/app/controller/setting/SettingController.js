@@ -210,7 +210,9 @@ Ext.define('cfa.controller.setting.SettingController', {
 		}
 	},
 	saveUserData : function() {
-		var store = Ext.getStore('Users').load(), firstname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('firstname').getValue(), lastname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('lastname').getValue();
+		var store = Ext.getStore('Users').load(),
+			firstname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('firstname').getValue(),
+		 	lastname = this.getSettingView().getComponent('settingformpanel').getComponent(0).getComponent('lastname').getValue();
 
 		store.removeAll(false);
 		store.add({

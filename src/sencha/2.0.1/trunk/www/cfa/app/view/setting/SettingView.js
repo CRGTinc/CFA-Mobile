@@ -16,11 +16,13 @@ Ext.define('cfa.view.setting.SettingView', {
 								},
 								items : [{
 											xtype : 'textfield',
+											itemId: 'firstname',
 											name : 'firstname',
 											label : 'First Name',
 											autoCapitalize : true
 										}, {
 											xtype : 'textfield',
+											itemId: 'lastname',
 											name : 'lastname',
 											label : 'Last Name',
 											autoCapitalize : true
