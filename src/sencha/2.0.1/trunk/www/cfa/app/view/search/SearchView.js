@@ -11,7 +11,8 @@ Ext.define('cfa.view.search.SearchView', {
 					xtype: 'searchfield',
 					id: 'searchinputfield',
 					align: 'right',
-					hidden: true
+					hidden: true,
+					clearIcon: false
 				}
 			]
 		},

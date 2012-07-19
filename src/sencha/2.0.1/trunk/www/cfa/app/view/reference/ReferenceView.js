@@ -33,7 +33,8 @@ Ext.define("cfa.view.reference.ReferenceView", {
 				{
 					xtype: 'searchfield',
 					id: 'referencesearchfield',
-					docked: 'top'
+					docked: 'top',
+					clearIcon: false
 				},
 				referencesList
 			]			

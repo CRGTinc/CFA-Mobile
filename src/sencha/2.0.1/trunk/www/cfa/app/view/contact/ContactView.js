@@ -35,7 +35,8 @@ Ext.define("cfa.view.contact.ContactView", {
 		var contactSearchField = {
 			xtype: 'searchfield',
 			id: 'searchcontacinput',
-			docked: 'top'
+			docked: 'top',
+			clearIcon: false
 		};
 		
 		var contactsList = {
