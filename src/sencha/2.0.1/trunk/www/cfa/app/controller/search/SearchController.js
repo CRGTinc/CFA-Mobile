@@ -244,7 +244,6 @@ Ext.define('cfa.controller.search.SearchController', {
 
 	formChanged : function() {
 		var currentRecord = this.getCurrentRecord();
-		console.log(currentRecord);
 		var changed = false;
 
 		if (currentRecord) {
