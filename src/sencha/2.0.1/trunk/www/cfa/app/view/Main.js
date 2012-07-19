@@ -61,6 +61,10 @@ Ext.define('cfa.view.Main', {
    
    beforePop: function(number) {
    	this.fireEvent('beforepopcommand', this);   
+   },
+   
+   backToDashboard: function() {
+   	this.fireEvent("todashboardcommand", this);
    }
 	
 });

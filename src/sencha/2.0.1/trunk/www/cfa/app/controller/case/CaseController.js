@@ -29,13 +29,14 @@ Ext.define('cfa.controller.case.CaseController', {
 			deleteCaseDataButton : 'button[action = deletecasedata]',
 			attachCaseDataButton : 'button[action = attachcasedata]',
 			deleteAttachmentButton : 'button[action = deleteattachmentdata]',
-			clearAllAttachmentButton : 'button[action = clearattachmentdata]'
+			clearAllAttachmentButton : 'button[action = clearattachmentdata]',
 		},
 
 		control : {
 			main : {
 				'pop' : 'onPop',
-				beforepopcommand : 'onMainBack'
+				beforepopcommand : 'onMainBack',
+				todashboardcommand : 'onBackToDashboard'
 			},
 
 			casesList : {
@@ -97,8 +98,10 @@ Ext.define('cfa.controller.case.CaseController', {
 		caseView : null,
 
 		currentActionSheet : null,
-		
-		neededPop: false
+
+		neededPop : false,
+		neededRefesh : false,
+		resetMainStack : false,
 	},
 
 	initForms : function() {
@@ -140,11 +143,26 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	onMainBack : function() {
+		if (!this.getResetMainStack()) {
+			if (this.getImageStoreChanged() || this.formChanged()) {
+				this.setNextRecord(null);
+				Ext.Msg.confirm("Data Changed", "Do you want to save change information?", this.confirmFormChanged, this);
+				this.setNeededPop(true);
+			} else {
+				this.getMain().doPop();
+			}
+		} else {
+			this.getMain().doPop();;
+		}
+	},
+
+	onBackToDashboard : function() {
 		if (this.getImageStoreChanged() || this.formChanged()) {
 			this.setNextRecord(null);
-			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+			Ext.Msg.confirm("Data Changed", "Do you want to save change information?", this.confirmFormChanged, this);
+			this.setResetMainStack(true);
 		} else {
-			this.getMain().doPop();
+			this.getMain().reset();
 		}
 	},
 
@@ -165,6 +183,16 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	refreshCaseData : function() {
+		if (this.getImageStoreChanged() || this.formChanged()) {
+			this.setNextRecord(null);
+			Ext.Msg.confirm("Data Changed", "Do you want to save change information?", this.confirmFormChanged, this);
+			this.setNeededRefesh(true);
+		} else {
+			this.doRefreshData();
+		}
+	},
+
+	doRefreshData : function() {
 		var store = Ext.getStore('Cases'), recordsPath = this.getRecordsPath(), currentNode = recordsPath.length ? recordsPath[recordsPath.length - 1] : store.getNode();
 
 		store.load({
@@ -263,6 +291,16 @@ Ext.define('cfa.controller.case.CaseController', {
 						if (me.getNeededPop()) {
 							me.getMain().doPop();
 							me.setNeededPop(false);
+						}
+
+						if (me.getNeededRefesh()) {
+							me.doRefreshData();
+							me.setNeededRefesh(false);
+						}
+
+						if (me.getResetMainStack()) {
+							me.getMain().doPop();
+							me.setResetMainStack(false);
 						}
 					}
 				});
@@ -446,7 +484,7 @@ Ext.define('cfa.controller.case.CaseController', {
 	casesListBackTap : function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
 		if (this.formChanged()) {
 			this.setNextRecord(null);
-			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+			Ext.Msg.confirm("Data Changed", "Do you want to save change information?", this.confirmFormChanged, this);
 			return false;
 		} else {
 			var recordsPath = this.getRecordsPath();
@@ -617,9 +655,23 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	confirmFormChanged : function(button) {
 		if (button == 'yes') {
-			this.setNeededPop(true);
 			if (!this.saveCaseData()) {
 				return;
+			}
+		} else {
+			if (this.getNeededPop()) {
+				this.getMain().doPop();
+				this.setNeededPop(false);
+			}
+
+			if (this.getNeededRefesh()) {
+				this.doRefreshData();
+				this.setNeededRefesh(false);
+			}
+
+			if (this.getResetMainStack()) {
+				this.getMain().reset();
+				this.setResetMainStack(false);
 			}
 		}
 
