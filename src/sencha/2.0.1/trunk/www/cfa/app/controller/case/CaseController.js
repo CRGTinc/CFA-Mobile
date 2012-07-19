@@ -34,7 +34,8 @@ Ext.define('cfa.controller.case.CaseController', {
 
 		control : {
 			main : {
-				'pop' : 'onPop'
+				'pop' : 'onPop',
+				beforepopcommand : 'onMainBack'
 			},
 
 			casesList : {
@@ -92,10 +93,12 @@ Ext.define('cfa.controller.case.CaseController', {
 		formSelectionView : null,
 
 		imageStoreChanged : false,
-				
-		caseView: null,
+
+		caseView : null,
+
+		currentActionSheet : null,
 		
-		currentActionSheet: null,
+		neededPop: false
 	},
 
 	initForms : function() {
@@ -120,7 +123,7 @@ Ext.define('cfa.controller.case.CaseController', {
 	onPop : function(navigation, view, eOpts) {
 		if (view.getId() == 'caseview') {
 			var imagelist = Ext.getCmp('imagelist');
-			
+
 			if (imagelist) {
 				this.setImageStoreChanged(false);
 				this.getCaseFormPanel().removeAll(true);
@@ -128,12 +131,21 @@ Ext.define('cfa.controller.case.CaseController', {
 				this.getCaseFormPanel().removeAll(false);
 			}
 		}
-		
+
 		if (this.getCurrentActionSheet()) {
 			this.getCurrentActionSheet().hide();
 		}
-		
+
 		view.destroy();
+	},
+
+	onMainBack : function() {
+		if (this.getImageStoreChanged() || this.formChanged()) {
+			this.setNextRecord(null);
+			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+		} else {
+			this.getMain().doPop();
+		}
 	},
 
 	caseItemTap : function(nestedList, list, index, target, record, e, eOpts) {
@@ -248,6 +260,10 @@ Ext.define('cfa.controller.case.CaseController', {
 						me.showCurrentRecord();
 						me.getCaseView().unmask();
 						Ext.Msg.alert("Save Data", "Data saved successfully");
+						if (me.getNeededPop()) {
+							me.getMain().doPop();
+							me.setNeededPop(false);
+						}
 					}
 				});
 
@@ -370,8 +386,8 @@ Ext.define('cfa.controller.case.CaseController', {
 						quality : 50,
 						destinationType : navigator.camera.DestinationType.DATA_URL,
 						encodingType : navigator.camera.EncodingType.PNG,
-						sourceType : Camera.PictureSourceType.CAMERA,						
-						correctOrientation: true,
+						sourceType : Camera.PictureSourceType.CAMERA,
+						correctOrientation : true,
 					});
 					actionSheet.hide();
 				}
@@ -438,7 +454,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			this.setCurrentRecord(null);
 			this.showCurrentRecord();
 		}
-		
+
 		if (this.getCurrentActionSheet()) {
 			this.getCurrentActionSheet().hide();
 		}
@@ -516,7 +532,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			imageStore.load();
 			this.setImageStore(imageStore);
 			var imageList = Ext.create('Ext.List', {
-				id:'imagelist',
+				id : 'imagelist',
 				itemTpl : new Ext.XTemplate('<img src="{srcImage}"  style = "max-width:320px; max-height:240px;"/>'),
 				inline : {
 					wrap : false
@@ -601,6 +617,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	confirmFormChanged : function(button) {
 		if (button == 'yes') {
+			this.setNeededPop(true);
 			if (!this.saveCaseData()) {
 				return;
 			}
