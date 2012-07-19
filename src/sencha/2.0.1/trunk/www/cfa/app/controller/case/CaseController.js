@@ -29,7 +29,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			deleteCaseDataButton : 'button[action = deletecasedata]',
 			attachCaseDataButton : 'button[action = attachcasedata]',
 			deleteAttachmentButton : 'button[action = deleteattachmentdata]',
-			clearAllAttachmentButton : 'button[action = clearattachmentdata]',
+			clearAllAttachmentButton : 'button[action = clearattachmentdata]'
 		},
 
 		control : {
@@ -101,7 +101,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 		neededPop : false,
 		neededRefesh : false,
-		resetMainStack : false,
+		resetMainStack : false
 	},
 
 	initForms : function() {
@@ -426,7 +426,7 @@ Ext.define('cfa.controller.case.CaseController', {
 						destinationType : navigator.camera.DestinationType.DATA_URL,
 						encodingType : navigator.camera.EncodingType.PNG,
 						sourceType : Camera.PictureSourceType.CAMERA,
-						correctOrientation : true,
+						correctOrientation : true
 					});
 					actionSheet.hide();
 				}
@@ -643,11 +643,13 @@ Ext.define('cfa.controller.case.CaseController', {
 					continue;
 
 				if ( typeof formData[key] == 'object') {
-					if ( typeof currentData[key] != 'undefined') {
-						if (Ext.Date.format(formData[key], Formpod.dateFormat) != Ext.Date.format(currentData[key], Formpod.dateFormat))
+					if (formData[key] instanceof Date) {
+						if ( typeof currentData[key] != 'undefined') {
+							if (Ext.Date.format(formData[key], Formpod.dateFormat) != Ext.Date.format(currentData[key], Formpod.dateFormat))
+								changed = true;
+						} else {
 							changed = true;
-					} else {
-						changed = true;
+						}
 					}
 				} else if ( typeof formData[key] == 'string') {
 					if (formData[key] != currentData[key]) {

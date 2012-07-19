@@ -416,7 +416,7 @@ Ext.define('cfa.controller.search.SearchController', {
 				var view = Ext.create('Ext.form.FieldSet', {
 					title : formData[i].data.name.replace(/"/g, ''),
 					margin : '0 0 0 ' + level * 25,
-					padding : 10,
+					padding : 10
 				});
 
 				var notes = formData[i].data.values;
