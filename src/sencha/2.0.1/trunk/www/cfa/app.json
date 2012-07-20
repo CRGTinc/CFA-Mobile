@@ -97,7 +97,12 @@
 			"resources/startup/748x1024.png",
 			"resources/startup/768x1004.png",
 			"resources/startup/1496x2048.png",
-			"resources/startup/1536x2008.png",			
+			"resources/startup/1536x2008.png",
+			"data/HelpPages/HomeHelp.html",
+			"data/HelpPages/CaseHelp.html",
+			"data/HelpPages/ContactHelp.html",
+			"data/HelpPages/EventHelp.html",
+			"data/SearchTemplate.json",
         ],
         /**
          * List of items in the NETWORK section
@@ -131,7 +136,6 @@
 		"data/HelpPages/CaseHelp.html",
 		"data/HelpPages/ContactHelp.html",
 		"data/HelpPages/EventHelp.html"
-		
     ],
 
     /**
