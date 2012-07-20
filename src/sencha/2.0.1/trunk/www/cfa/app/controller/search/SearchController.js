@@ -21,6 +21,11 @@ Ext.define('cfa.controller.search.SearchController', {
 		},
 
 		control : {
+			
+			main : {
+				beforepopcommand : 'onMainBack',
+			},
+			
 			searchTemplateList : {
 				'activate' : 'activateSearchTemplateList',
 				'select' : 'searchByTemplate'
@@ -60,7 +65,8 @@ Ext.define('cfa.controller.search.SearchController', {
 		currentRecord : null,
 		currentView : '',
 		resultListView : null,
-		currentList : ''
+		currentList : '',
+		currentActionSheet: null
 	},
 
 	showReportPage : function() {
@@ -160,6 +166,12 @@ Ext.define('cfa.controller.search.SearchController', {
 
 		view.destroy();
 	},
+	
+	onMainBack: function() {
+		if (this.getCurrentActionSheet()) {
+			this.getCurrentActionSheet().hide();
+		}
+	},
 
 	saveDeviceData : function() {
 		if (this.formChanged()) {
@@ -239,6 +251,10 @@ Ext.define('cfa.controller.search.SearchController', {
 		} else if (this.getCurrentView() == 'ResultList') {
 			this.setCurrentView('SearchTemplate');
 			this.getSearchInputField().hide();
+		}
+		
+		if (this.getCurrentActionSheet()) {
+			this.getCurrentActionSheet().hide();
 		}
 	},
 
@@ -378,6 +394,7 @@ Ext.define('cfa.controller.search.SearchController', {
 
 			Ext.Viewport.add(actionSheet);
 			actionSheet.show();
+			this.setCurrentActionSheet(actionSheet);
 		}
 	},
 

@@ -153,7 +153,6 @@ Ext.define('cfa.controller.case.CaseController', {
 			}
 		} else {
 			this.getMain().doPop();
-			;
 		}
 	},
 
@@ -453,6 +452,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 		Ext.Viewport.add(actionSheet);
 		actionSheet.show();
+		this.setCurrentActionSheet(actionSheet);
 	},
 
 	confirmDeleteData : function(button) {
