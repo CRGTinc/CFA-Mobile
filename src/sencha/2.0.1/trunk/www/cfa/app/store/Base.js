@@ -14,7 +14,6 @@ Ext.define('cfa.store.Base',{
 					for (var i = 0; i < records.length; i++) {
 						offlineStore.add(records[i]);										
 					};
-					console.log(offlineStore);		
 					offlineStore.sync();										
 				}
 			});
