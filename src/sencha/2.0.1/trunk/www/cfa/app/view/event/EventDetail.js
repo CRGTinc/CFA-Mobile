@@ -35,7 +35,7 @@ Ext.define('cfa.view.event.EventDetail', {
 				xtype : 'textareafield',
 				name : 'event_description',
 				label : 'Description',
-				maxRows : 6,
+				maxRows : 20,
 				readOnly : true
 			}]
 		}]
