@@ -8,40 +8,48 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 			directionLock : true
 		},
 		modal : true,
-		top: '60%',
-		left: '10%',
-		rigth: '10%',
+		top : '60%',
+		left : '10%',
+		rigth : '10%',
 		height : '40%',
 		width : '80%',
 		hideOnMaskTap : true,
 		items : [{
 			xtype : 'toolbar',
-			itemId: 'topbar',
+			itemId : 'topbar',
 			docked : 'top',
-			layout: {
-				pack: 'right',
-				align: 'center'
-			},
-			items: [
-				{
-					xtype: 'button',
-					text: 'Done',
-					listeners: {
-						tap: {fn: Formpod.FormEngine.Utils.hidePopup, scope: Formpod.FormEngine.Utils}
-					}
-				}
-			]
 		}, {
 			xtype : 'textareafield',
+			clearIcon : false,
 			maxRows : 20,
-			listeners : {
-				keyup : {
-					fn : Formpod.FormEngine.Utils.updateText,
-					scope : Formpod.FormEngine.Utils
-				}
-			},
 			itemId : 'inputfield'
-		}]
+		}, {
+			xtype : 'toolbar',
+			docked : 'bottom',
+			layout : {
+				pack : 'right',
+				align : 'center'
+			},
+			items : [{
+				xtype : 'button',
+				text : 'Done',
+				listeners : {
+					tap : {
+						fn : Formpod.FormEngine.Utils.hidePopup,
+						scope : Formpod.FormEngine.Utils
+					}
+				}
+			}]
+		}],
 		
+		listeners: {
+			hide: {
+				fn : Formpod.FormEngine.Utils.onHidePopup,
+				scope : Formpod.FormEngine.Utils
+			}
+			
+		}
+
 	}
+
 })

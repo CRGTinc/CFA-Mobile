@@ -67,6 +67,7 @@ var Formpod = {
 							}
 
 							if (finfo.showPopup) {
+								fitem.readOnly = true,
 								fitem.listeners = {
 									focus : {
 										fn : Formpod.FormEngine.Utils.showPopupInput,
@@ -160,17 +161,22 @@ var Formpod = {
 				inputView.getComponent('topbar').setTitle(view.getLabel());
 				Ext.Viewport.add(inputView);
 				inputView.show();
+				inputView.getComponent('inputfield').focus();
 
 				if (view.getValue() && view.getValue().trim() != '') {
 					inputView.getComponent('inputfield').setValue(view.getValue());
 				}
 			},
-
-			updateText : function(view, e, eOpts) {
-				referenceView.setValue(view.getValue());
+			
+			onHidePopup: function(view, eOpts) {
+				view.getComponent('inputfield').blur();
+				referenceView.setValue(view.getComponent('inputfield').getValue());
+				view.hide();
 			},
 
 			hidePopup : function() {
+				inputView.getComponent('inputfield').blur();
+				referenceView.setValue(inputView.getComponent('inputfield').getValue());
 				inputView.hide();
 			}
 		}
