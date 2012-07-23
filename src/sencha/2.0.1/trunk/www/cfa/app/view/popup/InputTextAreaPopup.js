@@ -1,5 +1,6 @@
 Ext.define('cfa.view.popup.InputTextAreaPopup', {
 	extend : 'Ext.Panel',
+	alias: 'widget.popupnote',
 
 	config : {
 		layout : 'fit',
@@ -18,21 +19,14 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 			xtype : 'toolbar',
 			itemId : 'topbar',
 			docked : 'top',
-		}, {
-			xtype : 'textareafield',
-			clearIcon : false,
-			maxRows : 20,
-			itemId : 'inputfield'
-		}, {
-			xtype : 'toolbar',
-			docked : 'bottom',
-			layout : {
-				pack : 'center',
-				align : 'center'
+			layout: {
+				pack:'right',
+				align: 'center'
 			},
 			items : [{
 				xtype : 'button',
 				text : 'Done',
+
 				listeners : {
 					tap : {
 						fn : Formpod.FormEngine.Utils.hidePopup,
@@ -40,14 +34,19 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 					}
 				}
 			}]
+		}, {
+			xtype : 'textareafield',
+			clearIcon : false,
+			maxRows : 20,
+			itemId : 'inputfield'
 		}],
-		
-		listeners: {
-			hide: {
+
+		listeners : {
+			hide : {
 				fn : Formpod.FormEngine.Utils.onHidePopup,
 				scope : Formpod.FormEngine.Utils
 			}
-			
+
 		}
 
 	}
