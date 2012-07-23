@@ -27,7 +27,7 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 			xtype : 'toolbar',
 			docked : 'bottom',
 			layout : {
-				pack : 'right',
+				pack : 'center',
 				align : 'center'
 			},
 			items : [{
