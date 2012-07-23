@@ -21,11 +21,11 @@ Ext.define('cfa.controller.search.SearchController', {
 		},
 
 		control : {
-			
+
 			main : {
 				beforepopcommand : 'onMainBack',
 			},
-			
+
 			searchTemplateList : {
 				'activate' : 'activateSearchTemplateList',
 				'select' : 'searchByTemplate'
@@ -66,7 +66,7 @@ Ext.define('cfa.controller.search.SearchController', {
 		currentView : '',
 		resultListView : null,
 		currentList : '',
-		currentActionSheet: null
+		currentActionSheet : null
 	},
 
 	showReportPage : function() {
@@ -127,20 +127,21 @@ Ext.define('cfa.controller.search.SearchController', {
 		if (field.getValue() && field.getValue() != '') {
 			if (this.getResultListView()) {
 				store.filterBy(function(record) {
+					var temp = field.getValue().toLowerCase();
 					var found = false;
 					var formdata = record.getData().form;
 					for (key in formdata) {
 
 						if ( typeof formdata[key] == 'string') {
-
-							if (formdata[key].toLowerCase().indexOf(field.getValue().toLowerCase()) > -1) {
-								found = true;
+							if (formdata[key].trim() != 'N/A') {
+								if (formdata[key].toLowerCase().indexOf(temp) > -1) {
+									found = true;
+								}
 							}
-
 						} else if ( typeof formdata[key] == 'object') {
 							if (key != 'engineClass' && key != 'prototype') {
 								if (formdata[key] instanceof Date) {
-									if (formdata[key].toString().indexOf(field.getValue()) > -1)
+									if (formdata[key].toDateString().indexOf(temp) > -1)
 										found = true;
 								}
 							}
@@ -166,8 +167,8 @@ Ext.define('cfa.controller.search.SearchController', {
 
 		view.destroy();
 	},
-	
-	onMainBack: function() {
+
+	onMainBack : function() {
 		if (this.getCurrentActionSheet()) {
 			this.getCurrentActionSheet().hide();
 		}
@@ -252,7 +253,7 @@ Ext.define('cfa.controller.search.SearchController', {
 			this.setCurrentView('SearchTemplate');
 			this.getSearchInputField().hide();
 		}
-		
+
 		if (this.getCurrentActionSheet()) {
 			this.getCurrentActionSheet().hide();
 		}
