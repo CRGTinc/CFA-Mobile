@@ -182,6 +182,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 				me.getImportListView().getComponent('importlistcontainer').getComponent('importlist').setStore(me.getImportStore());
 				Ext.Viewport.add(me.getImportListView());
 			} else {
+				me.getImportListView().getComponent('importlistcontainer').reset();
 				me.getImportStore().setData(Ext.JSON.decode(result));
 			}
 			me.getImportListView().showBy(me.getImportDataButton());
