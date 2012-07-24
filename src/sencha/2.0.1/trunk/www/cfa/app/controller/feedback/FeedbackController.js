@@ -25,7 +25,7 @@ Ext.define('cfa.controller.feedback.FeedbackController',{
 		if (Ext.os.is.Desktop) {
 			Ext.Msg.alert("Feedback", "Currently support only for iPad.");
 		} else {
-			window.plugins.emailComposer.showEmailComposer("CFA users' feedback", null, null, 'vbeaudoin@crgt.com', null, null, null);
+			window.plugins.emailComposer.showEmailComposer("CFA users' feedback", null, null, 'appfeedback@crgt.com', null, null, null);
 		}
        
 	},

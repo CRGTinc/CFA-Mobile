@@ -16,14 +16,14 @@ Ext.define('cfa.controller.help.HelpController',{
 	
 	showHelpPage: function(){		
 		var helpView = Ext.create('cfa.view.help.HTMLPanel');
-		helpView.setUrl('/data/HelpPages/HomeHelp.html');
+		helpView.setUrl('data/HelpPages/HomeHelp.html');
 		Ext.Viewport.add(helpView);
 		helpView.show();
 	},
 	
 	showHelpById: function(path){
 		var helpView = Ext.create('cfa.view.help.HTMLPanel');
-		helpView.setUrl('/data/HelpPages/' + path + '.html');
+		helpView.setUrl('data/HelpPages/' + path + '.html');
 		Ext.Viewport.add(helpView);
 		helpView.show();
 	}
