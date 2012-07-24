@@ -7,6 +7,6 @@ Ext.define("cfa.store.ReferencesLocal",{
 		proxy:{
 			type: "localstorage",
 			id: "reference"
-		},
+		}
 	}	
 })

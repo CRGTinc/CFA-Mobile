@@ -8,7 +8,7 @@ Ext.define("cfa.store.Contacts", {
 			url : "data/Contacts.csv",
 			reader : {
 				type : "csv"
-			},
+			}
 		},
 		sorters : 'lastname',
 		grouper : {

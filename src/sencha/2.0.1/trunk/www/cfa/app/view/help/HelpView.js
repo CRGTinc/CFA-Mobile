@@ -12,7 +12,7 @@ Ext.define('cfa.view.help.HelpView', {
 		items:[{
                 centered: true,
                 html: [
-                    '<p align="center">Coming Soon</p>',
+                    '<p align="center">Coming Soon</p>'
                 ].join('')
             }
         ]

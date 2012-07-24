@@ -1,7 +1,7 @@
 Ext.define('cfa.controller.help.HelpController',{
 	extend: 'Ext.app.Controller',
     
-	requires: ['cfa.view.help.HelpView'],
+	requires: ['cfa.view.help.HelpView', 'cfa.view.help.HTMLPanel'],
 	
 	config: {
         routes: {
@@ -15,22 +15,17 @@ Ext.define('cfa.controller.help.HelpController',{
     },
 	
 	showHelpPage: function(){		
-		var helpView = Ext.create('cfa.view.help.HelpView');
-		this.getMain().push(helpView);
-		
-		//get the current page
-		     						
+		var helpView = Ext.create('cfa.view.help.HTMLPanel');
+		helpView.setUrl('/data/HelpPages/HomeHelp.html');
+		Ext.Viewport.add(helpView);
+		helpView.show();
 	},
 	
 	showHelpById: function(path){
-		/* if (Ext.os.is.Desktop) {
-            window.open("help/"+path+".html");
-        } else {
-            window.plugins.childBrowser.showWebPage("help/"+path+".html");
-        }*/
-       
-       var helpView = Ext.create('cfa.view.help.HelpView');
-		this.getMain().push(helpView);
+		var helpView = Ext.create('cfa.view.help.HTMLPanel');
+		helpView.setUrl('/data/HelpPages/' + path + '.html');
+		Ext.Viewport.add(helpView);
+		helpView.show();
 	}
 			
 })

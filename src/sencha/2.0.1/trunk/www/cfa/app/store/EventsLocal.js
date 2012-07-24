@@ -7,6 +7,6 @@ Ext.define("cfa.store.EventsLocal",{
 		proxy:{
 			type: "localstorage",
 			id: "event"
-		},
+		}
 	}	
 })

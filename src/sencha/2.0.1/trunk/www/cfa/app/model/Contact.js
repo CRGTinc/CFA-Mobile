@@ -7,8 +7,15 @@ Ext.define('cfa.model.Contact',{
 			{name: 'lastname', type: 'string'},
 			{name: 'email', type: 'email'},
 			{name: 'office_phone', type: 'string'},
-			{name: 'mobile_phone', type: 'string'},
-			{name: 'department', type: 'string'}					
+			{name: 'cell', type: 'string'},
+			
+			{name: 'SAC', type: 'string'},
+			{name: 'RAC', type: 'string'},
+			{name: 'street1', type: 'string'},
+			{name: 'sreet2', type: 'string'},
+			{name: 'city', type: 'string'},
+			{name: 'state', type: 'string'},
+			{name: 'zip', type: 'int'}
 		]	
 	}	
 });

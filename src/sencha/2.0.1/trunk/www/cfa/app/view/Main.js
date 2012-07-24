@@ -57,6 +57,14 @@ Ext.define('cfa.view.Main', {
 	pop: function() {
         this.callParent(arguments);
 		cfa.app.helpUrl = "root";
-    }
+   },
+   
+   beforePop: function(number) {
+   	this.fireEvent('beforepopcommand', this);   
+   },
+   
+   backToDashboard: function() {
+   	this.fireEvent("todashboardcommand", this);
+   }
 	
 });

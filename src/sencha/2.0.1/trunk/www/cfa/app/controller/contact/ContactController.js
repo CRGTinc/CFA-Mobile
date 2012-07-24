@@ -1,38 +1,75 @@
-Ext.define('cfa.controller.contact.ContactController',{
-	extend: 'Ext.app.Controller',
-	requires: ['cfa.view.contact.ContactView'],
-	
-	config: {
-        routes: {
-            'contacts': 'showContactPage'
-        },
+Ext.define('cfa.controller.contact.ContactController', {
+	extend : 'Ext.app.Controller',
+	requires : ['cfa.view.contact.ContactView'],
 
-        refs: {
-            main: 'main',
+	config : {
+		routes : {
+			'contacts' : 'showContactPage'
+		},
+
+		refs : {
+			main : 'main',
 			contactContainer : 'contact_view_container',
-			contactDetailView :  'contact_detail'
-        },
-		
-		control:{
-			contactContainer:{
+			contactDetailView : 'contact_detail',
+			searchInputField : 'searchfield[id = "searchcontacinput"]',
+			emailField : 'urlfield[id = email]'
+		},
+
+		control : {
+			contactContainer : {
 				contactDetailCommand : 'displayContactDetail',
-				reloadContactCommand : 'reloadContact',
-			}			
-		}
-    },
-	
-	displayContactDetail: function(list,record){		
+				reloadContactCommand : 'reloadContact'
+			},
+
+			searchInputField : {
+				'keyup' : 'searchContactByKey'
+			},
+
+			emailField : {
+				openmailcomposercommand : 'openEmailComposer'
+			}
+		},
+
+		contactView : null
+	},
+
+	displayContactDetail : function(list, record) {
 		var contactDetail = this.getContactDetailView();
 		contactDetail.setRecord(record);
 	},
-	
-	reloadContact: function(obj){
-		obj.getContactStore().load();			
-	},
-	
-	showContactPage: function(){
-		var contactView = Ext.create('cfa.view.contact.ContactView');
-		this.getMain().push(contactView);        						
+
+	reloadContact : function(obj) {
+		obj.getContactStore().load();
 	},
 
+	showContactPage : function() {
+		this.setContactView(Ext.create('cfa.view.contact.ContactView'));
+		this.getMain().push(this.getContactView());
+	},
+
+	searchContactByKey : function(view, e, opts) {
+		var store = this.getContactView().getComponent('contactleftpanel').getComponent('contactlist').getStore();
+		store.clearFilter();
+
+		if (view.getValue && view.getValue != '') {
+			var temp = view.getValue().toLowerCase();
+			store.filterBy(function(record) {
+				var fullname = record.getData().firstname + ' ' +  record.getData().lastname;
+				if ( record.getData().firstname.toLowerCase().indexOf(temp) > -1 || record.getData().lastname.toLowerCase().indexOf(temp) > -1)
+					return record;
+				else if (fullname.toLowerCase().indexOf(temp) > -1 )
+					return record;
+			});
+		}
+	},
+
+	openEmailComposer : function() {
+		var emailAddress = this.getContactDetailView().getComponent(0).getComponent('email').getValue();
+
+		if (emailAddress)
+			window.plugins.emailComposer.showEmailComposer(null, null, null, emailAddress, null, null, null);
+		else
+			Ext.Msg.alert("Send mail", "Please chose a contact that you want to send mail to.");
+
+	}
 })

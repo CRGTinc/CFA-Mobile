@@ -8,6 +8,7 @@ Ext.define("cfa.view.reference.ReferenceView", {
 	
 	config: {
 		layout: 'fit',
+		title: 'References',
 		referenceStore: null
 	},
 	
@@ -16,28 +17,32 @@ Ext.define("cfa.view.reference.ReferenceView", {
 		cfa.app.helpUrl = "Reference";
 		var referencesList = {
 			xtype: 'references_list',
+			itemId: 'referenceslist',
 			store: this.getReferenceStore().load(),
-			listeners:{
-				select : {fn:this.onItemSelected, scope:this}
+			listeners: {
+				select : {fn: this.onItemSelected, scope: this}
         	}
 		};
 		
-		var leftPanel = {
-			xtype:'panel',
-			layout:'fit',
-			flex:1,
-			items:[
-				referencesList,
+		var contentPanel = {
+			xtype: 'panel',
+			itemId: 'contentpanel',
+			layout: 'fit',
+			flex: 1,
+			items: [
+				{
+					xtype: 'searchfield',
+					id: 'referencesearchfield',
+					docked: 'top',
+					clearIcon: false
+				},
+				referencesList
 			]			
 		};
-		
-		this.add(leftPanel);
+		this.add(contentPanel);
 	},
 		
-	onItemSelected: function(list,record,opt) {
-		this.fireEvent('openReferenceSourceCommand',this,record);
+	onItemSelected: function(list, record, opt) {
+		this.fireEvent('openReferenceSourceCommand', this, record);
 	},
-	
-	 
-	
 });

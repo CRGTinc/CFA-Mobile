@@ -1,9 +1,13 @@
 Ext.define('cfa.controller.case.CaseController', {
 	extend : 'Ext.app.Controller',
 
-	requires : ['cfa.view.case.CaseView', 'cfa.view.case.CaseFormSelectionView'],
+	requires : ['cfa.view.case.CaseView', 'cfa.view.case.CaseFormSelectionView', 'cfa.store.LSImages'],
 
 	config : {
+		imageStore : undefined,
+		imageList : undefined,
+		currentImageURI : undefined,
+
 		routes : {
 			'cases' : 'showCasePage'
 		},
@@ -16,30 +20,38 @@ Ext.define('cfa.controller.case.CaseController', {
 			caseFormPanel : 'panel[id = "caseformpanel"]',
 			caseToolbar : 'toolbar[id = "casetoolbar"]',
 			caseContextLabel : '#casecontextlabel',
-            refreshCaseDataButton : 'button[action = refreshCaseData]',
+			refreshCaseDataButton : 'button[action = refreshCaseData]',
 			addCaseDataButton : 'button[action = addCaseData]',
 			saveCaseDataButton : 'button[action = savecasedata]',
 			cancelCaseDataButton : 'button[action = cancelcasedata]',
 			caseFormList : 'list[id = "caseformlist"]',
 			exportCaseDataButton : 'button[action = exportcasedata]',
 			deleteCaseDataButton : 'button[action = deletecasedata]',
-			attachCaseDataButton : 'button[action = attachcasedata]'
+			attachCaseDataButton : 'button[action = attachcasedata]',
+			deleteAttachmentButton : 'button[action = deleteattachmentdata]',
+			clearAllAttachmentButton : 'button[action = clearattachmentdata]'
 		},
 
 		control : {
+			main : {
+				'pop' : 'onPop',
+				beforepopcommand : 'onMainBack',
+				todashboardcommand : 'onBackToDashboard'
+			},
+
 			casesList : {
 				'itemtap' : 'caseItemTap',
 				'back' : 'casesListBackTap'
 			},
-            
-            refreshCaseDataButton: {
-                'tap' : 'refreshCaseData'
-            },
+
+			refreshCaseDataButton : {
+				'tap' : 'refreshCaseData'
+			},
 
 			addCaseDataButton : {
 				'tap' : 'addCaseData'
 			},
-            
+
 			saveCaseDataButton : {
 				'tap' : 'saveCaseData'
 			},
@@ -59,19 +71,37 @@ Ext.define('cfa.controller.case.CaseController', {
 			deleteCaseDataButton : {
 				'tap' : 'deleteCaseData'
 			},
-            
-            attachCaseDataButton: {
-                'tap' : 'attachCaseData'
-            }
+
+			attachCaseDataButton : {
+				'tap' : 'attachCaseData'
+			},
+
+			deleteAttachmentButton : {
+				'tap' : 'deleteAttachmentData'
+			},
+
+			clearAllAttachmentButton : {
+				'tap' : 'clearAttachmentData'
+			}
 		},
 
 		currentRecord : null,
-		
-		nextRecord: null,
+
+		nextRecord : null,
 
 		recordsPath : [],
 
-		formSelectionView : null
+		formSelectionView : null,
+
+		imageStoreChanged : false,
+
+		caseView : null,
+
+		currentActionSheet : null,
+
+		neededPop : false,
+		neededRefesh : false,
+		resetMainStack : false
 	},
 
 	initForms : function() {
@@ -89,11 +119,54 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	showCasePage : function() {
 		this.initForms();
-		var caseView = Ext.create('cfa.view.case.CaseView');
-		this.getMain().push(caseView);
+		this.setCaseView(Ext.create('cfa.view.case.CaseView'));
+		this.getMain().push(this.getCaseView());
 	},
 
-	caseItemTap: function(nestedList, list, index, target, record, e, eOpts) {
+	onPop : function(navigation, view, eOpts) {
+		if (view.getId() == 'caseview') {
+			var imagelist = Ext.getCmp('imagelist');
+
+			if (imagelist) {
+				this.setImageStoreChanged(false);
+				this.getCaseFormPanel().removeAll(true);
+			} else {
+				this.getCaseFormPanel().removeAll(false);
+			}
+		}
+
+		if (this.getCurrentActionSheet()) {
+			this.getCurrentActionSheet().hide();
+		}
+
+		view.destroy();
+	},
+
+	onMainBack : function() {
+		if (!this.getResetMainStack()) {
+			if (this.getImageStoreChanged() || this.formChanged()) {
+				this.setNextRecord(null);
+				Ext.Msg.confirm("Data Changed", "Do you want to save change information?", this.confirmFormChanged, this);
+				this.setNeededPop(true);
+			} else {
+				this.getMain().doPop();
+			}
+		} else {
+			this.getMain().doPop();
+		}
+	},
+
+	onBackToDashboard : function() {
+		if (this.getImageStoreChanged() || this.formChanged()) {
+			this.setNextRecord(null);
+			Ext.Msg.confirm("Data Changed", "Do you want to save change information?", this.confirmFormChanged, this);
+			this.setResetMainStack(true);
+		} else {
+			this.getMain().reset();
+		}
+	},
+
+	caseItemTap : function(nestedList, list, index, target, record, e, eOpts) {
 		if (this.formChanged()) {
 			this.setNextRecord(record);
 			Ext.Msg.confirm("Data Changed", "Do you want to save changes before openning new data?", this.confirmFormChanged, this);
@@ -102,24 +175,36 @@ Ext.define('cfa.controller.case.CaseController', {
 			this.setNextRecord(record);
 			this.confirmFormChanged('no');
 		}
-		
+
 		if (!record.isLeaf()) {
 			var recordsPath = this.getRecordsPath();
 			Ext.Array.insert(recordsPath, recordsPath.length, [record]);
 		}
 	},
-    
-    refreshCaseData: function() {
-        var store = Ext.getStore('Cases'),
-        	recordsPath = this.getRecordsPath(),
-        	currentNode = recordsPath.length ? recordsPath[recordsPath.length - 1] : store.getNode();
-        
-        store.load({ node: currentNode, scope: this, callback: function() {
-			store.removed = [];        	
-        }});
-        this.setCurrentRecord(null);
-        this.showCurrentRecord();
-    },
+
+	refreshCaseData : function() {
+		if (this.getImageStoreChanged() || this.formChanged()) {
+			this.setNextRecord(null);
+			Ext.Msg.confirm("Data Changed", "Do you want to save change information?", this.confirmFormChanged, this);
+			this.setNeededRefesh(true);
+		} else {
+			this.doRefreshData();
+		}
+	},
+
+	doRefreshData : function() {
+		var store = Ext.getStore('Cases'), recordsPath = this.getRecordsPath(), currentNode = recordsPath.length ? recordsPath[recordsPath.length - 1] : store.getNode();
+
+		store.load({
+			node : currentNode,
+			scope : this,
+			callback : function(records, operation, success) {
+				store.removed = [];
+			}
+		});
+		this.setCurrentRecord(null);
+		this.showCurrentRecord();
+	},
 
 	addCaseData : function() {
 		if (this.formChanged()) {
@@ -130,122 +215,154 @@ Ext.define('cfa.controller.case.CaseController', {
 			this.confirmFormChanged('no');
 		}
 	},
-	
-	getNewRecord: function() {
+
+	getNewRecord : function() {
 		var recordsPath = this.getRecordsPath();
 		var record = Ext.create('cfa.model.Case');
 
 		if (recordsPath.length) {
-			record.set('form', { engineClass: null });
+			record.set('form', {
+				engineClass : null
+			});
 		} else {
 			var engine = Formpod.FormTypes['Case Form'];
 			record.set('form', engine.getInstance());
 		}
-		
+
 		return record;
 	},
 
 	saveCaseData : function() {
-		var currentRecord = this.getCurrentRecord();
-		
-		if (currentRecord) {
-			var errors = currentRecord.validate();
-			
-			if (!errors.isValid()) {
-				var errorString = '';
-				Ext.each(errors.items, function(rec, i) {
-                    errorString += rec.getMessage() + "<br>";
-                });
-                Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
-				return false;
-			}
-			
-			var store = Ext.getStore('Cases'), phantomRecord = currentRecord.phantom;
+		if (this.formChanged()) {
+			var me = this;
+			var currentRecord = this.getCurrentRecord();
 
-			if (phantomRecord) {
-				store.add(currentRecord);
-			}
+			if (currentRecord) {
+				var errors = currentRecord.validate();
+				if (!errors.isValid()) {
+					var errorString = '';
+					Ext.each(errors.items, function(rec, i) {
+						errorString += rec.getMessage() + "<br>";
+					});
 
-			var form = currentRecord.get('form'), engine = form.engineClass;
-
-			form = engine.getFormObject();
-			currentRecord.beginEdit();
-			currentRecord.set('form', form);
-			currentRecord.set('text', form[Formpod.FormTypes[engine.name].displayProperty]);
-			currentRecord.endEdit();
-
-			if (!phantomRecord) {
-				currentRecord.setDirty(true);
-			}
-
-			store.sync();
-
-			if (phantomRecord) {
-				var parentId = currentRecord.get('parentId');
-
-				if (parentId) {
-					store.getNodeById(parentId).appendChild(currentRecord);
-				} else {
-					store.getNode().appendChild(currentRecord);
+					Ext.Msg.alert('Save Data', errorString, Ext.emptyFn);
+					return false;
 				}
+
+				var store = Ext.getStore('Cases'), phantomRecord = currentRecord.phantom;
+
+				if (phantomRecord) {
+					store.add(currentRecord);
+				}
+
+				var form = currentRecord.get('form'), engine = form.engineClass;
+
+				form = engine.getFormObject();
+				currentRecord.beginEdit();
+				currentRecord.set('form', form);
+				currentRecord.set('text', form[Formpod.FormTypes[engine.name].displayProperty]);
+				currentRecord.endEdit();
+
+				if (!phantomRecord) {
+					currentRecord.setDirty(true);
+				}
+
+				if (phantomRecord) {
+
+					var parentId = currentRecord.get('parentId');
+
+					if (parentId) {
+						store.getNodeById(parentId).appendChild(currentRecord);
+					} else {
+						store.getNode().appendChild(currentRecord);
+					}
+				}
+
+				this.getCaseView().setMasked({
+					xtype : 'loadmask',
+					message : 'Saving...'
+				});
+
+				var operations = store.sync({
+					callback : function() {
+						me.showCurrentRecord();
+						me.getCaseView().unmask();
+						Ext.Msg.alert("Save Data", "Data saved successfully");
+						if (me.getNeededPop()) {
+							me.getMain().doPop();
+							me.setNeededPop(false);
+						}
+
+						if (me.getNeededRefesh()) {
+							me.doRefreshData();
+							me.setNeededRefesh(false);
+						}
+
+						if (me.getResetMainStack()) {
+							me.getMain().doPop();
+							me.setResetMainStack(false);
+						}
+					}
+				});
+
+				if (this.getImageStore() != undefined) {
+					this.getImageStore().sync();
+					this.setImageStoreChanged(false);
+				}
+
+				engine.scrollFormToTop();
 			}
+			return true;
 		}
-		
-		var currentRecord = this.getCurrentRecord();
-		if (currentRecord) {
-			var formData = currentRecord.get('form');
-			var engine = formData.engineClass;
-			 engine.scrollFormToTop();
-		}
-		
-		return true;
+
 	},
-	
+
 	cancelCaseData : function() {
 		this.setCurrentRecord(null);
 		this.showCurrentRecord();
 	},
 
 	exportCaseData : function() {
-			
 		if (Ext.os.is.Desktop) {
 			Ext.Msg.alert("Export Data", "Currently support only for iPad.");
 		} else {
-			var me = this,
-				currentRecord = this.getCurrentRecord();
-			
+			var me = this, currentRecord = this.getCurrentRecord();
+
 			if (currentRecord.phantom) {
 				Ext.Msg.alert("Export Data", "You can not export unsaved data.");
 				return;
 			}
-			
+
 			var actionSheet = Ext.create('Ext.ActionSheet', {
 				modal : false,
 				left : "40%",
 				right : "40%",
 				bottom : "6%",
-
 				items : [{
-
 					text : 'Via email',
 					handler : function() {
-
 						Formpod.exportData(currentRecord.getData().form, function(data) {
-							var filename = Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
-							me.saveFile(data, filename, function() {
-								window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
+								if (cfa.helper.PhoneGapHelper.fileSizeValidation(filename)) {
+									window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+								} else {
+									Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
+								}
+
 							});
 						});
+
 						actionSheet.hide();
 					}
 				}, {
 					text : 'To iTunes',
 					handler : function() {
 						Formpod.exportData(currentRecord.getData().form, function(data) {
-							var filename = Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
-							me.saveFile(data, filename, function() {
+							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
 								Ext.Msg.alert("Export Data", "Data has been exported successfully.");
 							});
 							actionSheet.hide();
@@ -262,47 +379,113 @@ Ext.define('cfa.controller.case.CaseController', {
 
 			Ext.Viewport.add(actionSheet);
 			actionSheet.show();
+			this.setCurrentActionSheet(actionSheet);
 		}
 	},
 
 	deleteCaseData : function() {
-		var  currentRecord = this.getCurrentRecord();
-		
-		if(!currentRecord.phantom) {
+		var currentRecord = this.getCurrentRecord();
+
+		if (!currentRecord.phantom) {
 			Ext.Msg.confirm("Delete Data", "Do you want to delete this data?", this.confirmDeleteData, this);
 		} else {
 			Ext.Msg.alert("Delete Data", "You can not delete unsaved data.");
 		}
 	},
-    
-    attachCaseData: function() {
-        console.log('attach data');
-    },
-	
-	confirmDeleteData: function(button) {
-        if (button == 'yes') {
-         	var store = Ext.getStore("Cases"),
-         		currentRecord = this.getCurrentRecord();
+
+	attachCaseData : function() {
+		var me = this;
+
+		var onPhotoDataSuccess = function(imageData) {
+			var currentRecord = me.getCurrentRecord(), imageStore = me.getImageStore();
+
+			var formId = currentRecord.get('form').PhotoId;
+			imageStore.add({
+				formId : formId,
+				srcImage : "data:image/png;base64," + imageData
+			});
+			var length = me.getImageStore().getData().length - 1;
+			me.getImageList().getScrollable().getScroller().scrollTo(330 * length, 0);
+			me.setImageStoreChanged(true);
+		}
+		var onPhotoDataError = function(message) {
+			console.log('Photo data error: ', message);
+		}
+		var actionSheet = Ext.create('Ext.ActionSheet', {
+			modal : false,
+			left : '40%',
+			right : '40%',
+			bottom : '6%',
+
+			items : [{
+				text : 'From Camera',
+				handler : function() {
+					navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, {
+						quality : 50,
+						destinationType : navigator.camera.DestinationType.DATA_URL,
+						encodingType : navigator.camera.EncodingType.PNG,
+						sourceType : Camera.PictureSourceType.CAMERA,
+						correctOrientation : true
+					});
+					actionSheet.hide();
+				}
+			}, {
+				text : 'From Photo Library',
+				handler : function() {
+					navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataError, {
+						quality : 50,
+						sourceType : navigator.camera.PictureSourceType.PHOTOLIBRARY,
+						destinationType : navigator.camera.DestinationType.DATA_URL,
+						encodingType : navigator.camera.EncodingType.PNG
+					});
+					actionSheet.hide();
+				}
+			}, {
+				text : 'Cancel',
+				ui : 'confirm',
+				handler : function() {
+					actionSheet.hide();
+				}
+			}]
+
+		});
+
+		Ext.Viewport.add(actionSheet);
+		actionSheet.show();
+		this.setCurrentActionSheet(actionSheet);
+	},
+
+	confirmDeleteData : function(button) {
+		if (button == 'yes') {
+			var store = Ext.getStore("Cases"), currentRecord = this.getCurrentRecord();
 
 			this.getCasesList().goToNode(currentRecord.parentNode);
-	
+
 			if (!currentRecord.isLeaf()) {
 				this.casesListBackTap();
 			} else {
 				this.setCurrentRecord(null);
 				this.showCurrentRecord();
 			}
-	
+
 			currentRecord.parentNode.removeChild(currentRecord);
 			store.remove(currentRecord);
 			store.sync();
-        }
-    },
+
+			var imageStore = this.getImageStore();
+
+			if (imageStore) {
+				imageStore.removeAll();
+				imageStore.sync();
+				this.setImageStore(null);
+			}
+		}
+	},
 
 	casesListBackTap : function(nestedList, node, lastActiveList, detailCardActive, eOpts) {
 		if (this.formChanged()) {
 			this.setNextRecord(null);
-			Ext.Msg.confirm("Data Changed", "Do you want to save changes before adding new data?", this.confirmFormChanged, this);
+			Ext.Msg.confirm("Data Changed", "Do you want to save change information?", this.confirmFormChanged, this);
 			return false;
 		} else {
 			var recordsPath = this.getRecordsPath();
@@ -310,14 +493,23 @@ Ext.define('cfa.controller.case.CaseController', {
 			this.setCurrentRecord(null);
 			this.showCurrentRecord();
 		}
+
+		if (this.getCurrentActionSheet()) {
+			this.getCurrentActionSheet().hide();
+		}
 	},
 
 	caseFormSelected : function(list, index, target, record, e, eOpts) {
 		this.getFormSelectionView().hide();
 
-		var formType = record.get('name'),
-			data = Ext.create('cfa.model.Case'),
-			engine = Formpod.FormTypes[formType];
+		var formType = record.get('name'), data = Ext.create('cfa.model.Case'), engine = Formpod.FormTypes[formType];
+
+		if (formType == 'Photo/Attachment') {
+			if (Ext.os.is.Desktop) {
+				Ext.Msg.alert("Export Data", "Currently support only for iPad.");
+				return;
+			}
+		}
 
 		engine.resetForm();
 		data.set('form', engine.getFormObject());
@@ -341,7 +533,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 	showCurrentRecord : function() {
 		var currentRecord = this.getCurrentRecord();
-		
+
 		if (currentRecord) {
 			var formData = currentRecord.get('form');
 			var data = formData;
@@ -352,41 +544,72 @@ Ext.define('cfa.controller.case.CaseController', {
 			var form = engine.getForm();
 			this.getCaseFormPanel().removeAll(false);
 			this.getCaseFormPanel().add(form);
+
+			if (engine.attachment == "photo") {
+				this.addImageListById(data.PhotoId);
+			} else {
+				this.addImageListById(null);
+			}
+
 			this.getCaseContentPanel().show();
+
 		} else {
 			this.getCaseFormPanel().removeAll(false);
 			this.getCaseContentPanel().hide();
 		}
 
-        this.showEditToolbar(currentRecord);
+		this.showEditToolbar(currentRecord);
 		this.showContextInfo(currentRecord);
 	},
-    
-    showEditToolbar: function(record) {
-		var toolbar = this.getCaseToolbar();
-        
-        if (record) {
-            /* if (record.phantom) {
-                this.getDeleteCaseDataButton().hide();
-                this.getExportCaseDataButton().hide();
-            } else {
-                this.getDeleteCaseDataButton().show();
-                this.getExportCaseDataButton().show();
-            } */
-            
-            var engine = record.get('form').engineClass;
 
-            if (engine.attachment) {
-                this.getAttachCaseDataButton().show();
-            } else {
-                this.getAttachCaseDataButton().hide();
-            }
+	addImageListById : function(id) {
+		this.setImageStore(undefined);
+		this.setImageList(undefined);
+		if (id != undefined) {
+			var imageStore = Ext.create('cfa.store.LSImages');
+			imageStore.getProxy().setFormId(id);
+			imageStore.load();
+			this.setImageStore(imageStore);
+			var imageList = Ext.create('Ext.List', {
+				id : 'imagelist',
+				itemTpl : new Ext.XTemplate('<img src="{srcImage}"  style = "max-width:320px; max-height:240px;"/>'),
+				inline : {
+					wrap : false
+				},
+				scrollable : {
+					direction : 'horizontal'
+				},
+				flex : 2,
+				store : this.getImageStore()
+			});
+
+			this.setImageList(imageList);
+			this.getCaseFormPanel().add(this.getImageList());
+		}
+	},
+
+	showEditToolbar : function(record) {
+
+		var toolbar = this.getCaseToolbar();
+
+		if (record) {
+			var engine = record.get('form').engineClass;
+
+			if (engine.attachment == "photo") {
+				this.getAttachCaseDataButton().show();
+				this.getDeleteAttachmentButton().show();
+				this.getClearAllAttachmentButton().show();
+			} else {
+				this.getAttachCaseDataButton().hide();
+				this.getDeleteAttachmentButton().hide();
+				this.getClearAllAttachmentButton().hide();
+			}
 
 			toolbar.show();
-        } else {
-            toolbar.hide();
-        }
-    },
+		} else {
+			toolbar.hide();
+		}
+	},
 
 	showContextInfo : function(record) {
 		if (record) {
@@ -404,77 +627,79 @@ Ext.define('cfa.controller.case.CaseController', {
 		}
 	},
 
-	saveFile : function(jsonString, filename, callback, scope) {
-		var me = this;
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-			fileSystem.root.getFile(filename, {
-				create : true,
-				exclusive : false
-			}, function(fileEntry) {
-				fileEntry.createWriter(function(writer) {
-					writer.onwrite = function(evt) {
-						if ( typeof callback == 'function') {
-							Ext.callback(callback, scope || me);
-						}
-					};
-
-					writer.write(jsonString);
-				}, this.fail);
-			}, this.fail);
-		}, this.fail);
-	},
-
-	fail : function(error) {
-		console.log(error.code);
-	},
-	
-	formChanged: function() {
+	formChanged : function() {
 		var currentRecord = this.getCurrentRecord();
 		var changed = false;
-		
+
 		if (currentRecord) {
 			var currentData = currentRecord.getData().form;
-			var engine = currentData.engineClass,
-				formData = engine.getFormObject();
-				
-			for (key in formData) {
-                if (formData[key] == '' && currentData[key] == null)
-                    continue;
+			var engine = currentData.engineClass, formData = engine.getFormObject();
 
-                if (formData[key] == null && currentData[key] == '')
-                    continue;
-                
-				if (formData[key] != currentData[key]) {
-					changed = true;
-					break;
+			for (key in formData) {
+				if (formData[key] == '' && currentData[key] == null)
+					continue;
+
+				if (formData[key] == null && currentData[key] == '')
+					continue;
+
+				if ( typeof formData[key] == 'object') {
+					if (formData[key] instanceof Date) {
+						if ( typeof currentData[key] != 'undefined') {
+							if (Ext.Date.format(formData[key], Formpod.dateFormat) != Ext.Date.format(currentData[key], Formpod.dateFormat))
+								changed = true;
+						} else {
+							changed = true;
+						}
+					}
+				} else if ( typeof formData[key] == 'string') {
+					if (formData[key] != currentData[key]) {
+						changed = true;
+						break;
+					}
 				}
 			}
 		}
-		
+
+		if (this.getImageStoreChanged())
+			changed = true;
+
 		return changed;
 	},
-	
-	confirmFormChanged: function(button) {
+
+	confirmFormChanged : function(button) {
 		if (button == 'yes') {
 			if (!this.saveCaseData()) {
 				return;
 			}
+		} else {
+			if (this.getNeededPop()) {
+				this.getMain().doPop();
+				this.setNeededPop(false);
+			}
+
+			if (this.getNeededRefesh()) {
+				this.doRefreshData();
+				this.setNeededRefesh(false);
+			}
+
+			if (this.getResetMainStack()) {
+				this.getMain().reset();
+				this.setResetMainStack(false);
+			}
 		}
-		
+
 		var nextRecord = this.getNextRecord();
 
 		if (!nextRecord) {
 		} else if (nextRecord.phantom) {
 			var engine = nextRecord.get('form').engineClass;
-			
+
 			if (engine) {
 				engine.resetForm();
 				nextRecord.set('form', engine.getFormObject());
 			} else {
 				var recordsPath = this.getRecordsPath();
-				var store = Ext.getStore('CaseForms'),
-					lastRecord = recordsPath[recordsPath.length - 1],
-					childForms = lastRecord.get('form').engineClass.childForms;
+				var store = Ext.getStore('CaseForms'), lastRecord = recordsPath[recordsPath.length - 1], childForms = lastRecord.get('form').engineClass.childForms;
 
 				store.clearFilter();
 				store.filterBy(function(record) {
@@ -486,9 +711,24 @@ Ext.define('cfa.controller.case.CaseController', {
 			}
 		} else {
 		}
-		
+
 		this.setCurrentRecord(nextRecord);
 		this.showCurrentRecord();
+	},
+
+	deleteAttachmentData : function() {
+		var imageStore = this.getImageStore(), imageList = this.getImageList(), record = imageList.getSelection();
+
+		for (var i = 0; i < record.length; i++) {
+			imageStore.remove(record[i])
+		}
+
+		this.setImageStoreChanged(true);
+	},
+
+	clearAttachmentData : function() {
+		var imageStore = this.getImageStore();
+		imageStore.removeAll();
+		this.setImageStoreChanged(true);
 	}
 });
-
