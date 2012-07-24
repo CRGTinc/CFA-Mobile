@@ -7,10 +7,11 @@ Ext.application({
 	name : 'cfa',
 	helpUrl: 'root',
 	requires : [		
-		'Ext.MessageBox'			
+		'Ext.MessageBox',
+		'cfa.proxy.File'
 	],
 	profiles : ['Tablet', 'Phone'],
-	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates'],
+	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates', 'Users'],
 
 	icon : {
 		'57' : 'resources/icons/Icon.png',
@@ -48,7 +49,7 @@ Ext.application({
 					else {
 						return Ext.create('cfa.store.LSContacts');
 					}
-				},
+				}
 				
 			},
 			
@@ -62,7 +63,7 @@ Ext.application({
 					else {					
 						return Ext.create('cfa.store.EventsLocal' );
 					}
-				},
+				}
 					
 			},
 			
@@ -76,7 +77,7 @@ Ext.application({
 					else {					
 						return Ext.create('cfa.store.ReferencesLocal' );
 					}
-				},
+				}
 			}
 		   	
     	});    	

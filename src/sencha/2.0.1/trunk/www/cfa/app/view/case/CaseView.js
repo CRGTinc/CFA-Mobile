@@ -3,11 +3,12 @@ Ext.define("cfa.view.case.CaseView", {
     xtype: 'case',
 
     config: {
+    	id: 'caseview',
         title: 'Case Data Management',
         layout: 'hbox',
         items: [{
-                xtype: 'tabpanel',
-                tabBarPosition: 'bottom',
+                xtype: 'panel',
+                layout: 'fit',
                 flex: 1,
                 items: [{
                         xtype: 'nestedlist',
@@ -33,14 +34,6 @@ Ext.define("cfa.view.case.CaseView", {
                                 }
                             ]
                         }
-                    }, {
-                        xtype: 'list',
-                        title: 'Devices',
-                        iconCls: 'settings'
-                    }, {
-                        xtype: 'panel',
-                        title: 'Search',
-                        iconCls: 'search'
                     }
                 ]
             }, {
@@ -65,22 +58,22 @@ Ext.define("cfa.view.case.CaseView", {
                                         xtype: 'label',
                                         id: 'casecontextlabel'
                                     }
-                                ],
+                                ]
                             }, {
                                 xtype: 'panel',
                                 baseCls: 'panel-shadow',
                                 cls:['infoPanel'],
                                 layout: 'fit',
-                                flex: 9,      
+                                flex: 2,
                                 hidden: true,
                                 id: 'casecontentpanel',
                                 items: [
                                     {
                                         xtype: 'panel',
-                                        layout: 'fit',
-                                        id: 'caseformpanel'
+                                        layout: 'vbox',
+                                        id: 'caseformpanel'									
                                     }
-                                ]
+								]
                             }, {
                                 xtype: 'toolbar',
                                 id: 'casetoolbar',
@@ -103,6 +96,14 @@ Ext.define("cfa.view.case.CaseView", {
                                         xtype: 'button',
                                         action: 'attachcasedata',
                                         text: 'Attach'
+                                    },{
+                                        xtype: 'button',
+                                        action: 'deleteattachmentdata',
+                                        text: 'Delete Photo'
+                                    }, {
+                                        xtype: 'button',
+                                        action: 'clearattachmentdata',
+                                        text: 'Clear Photos'
                                     }, {
                                         xtype: 'spacer'
                                     }, {
@@ -127,6 +128,6 @@ Ext.define("cfa.view.case.CaseView", {
     
     initialize: function(){
         this.callParent(arguments);
-        cfa.app.helpUrl = "Cases";
+        cfa.app.helpUrl = "CaseHelp";
     }
 });

@@ -10,9 +10,11 @@ Ext.define('cfa.view.search.SearchView', {
 				{
 					xtype: 'searchfield',
 					id: 'searchinputfield',
-					align: 'right'
+					align: 'right',
+					hidden: true,
+					clearIcon: false
 				}
-			]		
+			]
 		},
 		
 		items: [
@@ -21,8 +23,8 @@ Ext.define('cfa.view.search.SearchView', {
 				title: 'Search Templates',
 				id: 'searchtemplatelist',
 				itemTpl: '</pre><div>{text}</div><div><font size="-1">{description}</font></div><pre>',
-				store: 'SearchTemplates',
-			},
+				store: 'SearchTemplates'
+			}
 		]
 	},
 	
@@ -30,6 +32,7 @@ Ext.define('cfa.view.search.SearchView', {
 		this.callParent(arguments);
 		Ext.getCmp("searchinputfield").setValue('');
 	}
+
 });
 
 

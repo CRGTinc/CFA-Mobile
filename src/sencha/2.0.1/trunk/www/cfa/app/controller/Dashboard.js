@@ -1,51 +1,55 @@
 Ext.define('cfa.controller.Dashboard', {
-    extend: 'Ext.app.Controller',	
-	
-    config: {
-        refs: {
-            main: 'main',
-			homebtn: '#home-btn'
-        },
+	extend : 'Ext.app.Controller',
 
-        control: {
-            dashboards: {
-                itemtap: 'onDashboardItemTap',
-            },
-            
-			homebtn: {
-			   tap: 'goHome'
-			},			
-        },
+	config : {
+		refs : {
+			main : 'main',
+			homebtn : '#home-btn'
+		},
 
-        currentRecord: null,
+		control : {
+			dashboards : {
+				itemtap : 'onDashboardItemTap'
+			},
 
-        stack: []
-    },
+			homebtn : {
+				tap : 'goHome'
+			}
+		},
 
-    init: function() {
-        Ext.getStore('Dashboards').on('load', this.onStoreLoad, this);
-    },
+		currentRecord : null,
 
-    ensureStoreLoad: function(action) {
-        var store = Ext.getStore('Dashboards');
-
-        if (store.data.all.length) {
-            action.resume();
-        } else {
-            store.on('load', function() {
-                action.resume();
-            }, this, {
-                single: true
-            });
-        }
-    },
-
-    onDashboardItemTap: function(view, index, target, record, e, eOpts) {
-		this.redirectTo(record);
-    },
-     
-	goHome: function(){		
-		this.getMain().reset();
-		cfa.app.helpUrl = "root"
+		stack : []
 	},
+
+	init : function() {
+		Ext.getStore('Dashboards').on('load', this.onStoreLoad, this);
+	},
+
+	ensureStoreLoad : function(action) {
+		var store = Ext.getStore('Dashboards');
+
+		if (store.data.all.length) {
+			action.resume();
+		} else {
+			store.on('load', function() {
+				action.resume();
+			}, this, {
+				single : true
+			});
+		}
+	},
+
+	onDashboardItemTap : function(view, index, target, record, e, eOpts) {
+		this.redirectTo(record);
+	},
+
+	goHome : function() {
+		if (this.getMain().getActiveItem().getId() != 'dashboard') {
+			this.getMain().reset();
+		} else if (this.getMain().getActiveItem().getId() == 'caseview') {
+			this.getMain().backToDashboard();
+		}
+		cfa.app.helpUrl = "root"
+	}
 });

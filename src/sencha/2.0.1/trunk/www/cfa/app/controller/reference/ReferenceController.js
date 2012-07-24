@@ -11,15 +11,21 @@ Ext.define('cfa.controller.reference.ReferenceController',{
         refs: {
             main: 'main',
 			referenceViewContainer: 'reference_view_container',
-			referenceDetail: 'reference_detail'
+			referenceDetail: 'reference_detail',
+			referenceSearhField: 'searchfield[id = "referencesearchfield"]'
         },
 		
 		control:{
 			referenceViewContainer:{
 				openReferenceSourceCommand: 'openReferenceResource'	
+			},
+			
+			referenceSearhField: {
+				'keyup' : 'searchReferencesByKey'
 			}
-		}
+		},
 		
+		referenceView: null
     },
 	
 	openReferenceResource: function(list, record) {
@@ -31,7 +37,18 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 	},
 	
 	showReferencePage: function(){
-		var referenceView = Ext.create('cfa.view.reference.ReferenceView');
-		this.getMain().push(referenceView);        						
+		this.setReferenceView(Ext.create('cfa.view.reference.ReferenceView'));
+		this.getMain().push(this.getReferenceView());        						
+	},
+	
+	searchReferencesByKey: function(view, e, eOpts) {
+		var store = this.getReferenceView().getComponent('contentpanel').getComponent('referenceslist').getStore();
+		store.clearFilter();
+		store.filterBy(function(record){
+			if (record.getData().title.toLowerCase().indexOf(view.getValue().toLowerCase()) > -1) {
+				return record;
+			}
+		});
+		
 	}		
 })

@@ -1,8 +1,43 @@
 [
     {
         "text": "All devices",
-        "description": "Query for all devices",
+        "description": "Query for all devices (System, Storage, Media, Mobile)",
+        "queryType": "class",
+        "queryParam": "all"
+    },
+    
+    {
+        "text": "System",
+        "description": "Query for all Systems",
         "queryType": "class",
         "queryParam": "System"
+    },
+    
+    {
+        "text": "Storage",
+        "description": "Query for all Storage",
+        "queryType": "class",
+        "queryParam": "Storage"
+    },
+    
+    {
+        "text": "Media",
+        "description": "Query for all Media",
+        "queryType": "class",
+        "queryParam": "Media"
+    },
+    
+    {
+        "text": "Mobile",
+        "description": "Query for all Mobiles",
+        "queryType": "class",
+        "queryParam": "Mobile"
+    },
+    
+    {
+        "text": "Notes Report",
+        "description": "Query for all notes in a case",
+        "queryType": "class",
+        "queryParam": "Case Form"
     }
-]
+]  

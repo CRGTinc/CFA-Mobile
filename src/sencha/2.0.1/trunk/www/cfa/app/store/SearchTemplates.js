@@ -6,7 +6,11 @@ Ext.define('cfa.store.SearchTemplates', {
 		model: 'cfa.model.SearchTemplate',
 		proxy: {
 			type: 'ajax',
-			url : 'data/SearchTemplate.json'			
+			url : 'data/SearchTemplate.json',
+			limitParam: false,
+			pageParam : false,
+			startParam: false,
+			noCache: false,			
 		}
 	}
 

@@ -7,5 +7,5 @@ Ext.define('cfa.controller.tablet.Dashboard', {
 
     init: function() {
         this.callParent();        
-    },    
+    }   
 });

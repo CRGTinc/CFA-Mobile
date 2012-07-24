@@ -9,13 +9,13 @@ Ext.define("cfa.store.References",{
 			url : "data/References.csv",	
 			reader : {
 				type:"csv"
-			},
+			}
 		},
 		sorters: 'title',
 		grouper: {			
 			groupFn: function(record) {
 				return record.get('title')[0];
 			}
-		},
+		}
 	}	
 })
