@@ -49,7 +49,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>net.dynagility.mobile.cfa</string>
+	<string>com.crgt.c3app</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -57,11 +57,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>10.b3</string>
+	<string>1.0gm1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0b3</string>
+	<string>1.0gm1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMainNibFile</key>
