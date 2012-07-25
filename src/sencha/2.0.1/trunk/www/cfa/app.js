@@ -34,7 +34,7 @@ Ext.application({
     buildVersion: null,
 	
 	launch : function() {
-        this.buildVersion = new Ext.Version('1.0b3');
+        this.buildVersion = new Ext.Version('1.0gm1');
 
         Formpod.init(FD_Forms, Formpod.FormEngine.CodeGenerators.Sencha);
         Ext.getStore('CaseForms').setData(Formpod.Forms);
