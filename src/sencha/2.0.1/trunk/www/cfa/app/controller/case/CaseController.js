@@ -121,6 +121,11 @@ Ext.define('cfa.controller.case.CaseController', {
 		this.initForms();
 		this.setCaseView(Ext.create('cfa.view.case.CaseView'));
 		this.getMain().push(this.getCaseView());
+		var store = this.getCasesList().getStore().load({ callback: function() {
+			if(store.getData().all.length == 0) {
+				this.getCaseContextLabel().setHtml('<div align="center">"Tap on the + button to add a new case"</div>');
+			}
+		}, scope: this})
 	},
 
 	onPop : function(navigation, view, eOpts) {
