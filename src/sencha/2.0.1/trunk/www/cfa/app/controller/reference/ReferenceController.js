@@ -22,6 +22,10 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 			
 			referenceSearhField: {
 				'keyup' : 'searchReferencesByKey'
+			},
+			
+			main : {
+				beforepopcommand : 'onMainBack',
 			}
 		},
 		
@@ -33,9 +37,20 @@ Ext.define('cfa.controller.reference.ReferenceController',{
     onError: function(error) {
     	console.log(error);
     },
+    
+    onMainBack: function() {
+    	if (this.getCurrentActionSheet()) {
+			this.getCurrentActionSheet().hide();
+		}
+    },
 	
-	openReferenceResource: function(list, record) {
+	openReferenceResource: function( view, target, record) {
 		this.setCurrentRecord(record);
+		
+		if (this.getCurrentActionSheet()) {
+			this.getCurrentActionSheet().hide()	
+		}
+		
 		if (record.getData().url.toLowerCase().indexOf('.pdf') > -1){
 			if (!cfa.helper.PhoneGapHelper.isOnLine()) {
 				var me = this;
@@ -49,29 +64,40 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 				}, me.onError);
 			} else {
 				var me = this;
-				var actionSheet = Ext.create('Ext.ActionSheet',{
-					items: [{
-						text: 'View in CFA',
-						ui:'confirm',
-						handler: function() {me.openReferenceInWebview()}
-					}, {
-						text: 'Download to local',
-						handler: function(){me.saveReferenceToLocal();}
-					},{
-						text: 'Cancle',
-						handler: function(){actionSheet.hide();}
-					}]
+				var actionSheet = Ext.create('Ext.Panel',{
+					modal: false,
+					layout: 'fit',
+					height: '50px',
+					width: '235px',
+					items: [
+						{
+							xtype: 'toolbar',
+							items: [{
+									xtype: 'button',
+									text: 'View',
+									ui:'confirm',
+									handler: function() {me.openReferenceInWebview()}
+								}, {
+									xtype: 'button',
+									text: 'Download',
+									handler: function(){me.saveReferenceToLocal();}
+								},{
+									xtype: 'button',
+									text: 'Cancle',
+									handler: function(){actionSheet.hide();}
+								}]
+						}
+					]
+					
 				});
 			
 				Ext.Viewport.add(actionSheet);
 				this.setCurrentActionSheet(actionSheet);
-				actionSheet.show();
+				actionSheet.showBy(target);
 			}
 		} else {
 			this.openReferenceInWebview();
 		}
-		
-		
 	},
 	
 	openReferenceInWebview: function() {
@@ -82,7 +108,7 @@ Ext.define('cfa.controller.reference.ReferenceController',{
             window.plugins.childBrowser.showWebPage(currentRecord.getData().url);
         }
         
-        this.getCurrentActionSheet().hide()
+        this.getCurrentActionSheet().hide();
 	},
 	
 	saveReferenceToLocal: function() {
@@ -93,6 +119,11 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		}
 		var me = this;
 		currentRecord = this.getCurrentRecord();
+		this.getReferenceView().setMasked({
+			xtype : 'loadmask',
+			message : 'Downloading...'
+		});
+		
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
 			function(fileSystem) {
 				fileSystem.root.getFile(currentRecord.getData().title, {create : true},
@@ -105,7 +136,8 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 							currentRecord.getData().url,
 							path,
 							function(file) {
-								console.log("Download complete");
+								me.getReferenceView().unmask();
+								Ext.Msg.alert("Download Reference", "Referece downloaded complete");
 								me.getCurrentActionSheet().hide()
 							},
 							function(error){

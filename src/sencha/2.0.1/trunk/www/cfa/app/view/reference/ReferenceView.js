@@ -20,7 +20,7 @@ Ext.define("cfa.view.reference.ReferenceView", {
 			itemId: 'referenceslist',
 			store: this.getReferenceStore().load(),
 			listeners: {
-				select : {fn: this.onItemSelected, scope: this}
+				itemtap : {fn: this.onItemSelected, scope: this}
         	}
 		};
 		
@@ -42,7 +42,7 @@ Ext.define("cfa.view.reference.ReferenceView", {
 		this.add(contentPanel);
 	},
 		
-	onItemSelected: function(list, record, opt) {
-		this.fireEvent('openReferenceSourceCommand', this, record);
+	onItemSelected: function(view, index, target, record,  e, eOpts) {
+		this.fireEvent('openReferenceSourceCommand', this, target, record);
 	},
 });
