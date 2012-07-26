@@ -173,6 +173,21 @@
 
         [webView loadHTMLString:htmlText baseURL:[NSURL URLWithString:@""]];
 
+    }else if([url hasPrefix:@"file://"]) {
+        NSError *error = NULL;
+        
+        //Create the regular expression to match against
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"file://.*/Documents/" options:NSRegularExpressionCaseInsensitive error:&error];
+        
+        // Create the new string by replacing the matching of the regex pattern with the template pattern(empty string)
+        NSString *relativeUri = [regex stringByReplacingMatchesInString:url options:0 range:NSMakeRange(0, [url length]) withTemplate:@""];
+        NSLog(@"New string: %@", relativeUri);
+        
+        NSURL *documentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+        NSURL *url = [documentsDirectory URLByAppendingPathComponent:relativeUri];
+        NSLog(@"New string: %@", url);
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        [webView loadRequest:request];
     }
     else
     {
