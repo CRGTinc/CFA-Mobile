@@ -83,12 +83,11 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 									handler: function(){me.saveReferenceToLocal();}
 								},{
 									xtype: 'button',
-									text: 'Cancle',
+									text: 'Cancel',
 									handler: function(){actionSheet.hide();}
 								}]
 						}
 					]
-					
 				});
 			
 				Ext.Viewport.add(actionSheet);
@@ -130,14 +129,14 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 					function(fileEntry) {
 						var path = fileEntry.fullPath.replace(currentRecord.getData().title, "");
 						fileEntry.remove();
-						path = path + currentRecord.getData().title + ".pdf";
+						path = path + "Document-" + currentRecord.getData().title + ".pdf";
 						var fileTransfer = new FileTransfer();
 						fileTransfer.download(
 							currentRecord.getData().url,
 							path,
 							function(file) {
 								me.getReferenceView().unmask();
-								Ext.Msg.alert("Download Reference", "Referece downloaded complete");
+								Ext.Msg.alert("Download Reference", "Document downloaded");
 								me.getCurrentActionSheet().hide()
 							},
 							function(error){
