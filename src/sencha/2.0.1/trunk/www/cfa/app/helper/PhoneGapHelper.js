@@ -89,18 +89,16 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 									for (var i = 0; i < entries.length; i++) {
 										if (entries[i].isFile) {
 											var data = "";
-											if (entries[i].name.toUpperCase()
-													.indexOf('CASE') === 0) {
-												data += '{"type": "Case",';
-											} else {
-												data += '{"type": "Device",';
+											if (entries[i].name.toUpperCase().indexOf('CFADATA') > -1) {
+												if (entries[i].name.toUpperCase().indexOf('CASE') === 0) {
+													data += '{"type": "Case",';
+												} else {
+													data += '{"type": "Device",';
+												}
+												data += '"name": "' + entries[i].name + '",';
+												data += '"fullPath":"' + entries[i].fullPath + '"}';
+												result += data + ",";
 											}
-											data += '"name": "'
-													+ entries[i].name + '",';
-											data += '"fullPath":"'
-													+ entries[i].fullPath
-													+ '"}';
-											result += data + ",";
 										}
 									}
 									if (result[result.length - 1] == ',') {
