@@ -11,7 +11,7 @@ Ext.application({
 		'cfa.proxy.File'
 	],
 	profiles : ['Tablet', 'Phone'],
-	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates', 'Users'],
+	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates', 'Users', 'ReferencesDownloaded'],
 
 	icon : {
 		'57' : 'resources/icons/Icon.png',

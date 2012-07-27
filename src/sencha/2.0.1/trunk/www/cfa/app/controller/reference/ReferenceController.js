@@ -116,40 +116,95 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 			this.getCurrentActionSheet().hide();
 			return;
 		}
+		var currentRecord = this.getCurrentRecord();
+		
+		if(this.isDownloaded(currentRecord)) {
+			this.getCurrentActionSheet().hide();
+			Ext.Msg.confirm("Download Reference", "This document is already downloaded.<br> Do you want to re-download it?", this.cofirmDownload, this);
+		} else {
+			this.doDownload();
+		}
+		
+	},
+	
+	cofirmDownload: function(button) {
+		if(button == 'yes') {
+			this.doDownload();
+		}
+	},
+	
+	doDownload: function(button) {
 		var me = this;
-		currentRecord = this.getCurrentRecord();
-		this.getReferenceView().setMasked({
+		var localReferenceStore = Ext.getStore('ReferencesDownloaded');
+		var currentRecord = this.getCurrentRecord();
+
+		me.getReferenceView().setMasked({
 			xtype : 'loadmask',
 			message : 'Downloading...'
 		});
-		
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-			function(fileSystem) {
-				fileSystem.root.getFile(currentRecord.getData().title, {create : true},
-					function(fileEntry) {
-						var path = fileEntry.fullPath.replace(currentRecord.getData().title, "");
-						fileEntry.remove();
-						path = path + "Document-" + currentRecord.getData().title + ".pdf";
-						var fileTransfer = new FileTransfer();
-						fileTransfer.download(
-							currentRecord.getData().url,
-							path,
-							function(file) {
+
+		me.getCurrentActionSheet().hide();
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+			fileSystem.root.getFile(currentRecord.getData().title, {
+				create : true
+			}, function(fileEntry) {
+				var path = fileEntry.fullPath.replace(currentRecord.getData().title, "");
+				fileEntry.remove();
+				path = path + "Document-" + currentRecord.getData().title + ".pdf";
+				var fileTransfer = new FileTransfer();
+				fileTransfer.download(currentRecord.getData().url, path, function(file) {
+					if (localReferenceStore.getData().all.indexOf(currentRecord) > -1) {
+						me.getReferenceView().unmask();
+						Ext.Msg.alert("Download Reference", "Document downloaded");
+					} else {
+						localReferenceStore.add(currentRecord.copy());
+						localReferenceStore.sync({
+							callback : function() {
 								me.getReferenceView().unmask();
+								currentRecord.beginEdit();
+								currentRecord.set('downloaded', 'Downloaded');
+								currentRecord.endEdit();
 								Ext.Msg.alert("Download Reference", "Document downloaded");
-								me.getCurrentActionSheet().hide()
-							},
-							function(error){
-								console.log("Download error: " + error);
 							}
-						);
-					}, me.onError);
-		}, me.onError);
+						});
+					}
+				}, function(error) {
+					console.log("Download error: " + error);
+				});
+			}, me.onError);
+		}, me.onError); 
+	},
+
+	isDownloaded: function(document) {
+		if(document.getData().downloaded.toLowerCase() == 'downloaded')
+			return true;
+		else
+			return false;
 	},
 	
 	showReferencePage: function(){
+		var me = this;
 		this.setReferenceView(Ext.create('cfa.view.reference.ReferenceView'));
-		this.getMain().push(this.getReferenceView());        						
+		this.getMain().push(this.getReferenceView());
+		var localReferenceStore = Ext.getStore('ReferencesDownloaded');
+		var referenceStore = this.getReferenceView().getReferenceStore().load({
+			callback: function(records, operation, success) {
+				var dataOnline = records;
+				localReferenceStore.load({
+					callback: function(records, operation, success) {
+						for(var i = 0; i < dataOnline.length; i++) {
+							if (localReferenceStore.findRecord('title', dataOnline[i].getData().title)) {
+								dataOnline[i].getData().downloaded = 'Downloaded';
+							} else {
+								dataOnline[i].getData().downloaded = '';
+							}
+						}
+						referenceStore.setData(dataOnline);
+						this.getReferenceView().getComponent('contentpanel').getComponent('referenceslist').setStore(referenceStore);
+					},scope: me
+				});
+			}, scope: me
+		});						
 	},
 	
 	searchReferencesByKey: function(view, e, eOpts) {

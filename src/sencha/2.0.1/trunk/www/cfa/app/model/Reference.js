@@ -6,7 +6,8 @@ Ext.define('cfa.model.Reference',{
 		fields:[
 			{name: 'title', type: 'string'},
 			{name: 'description', type: 'string'},
-			{name: 'url', type: 'string'}
+			{name: 'url', type: 'string'},
+			{name: 'downloaded', type: 'string'}
 		]	
 	}	
 })

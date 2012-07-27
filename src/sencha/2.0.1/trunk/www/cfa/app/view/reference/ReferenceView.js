@@ -18,7 +18,6 @@ Ext.define("cfa.view.reference.ReferenceView", {
 		var referencesList = {
 			xtype: 'references_list',
 			itemId: 'referenceslist',
-			store: this.getReferenceStore().load(),
 			listeners: {
 				itemtap : {fn: this.onItemSelected, scope: this}
         	}
