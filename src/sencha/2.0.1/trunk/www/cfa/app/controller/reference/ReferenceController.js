@@ -187,19 +187,25 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		this.setReferenceView(Ext.create('cfa.view.reference.ReferenceView'));
 		this.getMain().push(this.getReferenceView());
 		var localReferenceStore = Ext.getStore('ReferencesDownloaded');
-		var referenceStore = this.getReferenceView().getReferenceStore().load({
+		
+		var referenceStore = this.getReferenceView().getReferenceStore();
+		referenceStore.load({
 			callback: function(records, operation, success) {
 				var dataOnline = records;
 				localReferenceStore.load({
 					callback: function(records, operation, success) {
 						for(var i = 0; i < dataOnline.length; i++) {
+							console.log(dataOnline[i]);
 							if (localReferenceStore.findRecord('title', dataOnline[i].getData().title)) {
-								dataOnline[i].getData().downloaded = 'Downloaded';
+								dataOnline[i].beginEdit();
+								dataOnline[i].set('downloaded', 'Downloaded');
+								dataOnline[i].endEdit();
 							} else {
-								dataOnline[i].getData().downloaded = '';
+								dataOnline[i].beginEdit();
+								dataOnline[i].set('downloaded', '');
+								dataOnline[i].endEdit();;
 							}
 						}
-						referenceStore.setData(dataOnline);
 						this.getReferenceView().getComponent('contentpanel').getComponent('referenceslist').setStore(referenceStore);
 					},scope: me
 				});
