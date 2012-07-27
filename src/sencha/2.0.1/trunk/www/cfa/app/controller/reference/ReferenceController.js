@@ -150,7 +150,7 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 			}, function(fileEntry) {
 				var path = fileEntry.fullPath.replace(currentRecord.getData().title, "");
 				fileEntry.remove();
-				path = path + "Document-" + currentRecord.getData().title + ".pdf";
+				path = path + currentRecord.getData().title + ".pdf";
 				var fileTransfer = new FileTransfer();
 				fileTransfer.download(currentRecord.getData().url, path, function(file) {
 					if (localReferenceStore.getData().all.indexOf(currentRecord) > -1) {
