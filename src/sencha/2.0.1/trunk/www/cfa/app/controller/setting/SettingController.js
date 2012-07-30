@@ -11,7 +11,9 @@ Ext.define('cfa.controller.setting.SettingController', {
 			main : 'main',
 			resetDataButton : 'button[action = resetdatabtn]',
 			importDataButton : 'button[action = importdatabtn]',
-			saveUserDataButton : 'button[action = saveuserdata]'
+			saveUserDataButton : 'button[action = saveuserdata]',
+			manageDocumentButton: 'button[action = managedocument]',
+			deleteButton: 'button[action = deletefile]'
 		},
 
 		control : {
@@ -27,6 +29,14 @@ Ext.define('cfa.controller.setting.SettingController', {
 
 			deleteImportButton : {
 				'tap' : 'deleteImportItems'
+			},
+			
+			manageDocumentButton: {
+				'tap' : 'manageDocument'
+			},
+			
+			deleteButton: {
+				'tap': 'deleteFile'
 			}
 
 		},
@@ -34,6 +44,8 @@ Ext.define('cfa.controller.setting.SettingController', {
 		importStore : undefined,
 		casesStore : undefined,
 		casesList : undefined,
+		documentStore: undefined,
+		documentStoreView: undefined,
 		settingView : null,
 		currentImportFile : ''
 	},
@@ -177,12 +189,22 @@ Ext.define('cfa.controller.setting.SettingController', {
 
 				me.setImportStore(importDataStore);
 				me.getImportStore().load();
-				me.setImportListView(Ext.create('cfa.view.setting.ImportDataView'))
-				me.getImportListView().getComponent('importlistcontainer').getComponent('importlist').setListeners(listener);
-				me.getImportListView().getComponent('importlistcontainer').getComponent('importlist').setStore(me.getImportStore());
+				me.setImportListView(Ext.create('cfa.view.setting.ImportDataView'));
+				var listView = {
+					xtype : 'list',
+					mode: 'MULTI',
+					title: 'Import List',
+					itemId: 'importlist',
+					itemTpl : "{name}",
+					onItemDisclosure: true,
+					grouped : true
+				};
+				me.getImportListView().getComponent('container').add(listView);
+				me.getImportListView().getComponent('container').getComponent('importlist').setListeners(listener);
+				me.getImportListView().getComponent('container').getComponent('importlist').setStore(me.getImportStore());
 				Ext.Viewport.add(me.getImportListView());
 			} else {
-				me.getImportListView().getComponent('importlistcontainer').reset();
+				me.getImportListView().getComponent('container').reset();
 				me.getImportStore().setData(Ext.JSON.decode(result));
 			}
 			me.getImportListView().showBy(me.getImportDataButton());
@@ -222,5 +244,82 @@ Ext.define('cfa.controller.setting.SettingController', {
 		});
 		store.sync();
 		Ext.Msg.alert('Save user data', 'Data has been saved successfully.', Ext.emptyFn, this);
+	},
+	
+	manageDocument: function() {
+		if (Ext.os.is.Desktop) {
+			Ext.Msg.alert("Manage Document", "Currently support only for iPad.");
+			return;
+		}
+
+		var me = this;
+
+		cfa.helper.PhoneGapHelper.loadDownloadedDocuments(function(result) {
+			if (me.getDocumentStore() == undefined) {
+				var documentStore = Ext.create('Ext.data.Store', {
+					model : 'cfa.model.Import',
+					data : result,
+					grouper : {
+						groupFn : function(record) {
+							return record.get('type');
+						}
+					}
+				});
+
+				me.setDocumentStore(documentStore);
+				me.getDocumentStore().load();
+				var listView = {
+					xtype : 'list',
+					title: 'Downloaded Documents',
+					itemId: 'documentlist',
+					itemTpl : "{name}",
+					grouped : true
+				};
+				me.setDocumentStoreView(Ext.create('cfa.view.setting.ImportDataView'));
+				me.getDocumentStoreView().getComponent('container').add(listView);
+				me.getDocumentStoreView().getComponent('container').getComponent('documentlist').setStore(me.getDocumentStore());
+				me.getDocumentStoreView().getComponent('actionbar').show();
+				Ext.Viewport.add(me.getDocumentStoreView());
+			} else {
+				me.getDocumentStoreView().getComponent('container').reset();
+				me.getDocumentStore().setData(Ext.JSON.decode(result));
+			}
+			me.getDocumentStoreView().showBy(me.getManageDocumentButton());
+		}, function() {
+			Ext.Msg.alert('Manage Document', 'This may be cause error....', Ext.emptyFn, this);
+		});
+	},
+	
+	
+	deleteFile: function() {
+		var me = this;
+		var selectedFiles = this.getDocumentStoreView().getComponent('container').getComponent('documentlist').getSelection();
+		var downloadedStore = Ext.getStore('ReferencesDownloaded');
+		var documentStore = this.getDocumentStore();
+	
+		downloadedStore.load({
+			callback : function(records, operation, success) {
+
+				for (var i = 0; i < selectedFiles.length; i++) {
+					documentStore.remove(selectedFiles[i]);
+					var recordToDelete = downloadedStore.findRecord('title',selectedFiles[i].getData().name.replace('.pdf','') );
+					downloadedStore.remove(recordToDelete);
+					console.log('here');
+					cfa.helper.PhoneGapHelper.deleteFile(selectedFiles[i].getData().fullPath);
+				}
+
+				downloadedStore.sync({
+					callback : function() {
+						me.getDocumentStoreView().hide();
+						Ext.Msg.alert('Detele File', 'Document deleted');
+						
+					}
+				});
+			},
+			scope : this,
+		}); 
+
+
 	}
+
 })

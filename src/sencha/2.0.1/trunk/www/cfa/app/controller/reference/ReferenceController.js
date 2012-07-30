@@ -32,6 +32,7 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		referenceView: null,
 		currentRecord: null,
 		currentActionSheet: null,
+		downloadedDocumentStore: null,
     },
     
     onError: function(error) {
@@ -129,13 +130,14 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 	
 	cofirmDownload: function(button) {
 		if(button == 'yes') {
+			this.getDownloadedDocumentStore().remove(this.getCurrentRecord());
 			this.doDownload();
 		}
 	},
 	
 	doDownload: function(button) {
 		var me = this;
-		var localReferenceStore = Ext.getStore('ReferencesDownloaded');
+		var downloadedDocumentStore = Ext.getStore('ReferencesDownloaded');
 		var currentRecord = this.getCurrentRecord();
 
 		me.getReferenceView().setMasked({
@@ -145,20 +147,15 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 
 		me.getCurrentActionSheet().hide();
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-			fileSystem.root.getFile(currentRecord.getData().title, {
-				create : true
-			}, function(fileEntry) {
-				var path = fileEntry.fullPath.replace(currentRecord.getData().title, "");
-				fileEntry.remove();
-				path = path + currentRecord.getData().title + ".pdf";
-				var fileTransfer = new FileTransfer();
-				fileTransfer.download(currentRecord.getData().url, path, function(file) {
-					if (localReferenceStore.getData().all.indexOf(currentRecord) > -1) {
-						me.getReferenceView().unmask();
-						Ext.Msg.alert("Download Reference", "Document downloaded");
-					} else {
-						localReferenceStore.add(currentRecord.copy());
-						localReferenceStore.sync({
+			fileSystem.root.getFile(currentRecord.getData().title, {create : true},
+				function(fileEntry) {
+					var path = fileEntry.fullPath.replace(currentRecord.getData().title, "");
+					fileEntry.remove();
+					path = path + currentRecord.getData().title + ".pdf";
+					var fileTransfer = new FileTransfer();
+					fileTransfer.download(currentRecord.getData().url, path, function(file) {
+						me.getDownloadedDocumentStore().add(currentRecord.copy());
+						me.getDownloadedDocumentStore().sync({
 							callback : function() {
 								me.getReferenceView().unmask();
 								currentRecord.beginEdit();
@@ -167,11 +164,10 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 								Ext.Msg.alert("Download Reference", "Document downloaded");
 							}
 						});
-					}
-				}, function(error) {
-					console.log("Download error: " + error);
-				});
-			}, me.onError);
+					}, function(error) {
+						console.log("Download error: " + error);
+					});
+				}, me.onError);
 		}, me.onError); 
 	},
 
@@ -186,17 +182,16 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		var me = this;
 		this.setReferenceView(Ext.create('cfa.view.reference.ReferenceView'));
 		this.getMain().push(this.getReferenceView());
-		var localReferenceStore = Ext.getStore('ReferencesDownloaded');
+		this.setDownloadedDocumentStore(Ext.getStore('ReferencesDownloaded'));
 		
 		var referenceStore = this.getReferenceView().getReferenceStore();
 		referenceStore.load({
 			callback: function(records, operation, success) {
 				var dataOnline = records;
-				localReferenceStore.load({
+				this.getDownloadedDocumentStore().load({
 					callback: function(records, operation, success) {
 						for(var i = 0; i < dataOnline.length; i++) {
-							console.log(dataOnline[i]);
-							if (localReferenceStore.findRecord('title', dataOnline[i].getData().title)) {
+							if (this.getDownloadedDocumentStore().findRecord('title', dataOnline[i].getData().title)) {
 								dataOnline[i].beginEdit();
 								dataOnline[i].set('downloaded', 'Downloaded');
 								dataOnline[i].endEdit();

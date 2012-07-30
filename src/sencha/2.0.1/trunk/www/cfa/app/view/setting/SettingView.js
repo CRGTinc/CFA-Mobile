@@ -51,6 +51,7 @@ Ext.define('cfa.view.setting.SettingView', {
 										}]
 							}, {
 								xtype : 'panel',
+								layout: 'hbox',
 								items : [{
 											xtype : 'button',
 											action : 'resetdatabtn',
@@ -60,8 +61,14 @@ Ext.define('cfa.view.setting.SettingView', {
 											xtype : 'button',
 											action : 'importdatabtn',
 											width : 200,
-											margin : '20 0 0 0',
+											margin : '0 0 0 20',
 											text : 'Import Data'
+										}, {
+											xtype : 'button',
+											action : 'managedocument',
+											width : 200,
+											margin : '0 0 0 20',
+											text : 'Manage Documents'
 										}]
 							}]
 				}]

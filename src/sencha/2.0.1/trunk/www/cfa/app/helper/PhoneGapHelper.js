@@ -116,6 +116,45 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 				onFileSystemSuccess, fail);
 	},
 	
+	loadDownloadedDocuments : function(successCallBack, failCallBack) {
+		var result = "[";
+		var fail = function(error) {
+			console.log(error);
+			failCallBack(error);
+		}
+
+		var onFileSystemSuccess = function(fileSytem) {
+			var importDataPath = "/";
+			fileSytem.root.getDirectory(importDataPath, {
+						create : true
+					}, function(directory) {
+						var directoryReader = directory.createReader();
+						directoryReader.readEntries(function(entries) {
+									for (var i = 0; i < entries.length; i++) {
+										if (entries[i].isFile) {
+											var data = "";
+											if (entries[i].name.toUpperCase().indexOf('PDF') > -1) {
+												data += '{"type": "DOCUMENT",';
+												data += '"name": "' + entries[i].name + '",';
+												data += '"fullPath":"' + entries[i].fullPath + '"}';
+												result += data + ",";
+											}
+										}
+									}
+									if (result[result.length - 1] == ',') {
+										result = result.slice(0, -1) + "]";
+									}else{
+										result += "]";
+									}
+									successCallBack(result);
+								}, fail)
+					}, fail);
+
+		}
+
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, fail);
+	},
+	
 	getImagesByFormId : function(formId, successCallBack, failCallBack) {
 		var fail = function(error) {
 			console.log(error);
@@ -256,6 +295,27 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 			}
 		};
 		saveData(0);
+	},
+	
+	deleteFile: function(path) {
+		var onFail = function(error) {
+			console.log('Delete file error: ' + error.code);
+		}
+		
+		var onFileSystemSuccess =  function(fileSystem) {
+			fileSystem.root.getFile(path, {create: false}, 
+				function(fileEntry) {
+					fileEntry.remove(
+						function(){
+							console.log("File deleted");
+						}, 						
+						function(error){
+							console.log("File delete error: " + error);
+						});
+				}, onFail)
+		}
+		
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, onFail);
 	}
 		
 });

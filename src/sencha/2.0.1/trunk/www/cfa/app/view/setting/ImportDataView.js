@@ -13,16 +13,20 @@ Ext.define('cfa.view.setting.ImportDataView', {
 		fullScreen: true,
 		items : [{
 			xtype : 'navigationview',
-			itemId: 'importlistcontainer',
-			items : [{
-				xtype : 'list',
-				mode: 'MULTI',
-				title: 'Import List',
-				id: 'importlist',
-				itemTpl : "{name}",
-				onItemDisclosure: true,
-				grouped : true
-			}]
+			itemId: 'container',
+		}, {
+			xtype: 'toolbar',
+			itemId: 'actionbar',
+			hidden: true,
+			docked: 'bottom',
+			items: [
+				{
+					xtype: 'button',
+					text: 'Delete',
+					action: 'deletefile'
+				}
+			]
+			
 		}]
 
 	}
