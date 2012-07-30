@@ -7,8 +7,8 @@ Ext.define('cfa.view.setting.ImportDataView', {
 		hideOnMaskTap : true,
 		hidden : true,
 		centered: true,
-		width : '50%',
-		height :' 60%',
+		width : '40%',
+		height :' 40%',
 		scrollable : true,
 		fullScreen: true,
 		items : [{
