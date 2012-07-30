@@ -691,6 +691,10 @@ Ext.define('cfa.controller.case.CaseController', {
 				this.getMain().reset();
 				this.setResetMainStack(false);
 			}
+			
+			if (this.getImageStoreChanged()){
+				this.setImageStoreChanged(false);
+			}
 		}
 
 		var nextRecord = this.getNextRecord();
