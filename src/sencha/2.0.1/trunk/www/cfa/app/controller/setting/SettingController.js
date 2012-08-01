@@ -377,7 +377,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 		reader.onloadend = function(evt) {
 			me.getHelper().saveDropFile(
 					name,
-					me.getHelper().decodeBase64(evt.target.result.replace('data:;base64,', '').replace('data:base64,')),
+					me.getHelper().decodeBase64(evt.target.result.replace('data:;base64,', '').replace('data:base64,','')),
 					function(path) {
 						console.log(dataArray);
 						var record = {};
