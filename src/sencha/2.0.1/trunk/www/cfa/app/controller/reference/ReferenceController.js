@@ -112,11 +112,6 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 	},
 	
 	saveReferenceToLocal: function() {
-		if (Ext.os.is.Desktop) {
-			Ext.Msg.alert("Download Reference", "Currently support only for iPad.");
-			this.getCurrentActionSheet().hide();
-			return;
-		}
 		var currentRecord = this.getCurrentRecord();
 		
 		if(this.isDownloaded(currentRecord)) {
@@ -136,9 +131,16 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 	},
 	
 	doDownload: function(button) {
+		if (Ext.os.is.Desktop) {
+			Ext.Msg.alert("Download Reference", "Currently support only for iPad.");
+			return;
+		} 
 		var me = this;
-		var downloadedDocumentStore = Ext.getStore('ReferencesDownloaded');
-		var currentRecord = this.getCurrentRecord();
+		var	downloadedDocumentStore = Ext.getStore('ReferencesDownloaded'),
+			currentRecord = this.getCurrentRecord();
+			
+		var name = currentRecord.getData().title,
+			url = currentRecord.getData().url;
 
 		me.getReferenceView().setMasked({
 			xtype : 'loadmask',
@@ -146,29 +148,21 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		});
 
 		me.getCurrentActionSheet().hide();
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-			fileSystem.root.getFile(currentRecord.getData().title, {create : true},
-				function(fileEntry) {
-					var path = fileEntry.fullPath.replace(currentRecord.getData().title, "");
-					fileEntry.remove();
-					path = path + currentRecord.getData().title + ".pdf";
-					var fileTransfer = new FileTransfer();
-					fileTransfer.download(currentRecord.getData().url, path, function(file) {
-						me.getDownloadedDocumentStore().add(currentRecord.copy());
-						me.getDownloadedDocumentStore().sync({
-							callback : function() {
-								me.getReferenceView().unmask();
-								currentRecord.beginEdit();
-								currentRecord.set('downloaded', 'Downloaded');
-								currentRecord.endEdit();
-								Ext.Msg.alert("Download Reference", "Document downloaded");
-							}
-						});
-					}, function(error) {
-						console.log("Download error: " + error);
-					});
-				}, me.onError);
-		}, me.onError); 
+		cfa.helper.PhoneGapHelper.downloadFile(name, url,
+			function() {
+				console.log("here");
+				me.getDownloadedDocumentStore().add(currentRecord.copy());
+				me.getDownloadedDocumentStore().sync({
+					callback : function() {
+						me.getReferenceView().unmask();
+						currentRecord.beginEdit();
+						currentRecord.set('downloaded', 'Downloaded');
+						currentRecord.endEdit();
+						Ext.Msg.alert("Download Reference", "Document downloaded");
+					}
+				});
+			}
+		); 
 	},
 
 	isDownloaded: function(document) {

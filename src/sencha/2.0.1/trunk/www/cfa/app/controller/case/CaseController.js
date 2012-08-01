@@ -101,7 +101,8 @@ Ext.define('cfa.controller.case.CaseController', {
 
 		neededPop : false,
 		neededRefesh : false,
-		resetMainStack : false
+		resetMainStack : false,
+		helper: cfa.utils.HelperUtil.getHelper()
 	},
 
 	initForms : function() {
@@ -125,7 +126,14 @@ Ext.define('cfa.controller.case.CaseController', {
 			if(store.getData().all.length == 0) {
 				this.getCaseContextLabel().setHtml('<div align="center">"Tap on the + button to add a new case"</div>');
 			}
-		}, scope: this})
+		}, scope: this});
+		
+		window.webkitStorageInfo.requestQuota(window.PERSISTENT, 1024 * 1024 * 50, function(grantedBytes) {
+			
+		}, function(e) {
+			
+			Ext.Msg.alert("Error", "Error allocating quota");
+		});
 	},
 
 	onPop : function(navigation, view, eOpts) {
@@ -328,64 +336,61 @@ Ext.define('cfa.controller.case.CaseController', {
 	},
 
 	exportCaseData : function() {
-		if (Ext.os.is.Desktop) {
-			Ext.Msg.alert("Export Data", "Currently support only for iPad.");
-		} else {
-			var me = this, currentRecord = this.getCurrentRecord();
+		var me = this, currentRecord = this.getCurrentRecord();
 
-			if (currentRecord.phantom) {
-				Ext.Msg.alert("Export Data", "You can not export unsaved data.");
-				return;
-			}
-
-			var actionSheet = Ext.create('Ext.ActionSheet', {
-				modal : false,
-				left : "40%",
-				right : "40%",
-				bottom : "6%",
-				items : [{
-					text : 'Via email',
-					handler : function() {
-						Formpod.exportData(currentRecord.getData().form, function(data) {
-							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
-
-							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
-								if (cfa.helper.PhoneGapHelper.fileSizeValidation(filename)) {
-									window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
-								} else {
-									Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
-								}
-
-							});
-						});
-
-						actionSheet.hide();
-					}
-				}, {
-					text : 'To iTunes',
-					handler : function() {
-						Formpod.exportData(currentRecord.getData().form, function(data) {
-							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
-
-							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
-								Ext.Msg.alert("Export Data", "Data has been exported successfully.");
-							});
-							actionSheet.hide();
-						});
-					}
-				}, {
-					text : 'Cancel',
-					ui : 'confirm',
-					handler : function() {
-						actionSheet.hide();
-					}
-				}]
-			});
-
-			Ext.Viewport.add(actionSheet);
-			actionSheet.show();
-			this.setCurrentActionSheet(actionSheet);
+		if (currentRecord.phantom) {
+			Ext.Msg.alert("Export Data", "You can not export unsaved data.");
+			return;
 		}
+
+		var actionSheet = Ext.create('Ext.ActionSheet', {
+			modal : false,
+			left : "40%",
+			right : "40%",
+			bottom : "6%",
+			items : [{
+				text : 'Via email',
+				handler : function() {
+					Formpod.exportData(currentRecord.getData().form, function(data) {
+						var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+
+						me.getHelper().saveFile(data, filename, function() {
+							if (me.getHelper().fileSizeValidation(filename)) {
+								window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+							} else {
+								Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
+							}
+
+						});
+					});
+
+					actionSheet.hide();
+				}
+			}, {
+				text : 'To iTunes',
+				handler : function() {
+					Formpod.exportData(currentRecord.getData().form, function(data) {
+						var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+
+						me.getHelper().saveFile(data, filename, function() {
+							Ext.Msg.alert("Export Data", "Data has been exported successfully.");
+						});
+						actionSheet.hide();
+					});
+				}
+			}, {
+				text : 'Cancel',
+				ui : 'confirm',
+				handler : function() {
+					actionSheet.hide();
+				}
+			}]
+		});
+
+		Ext.Viewport.add(actionSheet);
+		actionSheet.show();
+		this.setCurrentActionSheet(actionSheet); 
+
 	},
 
 	deleteCaseData : function() {
@@ -509,13 +514,6 @@ Ext.define('cfa.controller.case.CaseController', {
 
 		var formType = record.get('name'), data = Ext.create('cfa.model.Case'), engine = Formpod.FormTypes[formType];
 
-		if (formType == 'Photo/Attachment') {
-			if (Ext.os.is.Desktop) {
-				Ext.Msg.alert("Export Data", "Currently support only for iPad.");
-				return;
-			}
-		}
-
 		engine.resetForm();
 		data.set('form', engine.getFormObject());
 
@@ -572,6 +570,9 @@ Ext.define('cfa.controller.case.CaseController', {
 		this.setImageList(undefined);
 		if (id != undefined) {
 			var imageStore = Ext.create('cfa.store.LSImages');
+			imageStore.filterBy(function(record) {
+				return record.getData().formId == id; 
+			});
 			imageStore.getProxy().setFormId(id);
 			imageStore.load();
 			this.setImageStore(imageStore);
@@ -590,6 +591,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 			this.setImageList(imageList);
 			this.getCaseFormPanel().add(this.getImageList());
+			this.processImageDesktop();
 		}
 	},
 
@@ -649,7 +651,7 @@ Ext.define('cfa.controller.case.CaseController', {
 
 				if ( typeof formData[key] == 'object') {
 					if (formData[key] instanceof Date) {
-						if ( typeof currentData[key] != 'undefined' && currentData[key] != null ) {
+						if ( typeof currentData[key] != 'undefined' && currentData[key] != null) {
 							if (Ext.Date.format(formData[key], Formpod.dateFormat) != Ext.Date.format(currentData[key], Formpod.dateFormat))
 								changed = true;
 						} else {
@@ -739,5 +741,68 @@ Ext.define('cfa.controller.case.CaseController', {
 		var imageStore = this.getImageStore();
 		imageStore.removeAll();
 		this.setImageStoreChanged(true);
+	},
+	
+	processImageDesktop : function() {
+		var me = this;
+		var currentRecord = me.getCurrentRecord();
+		var imageStore = me.getImageStore();
+		var formId = currentRecord.get('form').PhotoId;
+		if (window.FileReader) {
+
+			var drop = document.getElementById('imagelist');
+			function cancel(e) {
+				if (e.preventDefault) {
+					e.preventDefault();
+				}
+				return false;
+			}
+			// Tells the browser that we *can* drop on this target
+			me.addEventHandler(drop, 'dragover', cancel);
+			me.addEventHandler(drop, 'dragenter', cancel);
+			me.addEventHandler(drop, 'drop', function(e) {
+						e = e || window.event;
+						// get window.event if e argument missing (in IE)
+						if (e.preventDefault) {
+							e.preventDefault();
+						}
+						// stops the browser from redirecting off to the
+						// image.
+
+						var dt = e.dataTransfer;
+						var files = dt.files;
+						for (var i = 0; i < files.length; i++) {
+							var file = files[i];
+							var reader = new FileReader();
+							// attach event handlers here...
+							reader.onloadend = function(evt) {
+								imageStore.add({
+											formId : formId,
+											srcImage : evt.target.result
+										});
+							};
+
+							reader.readAsDataURL(file);
+						}
+						return false;
+					});
+
+		} else {
+			Ext.Msg.alert('Alert',
+					'Your browser does not support the HTML5 FileReader. Please use Chrome browser');
+		}
+	},
+	
+	addEventHandler : function(obj, evt, handler) {
+		if (obj.addEventListener) {
+			// W3C method
+			obj.addEventListener(evt, handler, false);
+		} else if (obj.attachEvent) {
+			// IE method.
+			obj.attachEvent('on' + evt, handler);
+		} else {
+			// Old school method.
+			obj['on' + evt] = handler;
+		}
 	}
 });

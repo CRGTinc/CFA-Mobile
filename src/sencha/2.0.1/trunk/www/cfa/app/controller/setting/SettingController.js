@@ -47,7 +47,8 @@ Ext.define('cfa.controller.setting.SettingController', {
 		documentStore: undefined,
 		documentStoreView: undefined,
 		settingView : null,
-		currentImportFile : ''
+		currentImportFile : '',
+		helper: cfa.utils.HelperUtil.getHelper()
 	},
 
 	showSettingPage : function() {
@@ -58,6 +59,13 @@ Ext.define('cfa.controller.setting.SettingController', {
 				this.getSettingView().getComponent('settingformpanel').setRecord(records[0]);
 			},
 			scope : this
+		});
+		
+		window.webkitStorageInfo.requestQuota(window.PERSISTENT, 1024 * 1024 * 50, function(grantedBytes) {
+			
+		}, function(e) {
+			
+			Ext.Msg.alert("Error", "Error allocating quota");
 		});
 	},
 
@@ -71,28 +79,20 @@ Ext.define('cfa.controller.setting.SettingController', {
 		};
 
 		if (record.getData().type.toUpperCase() == 'CASE') {
-			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-				fileSystem.root.getFile(record.getData().fullPath, {
-					create : false
-				}, function(entry) {
-					entry.file(function(file) {
-						var reader = new FileReader();
-						reader.onloadend = function(evt) {
-							me.getSettingView().setMasked({
-								xtype : 'loadmask',
-								message : 'Importing...'
-							});
-							Formpod.importData(evt.target.result, function() {
-								Ext.Msg.alert("Import Data", "Data imported successfully", Ext.emptyFn, me);
-								me.getSettingView().unmask();
-							});
-						};
-						reader.readAsText(file);
+			me.getHelper().getFileData(record.getData().fullPath,
+					function(data) {
+						me.getSettingView().setMasked({
+									xtype : 'loadmask',
+									message : 'Importing...'
+								});
+						Formpod.importData(data, function() {
+									Ext.Msg.alert("Import Data",
+											"Data imported successfully",
+											Ext.emptyFn, me);
+									me.getSettingView().unmask();
+								});
 
-					}, fail);
-				}, fail);
-
-			}, fail);
+					});
 			me.getImportListView().hide();
 
 		} else {
@@ -120,7 +120,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 				}
 				me.setCasesList(caselist);
 			}
-			me.getImportListView().getComponent('importlistcontainer').push(me.getCasesList());
+			me.getImportListView().getComponent('container').push(me.getCasesList());
 			me.setCurrentImportFile(record.getData().fullPath);
 		};
 	},
@@ -132,39 +132,23 @@ Ext.define('cfa.controller.setting.SettingController', {
 			console.log("Error: " + error);
 		};
 
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-			fileSystem.root.getFile(me.getCurrentImportFile(), {
-				create : false
-			}, function(entry) {
-				entry.file(function(file) {
-					var reader = new FileReader();
-					reader.onloadend = function(evt) {
-						me.getSettingView().setMasked({
-							xtype : 'loadmask',
-							message : 'Importing...'
-						});
-						Formpod.importDevice(record.getData().form, evt.target.result, function() {
-							Ext.Msg.alert("Import Data", "Data imported successfully", function() {
-							}, me);
-							me.getSettingView().unmask();
-						});
-					};
-					reader.readAsText(file);
+		me.getHelper().getFileData(me.getCurrentImportFile(), function(data) {
+			me.getSettingView().setMasked({
+				xtype : 'loadmask',
+				message : 'Importing...'
+			});
+			Formpod.importDevice(record.getData().form, data, function() {
+				Ext.Msg.alert("Import Data", "Data imported successfully", function() {
+				}, me);
+				me.getSettingView().unmask();
+			});
+		});
 
-				}, fail);
-			}, fail);
-
-		}, fail);
 		me.getImportListView().hide();
 
 	},
 
 	importData : function() {
-
-		if (Ext.os.is.Desktop) {
-			Ext.Msg.alert("Import Data", "Currently support only for iPad.");
-			return;
-		}
 
 		var me = this;
 
@@ -175,7 +159,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 			}
 		};
 
-		cfa.helper.PhoneGapHelper.loadImportedData(function(result) {
+		me.getHelper().loadImportedData(function(result) {
 			if (me.getImportStore() == undefined) {
 				var importDataStore = Ext.create('Ext.data.Store', {
 					model : 'cfa.model.Import',
@@ -207,7 +191,15 @@ Ext.define('cfa.controller.setting.SettingController', {
 				me.getImportListView().getComponent('container').reset();
 				me.getImportStore().setData(Ext.JSON.decode(result));
 			}
+			
+			if (Ext.os.is.Desktop) {
+				me.getImportListView().getComponent('dragfilefield').show();
+			} else {
+				me.getImportListView().getComponent('dragfilefield').hide();
+			}
+			
 			me.getImportListView().showBy(me.getImportDataButton());
+			me.processDataFromDesktop();
 		}, function() {
 			Ext.Msg.alert('Import Data', 'This may be cause error....', Ext.emptyFn, this);
 		});
@@ -247,14 +239,9 @@ Ext.define('cfa.controller.setting.SettingController', {
 	},
 	
 	manageDocument: function() {
-		if (Ext.os.is.Desktop) {
-			Ext.Msg.alert("Manage Document", "Currently support only for iPad.");
-			return;
-		}
-
 		var me = this;
 
-		cfa.helper.PhoneGapHelper.loadDownloadedDocuments(function(result) {
+		me.getHelper().loadDownloadedDocuments(function(result) {
 			if (me.getDocumentStore() == undefined) {
 				var documentStore = Ext.create('Ext.data.Store', {
 					model : 'cfa.model.Import',
@@ -304,8 +291,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 					documentStore.remove(selectedFiles[i]);
 					var recordToDelete = downloadedStore.findRecord('title',selectedFiles[i].getData().name.replace('.pdf','') );
 					downloadedStore.remove(recordToDelete);
-					console.log('here');
-					cfa.helper.PhoneGapHelper.deleteFile(selectedFiles[i].getData().fullPath);
+					me.getHelper().deleteFile(selectedFiles[i].getData().fullPath);
 				}
 
 				downloadedStore.sync({
@@ -320,6 +306,93 @@ Ext.define('cfa.controller.setting.SettingController', {
 		}); 
 
 
-	}
+	},
+	
+	processDataFromDesktop : function() {
+		var me = this;
+		
+		if (window.FileReader) {
+			var drop = document.getElementById('dragfilefield');
+			function cancel(e) {
+				if (e.preventDefault) {
+					e.preventDefault();
+				}
+				return false;
+			}
+			// Tells the browser that we *can* drop on this target
+			me.addEventHandler(drop, 'dragover', cancel);
+			me.addEventHandler(drop, 'dragenter', cancel);
+			me.addEventHandler(drop, 'drop', function(e) {
+						e = e || window.event;
+						// get window.event if e argument missing (in IE)
+						if (e.preventDefault) {
+							e.preventDefault();
+						}
 
+						var dt = e.dataTransfer;
+						var files = dt.files;
+						var filesArray = [];
+						
+						//convert file list to array
+						for (var i = 0; i < files.length; i++){
+							filesArray.push(files[i]);
+						}
+						
+						var dataArray = [];						
+						me.putFileInToList(filesArray, dataArray );
+							
+						return false;
+					});
+
+		} else {
+			Ext.Msg.alert('Alert', 'Your browser does not support the HTML5 FileReader. Please use Chrome browser');
+		}
+	},
+	
+	addEventHandler : function(obj, evt, handler) {
+		if (obj.addEventListener) {
+			// W3C method
+			obj.addEventListener(evt, handler, false);
+		} else if (obj.attachEvent) {
+			// IE method.
+			obj.attachEvent('on' + evt, handler);
+		} else {
+			// Old school method.
+			obj['on' + evt] = handler;
+		}
+	},
+	
+	putFileInToList : function(filesArray, resultArray) {
+		var me = this;
+		var files = filesArray;
+		var dataArray = resultArray;
+		var dataType = '', name = files[0].name, count = 0, length = files.length;
+
+		if (files[0].name.toUpperCase().indexOf('CASE') > -1) {
+			dataType = 'Case';
+		} else {
+			dataType = 'Device';
+		}
+		var reader = new FileReader();
+		reader.onloadend = function(evt) {
+			me.getHelper().saveDropFile(
+					name,
+					me.getHelper().decodeBase64(evt.target.result.replace('data:;base64,', '').replace('data:base64,')),
+					function(path) {
+						console.log(dataArray);
+						var record = {};
+						record.name = name, record.fullPath = path, record.type = dataType
+						dataArray.push(record);
+						count++;
+
+						if (count == length) {
+							me.getImportStore().add(dataArray);
+						} else {
+							me.putFile(files.slice(1, files.length), dataArray);
+						}
+					});
+					
+		};
+		reader.readAsDataURL(files[0]);
+	}
 })

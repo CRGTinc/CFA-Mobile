@@ -816,13 +816,14 @@ var Formpod = {
 	},
 
 	saveInstanceWithImages : function(importData, callback) {
+		var helper = cfa.utils.HelperUtil.getHelper();
 		var me = this;
 		var fail = function(error) {
 			console.log(error);
 		}
 		me.saveInstance(importData, function(obj) {
 			if (obj && obj.dataimg && obj.dataimg.length > 0) {
-				cfa.helper.PhoneGapHelper.saveImagesByJsonObjs(obj.dataimg, function() {
+				helper.saveImagesByJsonObjs(obj.dataimg, function() {
 					callback(obj);
 				}, fail)
 			} else {
