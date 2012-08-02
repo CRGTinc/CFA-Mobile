@@ -48,7 +48,8 @@ Ext.define('cfa.controller.setting.SettingController', {
 		documentStoreView: undefined,
 		settingView : null,
 		currentImportFile : '',
-		helper: cfa.utils.HelperUtil.getHelper()
+		helper: cfa.utils.HelperUtil.getHelper(),
+		fileUtils: cfa.utils.FileUtils
 	},
 
 	showSettingPage : function() {
@@ -85,6 +86,10 @@ Ext.define('cfa.controller.setting.SettingController', {
 									xtype : 'loadmask',
 									message : 'Importing...'
 								});
+						
+						if (me.getFileUtils().isEncryptedData(data)) {
+							data = me.getFileUtils().XORDecode(data);
+						}
 						Formpod.importData(data, function() {
 									Ext.Msg.alert("Import Data",
 											"Data imported successfully",
@@ -137,6 +142,11 @@ Ext.define('cfa.controller.setting.SettingController', {
 				xtype : 'loadmask',
 				message : 'Importing...'
 			});
+			
+			if (me.getFileUtils().isEncryptedData(data)) {
+				data = me.getFileUtils().XORDecode(data);
+			}
+
 			Formpod.importDevice(record.getData().form, data, function() {
 				Ext.Msg.alert("Import Data", "Data imported successfully", function() {
 				}, me);
@@ -375,11 +385,22 @@ Ext.define('cfa.controller.setting.SettingController', {
 		}
 		var reader = new FileReader();
 		reader.onloadend = function(evt) {
+			
+			var data = me.getHelper().decodeBase64(evt.target.result.replace('data:;base64,', '').replace('data:base64,','').replace('data:application/json;base64,',''));
+			
+			
+			if (me.getFileUtils().isEncryptedData(data)) {
+				data = me.getFileUtils().XORDecode(data);
+				if (me.getFileUtils().isEncryptedData(data)) {
+					Ext.Msg.alert("Import Files", "There is error(s) in decoded file");
+					return;
+				}	
+			}
+			
 			me.getHelper().saveDropFile(
 					name,
-					me.getHelper().decodeBase64(evt.target.result.replace('data:;base64,', '').replace('data:base64,','')),
+					data,
 					function(path) {
-						console.log(dataArray);
 						var record = {};
 						record.name = name, record.fullPath = path, record.type = dataType
 						dataArray.push(record);

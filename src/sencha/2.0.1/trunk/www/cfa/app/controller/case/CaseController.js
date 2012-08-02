@@ -102,7 +102,10 @@ Ext.define('cfa.controller.case.CaseController', {
 		neededPop : false,
 		neededRefesh : false,
 		resetMainStack : false,
-		helper: cfa.utils.HelperUtil.getHelper()
+		
+		helper: cfa.utils.HelperUtil.getHelper(),
+		fileUtils: cfa.utils.FileUtils,
+		isDesktop: Ext.os.is.Desktop?true:false
 	},
 
 	initForms : function() {
@@ -122,10 +125,13 @@ Ext.define('cfa.controller.case.CaseController', {
 		this.initForms();
 		this.setCaseView(Ext.create('cfa.view.case.CaseView'));
 		this.getMain().push(this.getCaseView());
-		var store = this.getCasesList().getStore().load({ callback: function() {
-			if(store.getData().all.length == 0) {
-				this.getCaseContextLabel().setHtml('<div align="center">"Tap on the + button to add a new case"</div>');
-			}
+		var store = Ext.getStore('Cases')
+		store.load({
+			callback: function(records, operation, success) {
+				store.removed = [];
+				if(store.getData().all.length == 0) {
+					this.getCaseContextLabel().setHtml('<div align="center">"Tap on the + button to add a new case"</div>');
+				}
 		}, scope: this});
 		
 		window.webkitStorageInfo.requestQuota(window.PERSISTENT, 1024 * 1024 * 50, function(grantedBytes) {
@@ -353,10 +359,14 @@ Ext.define('cfa.controller.case.CaseController', {
 				handler : function() {
 					Formpod.exportData(currentRecord.getData().form, function(data) {
 						var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
-
-						me.getHelper().saveFile(data, filename, function() {
+						var encodedData = me.getFileUtils().XOREncode(data);
+						
+						me.getHelper().saveFile(encodedData, filename, function(path) {
 							if (me.getHelper().fileSizeValidation(filename)) {
-								window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+								if (!me.getIsDesktop())
+									window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+								else
+									document.location.href = 'mailto:?subject="CFA Data"&attachment=' + path;
 							} else {
 								Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
 							}
@@ -371,7 +381,7 @@ Ext.define('cfa.controller.case.CaseController', {
 				handler : function() {
 					Formpod.exportData(currentRecord.getData().form, function(data) {
 						var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
-
+						
 						me.getHelper().saveFile(data, filename, function() {
 							Ext.Msg.alert("Export Data", "Data has been exported successfully.");
 						});

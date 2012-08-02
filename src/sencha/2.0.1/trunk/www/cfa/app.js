@@ -2,7 +2,7 @@ Ext.Loader.setPath({
 	'cfa' : 'app',
 	'Deft' : 'app/lib/deft'
 });
-Ext.require(['Deft.*','cfa.helper.PhoneGapHelper','cfa.helper.ChromeHelper', 'cfa.utils.HelperUtil']);
+Ext.require(['Deft.*','cfa.helper.PhoneGapHelper','cfa.helper.ChromeHelper', 'cfa.utils.HelperUtil', 'cfa.utils.FileUtils']);
 Ext.application({
 	name : 'cfa',
 	helpUrl: 'root',
