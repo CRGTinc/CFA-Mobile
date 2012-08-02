@@ -861,6 +861,7 @@ var Formpod = {
 	},
 
 	getFormInstanceData : function(formInstance, successCallBack) {
+		var helper = cfa.utils.HelperUtil.getHelper();
 		var me = this;
 		var newPhotoId = "";
 		var formdata = '{', engine = formInstance.engineClass, definition = engine.definition, index;
@@ -900,7 +901,7 @@ var Formpod = {
 				console.log('error:' + error);
 			}
 			//images can be added here to json string
-			cfa.helper.PhoneGapHelper.getJsonStringFromImages(formInstance['PhotoId'], newPhotoId, function(result) {
+			helper.getJsonStringFromImages(formInstance['PhotoId'], newPhotoId, function(result) {
 				formdata = formdata.concat('"dataimg":' + result + '}');
 				successCallBack(formdata);
 			}, fail)
