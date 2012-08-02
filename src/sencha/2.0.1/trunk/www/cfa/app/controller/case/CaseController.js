@@ -365,8 +365,10 @@ Ext.define('cfa.controller.case.CaseController', {
 							if (me.getHelper().fileSizeValidation(filename)) {
 								if (!me.getIsDesktop())
 									window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
-								else
-									document.location.href = 'mailto:?subject="CFA Data"&attachment=' + path;
+								else {
+									document.location.href = 'mailto:?subject=CFA Data&attachment='+path;
+								}
+									
 							} else {
 								Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
 							}

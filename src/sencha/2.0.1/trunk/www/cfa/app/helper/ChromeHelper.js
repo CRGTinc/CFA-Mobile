@@ -27,7 +27,7 @@ Ext.define("cfa.helper.ChromeHelper", {
 						fileEntry.createWriter(function(writer) {
 									writer.onwriteend = function(evt) {
 										if (typeof callback == 'function') {
-											Ext.callback(callback, scope || me);
+											callback(fileEntry.toURL());
 										}
 									};
 									if (!window.BlobBuilder && window.WebKitBlobBuilder)
