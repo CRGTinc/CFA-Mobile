@@ -332,28 +332,36 @@ Ext.define('cfa.controller.setting.SettingController', {
 			// Tells the browser that we *can* drop on this target
 			me.addEventHandler(drop, 'dragover', cancel);
 			me.addEventHandler(drop, 'dragenter', cancel);
+			
+		
 			me.addEventHandler(drop, 'drop', function(e) {
-						e = e || window.event;
-						// get window.event if e argument missing (in IE)
-						if (e.preventDefault) {
-							e.preventDefault();
-						}
+				e = e || window.event;
+				// get window.event if e argument missing (in IE)
+				if (e.preventDefault) {
+					e.preventDefault();
+				}
 
-						var dt = e.dataTransfer;
-						var files = dt.files;
-						var filesArray = [];
-						
-						//convert file list to array
-						for (var i = 0; i < files.length; i++){
-							filesArray.push(files[i]);
-						}
-						
-						var dataArray = [];						
-						me.putFileInToList(filesArray, dataArray );
-							
-						return false;
-					});
+				var dt = e.dataTransfer;
+				var files = dt.files;
+				var filesArray = [], dataArray = [];
+				var store = me.getImportStore();
 
+				//convert file list to array
+				for (var i = 0; i < files.length; i++) {
+					if (!store.findRecord('name', files[i].name)) {
+						filesArray.push(files[i]);
+					}
+				}
+				
+				if (filesArray.length > 0) {
+					me.putFileInToList(filesArray, dataArray);
+				} else {
+					Ext.Msg.alert("File Import", "The file(s) already existed.")
+				}
+				
+				return false;
+			});
+			
 		} else {
 			Ext.Msg.alert('Alert', 'Your browser does not support the HTML5 FileReader. Please use Chrome browser');
 		}
@@ -372,48 +380,52 @@ Ext.define('cfa.controller.setting.SettingController', {
 		}
 	},
 	
+	
 	putFileInToList : function(filesArray, resultArray) {
 		var me = this;
 		var files = filesArray;
 		var dataArray = resultArray;
-		var dataType = '', name = files[0].name, count = 0, length = files.length;
+		var dataType = '';
 
-		if (files[0].name.toUpperCase().indexOf('CASE') > -1) {
-			dataType = 'Case';
-		} else {
-			dataType = 'Device';
-		}
-		var reader = new FileReader();
-		reader.onloadend = function(evt) {
+		if (files[0] != null) {
+			var name = files[0].name;
 			
-			var data = me.getHelper().decodeBase64(evt.target.result.replace('data:;base64,', '').replace('data:base64,','').replace('data:application/json;base64,',''));
-			
-			
-			if (me.getFileUtils().isEncryptedData(data)) {
-				data = me.getFileUtils().XORDecode(data);
-				if (me.getFileUtils().isEncryptedData(data)) {
-					Ext.Msg.alert("Import Files", "There is error(s) in decoded file");
-					return;
-				}	
+			if (files[0].name.toUpperCase().indexOf('CASE') > -1) {
+				dataType = 'Case';
+			} else {
+				dataType = 'Device';
 			}
 			
-			me.getHelper().saveDropFile(
-					name,
-					data,
-					function(path) {
-						var record = {};
-						record.name = name, record.fullPath = path, record.type = dataType
-						dataArray.push(record);
-						count++;
+			var reader = new FileReader();
+			reader.onloadend = function(evt) {
+				var data = evt.target.result.replace('data:;base64,', '').replace('data:base64,', '').replace('data:application/json;base64,', '');
 
-						if (count == length) {
-							me.getImportStore().add(dataArray);
-						} else {
-							me.putFile(files.slice(1, files.length), dataArray);
-						}
-					});
-					
-		};
-		reader.readAsDataURL(files[0]);
+				if (me.getFileUtils().isEncryptedData(data)) {
+					data = me.getFileUtils().XORDecode(data);
+					if (me.getFileUtils().isEncryptedData(data)) {
+						Ext.Msg.alert("Import Files", "There is error(s) in decoded file");
+						return;
+					}
+				}
+				
+				var count = 0, length = files.length;
+				me.getHelper().saveDropFile(name, data, function(path) {
+					var record = {};
+					record.name = name;
+					record.fullPath = path;
+					record.type = dataType;
+					dataArray.push(record);
+					count++;
+
+					if (count == length) {
+						me.getImportStore().add(dataArray);
+					} else {
+						me.putFileInToList(files.slice(1, files.length), dataArray);
+					}
+				});
+			};
+
+			reader.readAsText(files[0]);
+		}
 	}
 })
