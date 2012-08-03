@@ -366,7 +366,13 @@ Ext.define('cfa.controller.case.CaseController', {
 								if (!me.getIsDesktop())
 									window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
 								else {
-									document.location.href = 'mailto:?subject=CFA Data&attachment='+path;
+									var linkFile = document.createElement('a');  
+							        linkFile.href = path;
+							        linkFile.download = filename;
+							        document.body.appendChild(linkFile);
+							        linkFile.click();
+							        document.body.removeChild(linkFile);
+									document.location.href = 'mailto:?subject=CFA Data&body= Send form my PC';
 								}
 									
 							} else {
