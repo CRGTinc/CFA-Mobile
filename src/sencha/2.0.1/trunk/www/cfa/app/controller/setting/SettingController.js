@@ -329,14 +329,10 @@ Ext.define('cfa.controller.setting.SettingController', {
 				}
 				return false;
 			}
-			// Tells the browser that we *can* drop on this target
 			me.addEventHandler(drop, 'dragover', cancel);
 			me.addEventHandler(drop, 'dragenter', cancel);
-			
-		
 			me.addEventHandler(drop, 'drop', function(e) {
 				e = e || window.event;
-				// get window.event if e argument missing (in IE)
 				if (e.preventDefault) {
 					e.preventDefault();
 				}
@@ -346,7 +342,6 @@ Ext.define('cfa.controller.setting.SettingController', {
 				var filesArray = [], dataArray = [];
 				var store = me.getImportStore();
 
-				//convert file list to array
 				for (var i = 0; i < files.length; i++) {
 					if (!store.findRecord('name', files[i].name)) {
 						filesArray.push(files[i]);
