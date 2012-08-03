@@ -325,7 +325,7 @@ Ext.define("cfa.helper.ChromeHelper", {
 	},
 	
 	saveDropFile: function(name, data, callback) {
-		
+		var me = this;
 		var onFail = function(error) {
 			console.log('Get file data error: ' + error.code);
 		}
@@ -350,14 +350,20 @@ Ext.define("cfa.helper.ChromeHelper", {
 				}, onFail);
 		};
 		
-		window.requestFileSystem(window.PERSISTENT, 0,	onFileSystemSuccess, onFail);
+		me.requestFileSystem(window.PERSISTENT, 0,	onFileSystemSuccess, onFail);
 	},
 	
 	decodeBase64: function(string) {
 		return atob(string);
 	},
 	
+	
+	downloadFile: function( fileName, url, callback) {
+		
+	},
+	
 	deleteFile: function(path) {
+		var me = this;
 		var onFail = function(error) {
 			console.log('Delete file error: ' + error.code);
 		}
@@ -375,6 +381,6 @@ Ext.define("cfa.helper.ChromeHelper", {
 				}, onFail)
 		}
 		
-		window.requestFileSystem(window.PERSISTENT, 0,	onFileSystemSuccess, onFail);
+		me.requestFileSystem(window.PERSISTENT, 0,	onFileSystemSuccess, onFail);
 	}
 });
