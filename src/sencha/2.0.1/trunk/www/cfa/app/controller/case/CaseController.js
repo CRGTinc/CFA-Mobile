@@ -372,7 +372,7 @@ Ext.define('cfa.controller.case.CaseController', {
 							        document.body.appendChild(linkFile);
 							        linkFile.click();
 							        document.body.removeChild(linkFile);
-									document.location.href = 'mailto:?subject=CFA Data&body= Send form my PC';
+									document.location.href = 'mailto:?subject=CFA Data&body= Send from my PC';
 								}
 									
 							} else {
