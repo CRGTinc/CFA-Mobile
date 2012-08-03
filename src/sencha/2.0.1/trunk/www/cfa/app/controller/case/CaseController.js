@@ -105,7 +105,7 @@ Ext.define('cfa.controller.case.CaseController', {
 		
 		helper: cfa.utils.HelperUtil.getHelper(),
 		fileUtils: cfa.utils.FileUtils,
-		isDesktop: Ext.os.is.Desktop?true:false
+		isDesktop: Ext.os.is.Desktop
 	},
 
 	initForms : function() {
