@@ -145,9 +145,7 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 			
 		var name = currentRecord.getData().title,
 			url = currentRecord.getData().url;
-
-		
-
+			
 		me.getCurrentActionSheet().hide();
 		if (!this.getIsDesktop()){
 			me.getReferenceView().setMasked({
