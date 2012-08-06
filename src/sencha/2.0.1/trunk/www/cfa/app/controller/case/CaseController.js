@@ -349,66 +349,71 @@ Ext.define('cfa.controller.case.CaseController', {
 			return;
 		}
 
-		var actionSheet = Ext.create('Ext.ActionSheet', {
-			modal : false,
-			left : "40%",
-			right : "40%",
-			bottom : "6%",
-			items : [{
-				text : 'Via email',
-				handler : function() {
-					Formpod.exportData(currentRecord.getData().form, function(data) {
-						var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
-						var encodedData = me.getFileUtils().XOREncode(data);
-						
-						me.getHelper().saveFile(encodedData, filename, function(path) {
-							if (me.getHelper().fileSizeValidation(filename)) {
-								if (!me.getIsDesktop())
+		
+		if (!me.getIsDesktop()) {
+			var actionSheet = Ext.create('Ext.ActionSheet', {
+				modal : false,
+				left : "40%",
+				right : "40%",
+				bottom : "6%",
+				items : [{
+					text : 'Via email',
+					handler : function() {
+						Formpod.exportData(currentRecord.getData().form, function(data) {
+							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+							var encodedData = me.getFileUtils().XOREncode(data);
+
+							me.getHelper().saveFile(encodedData, filename, function(path) {
+								if (me.getHelper().fileSizeValidation(filename)) {
 									window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
-								else {
-									var linkFile = document.createElement('a');  
-							        linkFile.href = path;
-							        linkFile.download = filename;
-							        document.body.appendChild(linkFile);
-							        linkFile.click();
-							        document.body.removeChild(linkFile);
-									document.location.href = 'mailto:?subject=CFA Data&body= Send from my PC';
+								} else {
+									Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
 								}
-									
-							} else {
-								Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
-							}
-
+							});
 						});
-					});
 
-					actionSheet.hide();
-				}
-			}, {
-				text : 'To iTunes',
-				handler : function() {
-					Formpod.exportData(currentRecord.getData().form, function(data) {
-						var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
-						
-						me.getHelper().saveFile(data, filename, function() {
-							Ext.Msg.alert("Export Data", "Data has been exported successfully.");
-						});
 						actionSheet.hide();
-					});
-				}
-			}, {
-				text : 'Cancel',
-				ui : 'confirm',
-				handler : function() {
-					actionSheet.hide();
-				}
-			}]
-		});
+					}
+				}, {
+					text : 'To iTunes',
+					handler : function() {
+						Formpod.exportData(currentRecord.getData().form, function(data) {
+							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
-		Ext.Viewport.add(actionSheet);
-		actionSheet.show();
-		this.setCurrentActionSheet(actionSheet); 
+							me.getHelper().saveFile(data, filename, function() {
+								Ext.Msg.alert("Export Data", "Data has been exported successfully.");
+							});
+							actionSheet.hide();
+						});
+					}
+				}, {
+					text : 'Cancel',
+					ui : 'confirm',
+					handler : function() {
+						actionSheet.hide();
+					}
+				}]
+			});
+			
+			Ext.Viewport.add(actionSheet);
+			actionSheet.show();
+			this.setCurrentActionSheet(actionSheet);
+		} else {
+			Formpod.exportData(currentRecord.getData().form, function(data) {
+				var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+				var encodedData = me.getFileUtils().XOREncode(data);
 
+				me.getHelper().saveFile(encodedData, filename, function(path) {
+					var linkFile = document.createElement('a');
+					linkFile.href = path;
+					linkFile.download = filename;
+					document.body.appendChild(linkFile);
+					linkFile.click();
+					document.body.removeChild(linkFile);
+					me.getHelper().deleteFile("/" + filename);
+				});
+			}); 
+		}
 	},
 
 	deleteCaseData : function() {
