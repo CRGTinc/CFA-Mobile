@@ -15,11 +15,18 @@ Ext.define('cfa.view.setting.ImportDataView', {
 			xtype : 'navigationview',
 			itemId: 'container',
 		}, {
-			xtype: 'textareafield',
-			hidden: true,
-			id: 'dragfilefield',
+			xtype: 'panel',
+			id: 'dragpanel',
 			docked: 'bottom',
-			placeHolder: 'Drag import file in here'
+			items: [{
+				xtype: 'textareafield',
+				hidden: true,
+				id: 'dragfilefield',
+				docked: 'bottom',
+				margin: 5,
+				placeHolder: 'Drag import file in here'
+			}]
+			
 		},{
 			xtype: 'toolbar',
 			itemId: 'actionbar',

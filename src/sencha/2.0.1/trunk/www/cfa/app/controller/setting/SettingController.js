@@ -203,9 +203,9 @@ Ext.define('cfa.controller.setting.SettingController', {
 			}
 			
 			if (Ext.os.is.Desktop) {
-				me.getImportListView().getComponent('dragfilefield').show();
+				me.getImportListView().getComponent('dragpanel').getComponent('dragfilefield').show();
 			} else {
-				me.getImportListView().getComponent('dragfilefield').hide();
+				me.getImportListView().getComponent('dragpanel').getComponent('dragfilefield').hide();
 			}
 			
 			me.getImportListView().showBy(me.getImportDataButton());
