@@ -120,7 +120,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 				}
 				me.setCasesList(caselist);
 			}
-			me.getImportListView().getComponent('importlistcontainer').push(me.getCasesList());
+			me.getImportListView().getComponent('container').push(me.getCasesList());
 			me.setCurrentImportFile(record.getData().fullPath);
 		};
 	},

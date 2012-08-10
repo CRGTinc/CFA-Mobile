@@ -121,12 +121,14 @@ Ext.define('cfa.controller.case.CaseController', {
 		this.initForms();
 		this.setCaseView(Ext.create('cfa.view.case.CaseView'));
 		this.getMain().push(this.getCaseView());
-		var store = Ext.getStore('Cases');
-		store.load({ callback: function() {
-			if(store.getData().all.length == 0) {
-				this.getCaseContextLabel().setHtml('<div align="center">"Tap on the + button to add a new case"</div>');
-			}
-		}, scope: this})
+		var store = Ext.getStore('Cases')
+		store.load({
+			callback: function(records, operation, success) {
+				store.removed = [];
+				if(store.getData().all.length == 0) {
+					this.getCaseContextLabel().setHtml('<div align="center">"Tap on the + button to add a new case"</div>');
+				}
+		}, scope: this});
 	},
 
 	onPop : function(navigation, view, eOpts) {
