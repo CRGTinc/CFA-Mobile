@@ -626,7 +626,13 @@ Ext.define('cfa.controller.case.CaseController', {
 			var engine = record.get('form').engineClass;
 
 			if (engine.attachment == "photo") {
-				this.getAttachCaseDataButton().show();
+				
+				if (!this.getIsDesktop()){
+					this.getDeleteAttachmentButton().show();
+				} else {
+					this.getDeleteAttachmentButton().hide();
+				}
+				
 				this.getDeleteAttachmentButton().show();
 				this.getClearAllAttachmentButton().show();
 			} else {
