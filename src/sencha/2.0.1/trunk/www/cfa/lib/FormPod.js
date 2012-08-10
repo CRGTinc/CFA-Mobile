@@ -831,24 +831,45 @@ var Formpod = {
 		});
 	},
 
-	exportData : function(form, callback) {
+	exportData : function(form, includePhoto,callback) {
 		Formpod.getFormInstanceData(form, function(jsonString) {
 			Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {
 				var childData = [], processed = 0, length = objs.length, i;
-
+				
 				for ( i = 0; i < length; i++) {
-					Formpod.exportData(objs[i], function(data) {
-						childData.push(data);
-						processed++;
-
-						if (processed == length) {
-							jsonString = jsonString.slice(0, -1);
-							jsonString = jsonString.concat(', "children": [' + childData + ']}');
-
+					var child = objs[i];
+					if (includePhoto) {
+						Formpod.exportData(child, includePhoto,function(data) {
+							childData.push(data);
+							processed++;
+	
+							if (processed == length) {
+								jsonString = jsonString.slice(0, -1);
+								jsonString = jsonString.concat(', "children": [' + childData + ']}');
+	
+								if ( typeof callback === 'function')
+									callback(jsonString);
+							}
+						});
+					} else {
+						if (child['engineClass'].name == 'Photo/Attachment' && length == 1) {
 							if ( typeof callback === 'function')
 								callback(jsonString);
+						} else if (child['engineClass'].name != 'Photo/Attachment') {
+							Formpod.exportData(child, includePhoto, function(data) {
+								childData.push(data);
+								processed++;
+
+								if (processed == length-1) {
+									jsonString = jsonString.slice(0, -1);
+									jsonString = jsonString.concat(', "children": [' + childData + ']}');
+
+									if ( typeof callback === 'function')
+										callback(jsonString);
+								}
+							}); 
 						}
-					});
+					}
 				}
 
 				if (length == 0 && typeof callback === 'function') {

@@ -346,7 +346,7 @@ Ext.define('cfa.controller.case.CaseController', {
 				items : [{
 					text : 'Via email',
 					handler : function() {
-						Formpod.exportData(currentRecord.getData().form, function(data) {
+						Formpod.exportData(currentRecord.getData().form, false,function(data) {
 							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
@@ -364,7 +364,7 @@ Ext.define('cfa.controller.case.CaseController', {
 				}, {
 					text : 'To iTunes',
 					handler : function() {
-						Formpod.exportData(currentRecord.getData().form, function(data) {
+						Formpod.exportData(currentRecord.getData().form, true, function(data) {
 							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							cfa.helper.PhoneGapHelper.saveFile(data, filename, function() {
