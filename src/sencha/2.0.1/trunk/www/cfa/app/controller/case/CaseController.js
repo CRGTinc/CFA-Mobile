@@ -346,6 +346,13 @@ Ext.define('cfa.controller.case.CaseController', {
 				items : [{
 					text : 'Via email',
 					handler : function() {
+						
+						if (currentRecord.getData().form['engineClass'].name == 'Photo/Attachment') {
+							Ext.Msg.alert("Export Data", "Please use function Export To iTunes for exporting image.");
+							actionSheet.hide();
+							return;
+						}
+
 						Formpod.exportData(currentRecord.getData().form, false,function(data) {
 							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
