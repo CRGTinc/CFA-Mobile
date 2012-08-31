@@ -359,7 +359,7 @@ Ext.define('cfa.controller.case.CaseController', {
 				items : [{
 					text : 'Via email',
 					handler : function() {
-						Formpod.exportData(currentRecord.getData().form, function(data) {
+						Formpod.exportData(currentRecord.getData().form, false ,function(data) {
 							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 							var encodedData = me.getFileUtils().XOREncode(data);
 
@@ -377,7 +377,7 @@ Ext.define('cfa.controller.case.CaseController', {
 				}, {
 					text : 'To iTunes',
 					handler : function() {
-						Formpod.exportData(currentRecord.getData().form, function(data) {
+						Formpod.exportData(currentRecord.getData().form, true , function(data) {
 							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 
 							me.getHelper().saveFile(data, filename, function() {
@@ -628,9 +628,9 @@ Ext.define('cfa.controller.case.CaseController', {
 			if (engine.attachment == "photo") {
 				
 				if (!this.getIsDesktop()){
-					this.getDeleteAttachmentButton().show();
+					this.getAttachCaseDataButton().show();;
 				} else {
-					this.getDeleteAttachmentButton().hide();
+					this.getAttachCaseDataButton().hide();;
 				}
 				
 				this.getDeleteAttachmentButton().show();
