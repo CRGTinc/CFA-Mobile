@@ -135,7 +135,10 @@
 		"data/HelpPages/HomeHelp.html",
 		"data/HelpPages/CaseHelp.html",
 		"data/HelpPages/ContactHelp.html",
-		"data/HelpPages/EventHelp.html"
+		"data/HelpPages/EventHelp.html",
+		"data/HelpPages/ReferenceHelp.html",
+		"data/HelpPages/SearchHelp.html",
+		"data/HelpPages/SettingHelp.html"
     ],
 
     /**
