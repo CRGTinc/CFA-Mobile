@@ -51,7 +51,7 @@ Ext.define('cfa.controller.contact.ContactController', {
 		var store = this.getContactView().getComponent('contactleftpanel').getComponent('contactlist').getStore();
 		store.clearFilter();
 
-		if (view.getValue && view.getValue != '') {
+		if (view.getValue() && view.getValue() != '') {
 			var temp = view.getValue().toLowerCase();
 			store.filterBy(function(record) {
 				var fullname = record.getData().firstname + ' ' +  record.getData().lastname;
