@@ -81,6 +81,6 @@ Ext.define('cfa.view.setting.SettingView', {
 
 		versionTextField.setValue(cfa.app.application.buildVersion.version);
 
-		cfa.app.helpUrl = "Setting";
+		cfa.app.helpUrl = "SettingHelp";
 	}
 });

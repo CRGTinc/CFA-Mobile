@@ -14,7 +14,7 @@ Ext.define("cfa.view.reference.ReferenceView", {
 	
 	initialize: function() {
 		this.callParent(arguments);
-		cfa.app.helpUrl = "Reference";
+		cfa.app.helpUrl = "ReferenceHelp";
 		var referencesList = {
 			xtype: 'references_list',
 			itemId: 'referenceslist',
