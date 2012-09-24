@@ -399,7 +399,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			actionSheet.show();
 			this.setCurrentActionSheet(actionSheet);
 		} else {
-			Formpod.exportData(currentRecord.getData().form, function(data) {
+			Formpod.exportData(currentRecord.getData().form, true,function(data) {
 				var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
 				var encodedData = me.getFileUtils().XOREncode(data);
 
