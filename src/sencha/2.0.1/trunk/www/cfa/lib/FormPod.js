@@ -816,13 +816,14 @@ var Formpod = {
 	},
 
 	saveInstanceWithImages : function(importData, callback) {
+		var helper = cfa.utils.HelperUtil.getHelper();
 		var me = this;
 		var fail = function(error) {
 			console.log(error);
 		}
 		me.saveInstance(importData, function(obj) {
 			if (obj && obj.dataimg && obj.dataimg.length > 0) {
-				cfa.helper.PhoneGapHelper.saveImagesByJsonObjs(obj.dataimg, function() {
+				helper.saveImagesByJsonObjs(obj.dataimg, function() {
 					callback(obj);
 				}, fail)
 			} else {
@@ -831,56 +832,65 @@ var Formpod = {
 		});
 	},
 
-	exportData : function(form, includePhoto,callback) {
-		Formpod.getFormInstanceData(form, function(jsonString) {
-			Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {
-				var childData = [], processed = 0, length = objs.length, i;
-				
-				for ( i = 0; i < length; i++) {
-					var child = objs[i];
-					if (includePhoto) {
-						Formpod.exportData(child, includePhoto,function(data) {
-							childData.push(data);
-							processed++;
-	
-							if (processed == length) {
-								jsonString = jsonString.slice(0, -1);
-								jsonString = jsonString.concat(', "children": [' + childData + ']}');
-	
-								if ( typeof callback === 'function')
-									callback(jsonString);
-							}
-						});
-					} else {
-						if (child['engineClass'].name == 'Photo/Attachment' && length == 1) {
-							if ( typeof callback === 'function')
-								callback(jsonString);
-						} else if (child['engineClass'].name != 'Photo/Attachment') {
-							Formpod.exportData(child, includePhoto, function(data) {
-								childData.push(data);
-								processed++;
+	exportData : function(form, includePhoto, callback) {
+        Formpod.getFormInstanceData(form, function(jsonString) {
+            Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {
+                var childData = [], processed = 0, length = objs.length, i;
+                var imageCount = 0;
+                
+                for ( i = 0; i < length; i++) {
+                    var child = objs[i];
+                    if (includePhoto) {
+                        Formpod.exportData(child, includePhoto,function(data) {
+                            childData.push(data);
+                            processed++;
+    
+                            if (processed == length) {
+                                jsonString = jsonString.slice(0, -1);
+                                jsonString = jsonString.concat(', "children": [' + childData + ']}');
+    
+                                if ( typeof callback === 'function')
+                                    callback(jsonString);
+                            }
+                        });
+                    } else {
+                        if (child['engineClass'].name == 'Photo/Attachment') {
+                            if (length == 1) {
+                                if ( typeof callback === 'function')
+                                    callback(jsonString);
+                            } else {
+                                imageCount++;
+                                if ( imageCount == length);
+                                    if ( typeof callback === 'function')
+                                        callback(jsonString);
+                            }
+                        } else if (child['engineClass'].name != 'Photo/Attachment') {
+                            Formpod.exportData(child, includePhoto, function(data) {
+                                childData.push(data);
+                                processed++;
+                                
+                                if (processed == length-imageCount) {
+                                    jsonString = jsonString.slice(0, -1);
+                                    jsonString = jsonString.concat(', "children": [' + childData + ']}');
 
-								if (processed == length-1) {
-									jsonString = jsonString.slice(0, -1);
-									jsonString = jsonString.concat(', "children": [' + childData + ']}');
+                                    if ( typeof callback === 'function')
+                                        callback(jsonString);
+                                }
+                            }); 
+                        }
+                    }
+                }
 
-									if ( typeof callback === 'function')
-										callback(jsonString);
-								}
-							}); 
-						}
-					}
-				}
+                if (length == 0 && typeof callback === 'function') {
+                    callback(jsonString);
+                }
+            });
+        });
 
-				if (length == 0 && typeof callback === 'function') {
-					callback(jsonString);
-				}
-			});
-		});
-
-	},
-
+    },
+    
 	getFormInstanceData : function(formInstance, successCallBack) {
+		var helper = cfa.utils.HelperUtil.getHelper();
 		var me = this;
 		var newPhotoId = "";
 		var formdata = '{', engine = formInstance.engineClass, definition = engine.definition, index;
@@ -920,7 +930,7 @@ var Formpod = {
 				console.log('error:' + error);
 			}
 			//images can be added here to json string
-			cfa.helper.PhoneGapHelper.getJsonStringFromImages(formInstance['PhotoId'], newPhotoId, function(result) {
+			helper.getJsonStringFromImages(formInstance['PhotoId'], newPhotoId, function(result) {
 				formdata = formdata.concat('"dataimg":' + result + '}');
 				successCallBack(formdata);
 			}, fail)

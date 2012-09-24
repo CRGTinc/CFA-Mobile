@@ -33,6 +33,8 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		currentRecord: null,
 		currentActionSheet: null,
 		downloadedDocumentStore: null,
+		isOnline: cfa.helper.PhoneGapHelper.isOnLine(),
+		isDesktop: Ext.os.is.Desktop
     },
     
     onError: function(error) {
@@ -53,16 +55,22 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 		}
 		
 		if (record.getData().url.toLowerCase().indexOf('.pdf') > -1){
-			if (!cfa.helper.PhoneGapHelper.isOnLine()) {
-				var me = this;
-				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-					function(fileSystem) {
-						fileSystem.root.getFile(record.getData().title, {create : true},
-							function(fileEntry) {
-								var path = fileEntry.toURI();
-								window.plugins.childBrowser.showWebPage(path + ".pdf")
-							}, me.onError);
-				}, me.onError);
+			if (!this.getIsOnline()) {
+				
+				if (!this.getIsDesktop()) {
+					var me = this;
+					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+						fileSystem.root.getFile(record.getData().title, {
+							create : true
+						}, function(fileEntry) {
+							var path = fileEntry.toURI();
+							window.plugins.childBrowser.showWebPage(path + ".pdf")
+						}, me.onError);
+					}, me.onError);
+				} else {
+					Ext.Msg.alert("References ","You are in offline mode. Please open the document on you PC if you downloaded it.");
+				}
+				
 			} else {
 				var me = this;
 				var actionSheet = Ext.create('Ext.Panel',{
@@ -112,11 +120,6 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 	},
 	
 	saveReferenceToLocal: function() {
-		if (Ext.os.is.Desktop) {
-			Ext.Msg.alert("Download Reference", "Currently support only for iPad.");
-			this.getCurrentActionSheet().hide();
-			return;
-		}
 		var currentRecord = this.getCurrentRecord();
 		
 		if(this.isDownloaded(currentRecord)) {
@@ -137,38 +140,42 @@ Ext.define('cfa.controller.reference.ReferenceController',{
 	
 	doDownload: function(button) {
 		var me = this;
-		var downloadedDocumentStore = Ext.getStore('ReferencesDownloaded');
-		var currentRecord = this.getCurrentRecord();
-
-		me.getReferenceView().setMasked({
-			xtype : 'loadmask',
-			message : 'Downloading...'
-		});
-
+		var	downloadedDocumentStore = Ext.getStore('ReferencesDownloaded'),
+			currentRecord = this.getCurrentRecord();
+			
+		var name = currentRecord.getData().title,
+			url = currentRecord.getData().url;
+			
 		me.getCurrentActionSheet().hide();
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-			fileSystem.root.getFile(currentRecord.getData().title, {create : true},
-				function(fileEntry) {
-					var path = fileEntry.fullPath.replace(currentRecord.getData().title, "");
-					fileEntry.remove();
-					path = path + currentRecord.getData().title + ".pdf";
-					var fileTransfer = new FileTransfer();
-					fileTransfer.download(currentRecord.getData().url, path, function(file) {
-						me.getDownloadedDocumentStore().add(currentRecord.copy());
-						me.getDownloadedDocumentStore().sync({
-							callback : function() {
-								me.getReferenceView().unmask();
-								currentRecord.beginEdit();
-								currentRecord.set('downloaded', 'Downloaded');
-								currentRecord.endEdit();
-								Ext.Msg.alert("Download Reference", "Document downloaded");
-							}
-						});
-					}, function(error) {
-						console.log("Download error: " + error);
+		if (!this.getIsDesktop()){
+			me.getReferenceView().setMasked({
+				xtype : 'loadmask',
+				message : 'Downloading...'
+			});
+			
+			cfa.helper.PhoneGapHelper.downloadFile(name, url,
+				function() {
+					me.getDownloadedDocumentStore().add(currentRecord.copy());
+					me.getDownloadedDocumentStore().sync({
+						callback : function() {
+							me.getReferenceView().unmask();
+							currentRecord.beginEdit();
+							currentRecord.set('downloaded', 'Downloaded');
+							currentRecord.endEdit();
+							Ext.Msg.alert("Download Reference", "Document downloaded");
+						}
 					});
-				}, me.onError);
-		}, me.onError); 
+				}
+			); 
+		} else {
+			var linkFile = document.createElement('a');
+			linkFile.href = url;
+			linkFile.download = name;
+			document.body.appendChild(linkFile);
+			linkFile.click();
+			document.body.removeChild(linkFile);
+		}
+		
 	},
 
 	isDownloaded: function(document) {

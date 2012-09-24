@@ -2,13 +2,14 @@ Ext.Loader.setPath({
 	'cfa' : 'app',
 	'Deft' : 'app/lib/deft'
 });
-Ext.require(['Deft.*','cfa.helper.PhoneGapHelper']);
+Ext.require(['Deft.*','cfa.helper.PhoneGapHelper','cfa.helper.ChromeHelper', 'cfa.utils.HelperUtil', 'cfa.utils.FileUtils']);
 Ext.application({
 	name : 'cfa',
 	helpUrl: 'root',
 	requires : [		
 		'Ext.MessageBox',
-		'cfa.proxy.File'
+		'cfa.proxy.File',
+		'cfa.proxy.ChromeFile'
 	],
 	profiles : ['Tablet', 'Phone'],
 	stores : ['Base','Dashboards', 'Events', 'Cases', 'Contacts', 'References','LSContacts', 'EventsLocal', 'ReferencesLocal', 'CaseForms', 'SearchCases', 'SearchTemplates', 'Users', 'ReferencesDownloaded'],
@@ -85,6 +86,7 @@ Ext.application({
 	    //Destroy the #appLoadingIndicator element		
     	Ext.fly('appLoadingIndicator').destroy();
 	},
+	
 	onUpdated : function() {
 		Ext.Msg
 				.confirm(

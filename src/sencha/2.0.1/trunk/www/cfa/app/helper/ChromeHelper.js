@@ -1,46 +1,40 @@
-Ext.define("cfa.helper.PhoneGapHelper", {
+Ext.define("cfa.helper.ChromeHelper", {
 	singleton : true,
-	alias : 'cfa.helper.PhoneGapHelper',
+	alias : 'cfa.helper.ChromeHelper',
 	config : {},
 	/* Begin Device wrapper */
 	isOnLine : function() {
-		return navigator.onLine;
+		return true;
 	},
 	/* End Device wrapper */
 	checkConnection : function() {
-		var networkState = navigator.network.connection.type;
-
-		var states = {};
-		states[Connection.UNKNOWN] = 'UNKNOWN';
-		states[Connection.ETHERNET] = 'ETHERNET';
-		states[Connection.WIFI] = 'WIFI';
-		states[Connection.CELL_2G] = 'CELL_2G';
-		states[Connection.CELL_3G] = 'CELL_3G';
-		states[Connection.CELL_4G] = 'CELL_4G';
-		states[Connection.NONE] = 'NONE';
-
-		alert('Connection type: ' + states[networkState]);
-		return states[networkState];
+		return "";
 	},
 	/* End Connection wrapper */
-
+	requestFileSystem : function(type, size, successCallBack, failCallBack){
+		window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+		requestFileSystem(type, size,successCallBack, failCallBack );
+	},
 	/* Begining of save file */
 	saveFile : function(jsonString, filename, callback, scope) {
 		var me = this;
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(
+		me.requestFileSystem(window.PERSISTENT, 0, function(
 				fileSystem) {
 			fileSystem.root.getFile(filename, {
 						create : true,
 						exclusive : false
 					}, function(fileEntry) {
 						fileEntry.createWriter(function(writer) {
-									writer.onwrite = function(evt) {
+									writer.onwriteend = function(evt) {
 										if (typeof callback == 'function') {
-											Ext.callback(callback, scope || me);
+											callback(fileEntry.toURL());
 										}
 									};
-
-									writer.write(jsonString);
+									if (!window.BlobBuilder && window.WebKitBlobBuilder)
+    									window.BlobBuilder = window.WebKitBlobBuilder;
+									var bb = new window.BlobBuilder(); 
+									bb.append(jsonString);
+									writer.write(bb.getBlob('text/plain'));
 								}, me.failOnSaveFile);
 					}, me.failOnSaveFile);
 		}, me.failOnSaveFile);
@@ -56,7 +50,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 
 	fileSizeValidation : function(filename) {
 		var me = this;
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(
+		me.requestFileSystem(window.PERSISTENT, 0, function(
 						fileSystem) {
 					fileSystem.root.getFile(filename, {
 								create : false,
@@ -73,6 +67,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 	},
 
 	loadImportedData : function(successCallBack, failCallBack) {
+		var me = this;
 		var result = "[";
 		var fail = function(error) {
 			console.log(error);
@@ -82,7 +77,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 		var onFileSystemSuccess = function(fileSytem) {
 			var importDataPath = "/";
 			fileSytem.root.getDirectory(importDataPath, {
-						create : true
+						create : false
 					}, function(directory) {
 						var directoryReader = directory.createReader();
 						directoryReader.readEntries(function(entries) {
@@ -112,11 +107,11 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 
 		}
 
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-				onFileSystemSuccess, fail);
+		me.requestFileSystem(window.PERSISTENT, 0, onFileSystemSuccess, fail);
 	},
 	
 	loadDownloadedDocuments : function(successCallBack, failCallBack) {
+		var me = this;
 		var result = "[";
 		var fail = function(error) {
 			console.log(error);
@@ -126,7 +121,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 		var onFileSystemSuccess = function(fileSytem) {
 			var importDataPath = "/";
 			fileSytem.root.getDirectory(importDataPath, {
-						create : true
+						create : false
 					}, function(directory) {
 						var directoryReader = directory.createReader();
 						directoryReader.readEntries(function(entries) {
@@ -152,10 +147,11 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 
 		}
 
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, fail);
+		me.requestFileSystem(window.PERSISTENT, 0, onFileSystemSuccess, fail);
 	},
 	
 	getImagesByFormId : function(formId, successCallBack, failCallBack) {
+		var me = this;
 		var fail = function(error) {
 			console.log(error);
 			failCallBack(error);
@@ -178,7 +174,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 
 		}
 
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+		me.requestFileSystem(window.PERSISTENT, 0,
 				onFileSystemSuccess, fail);
 	},
 	
@@ -230,6 +226,8 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 	},
 	
 	addImageByFullPath : function(formId, imageData, success, failCallBack) {
+		var me = this;
+		
 		var fail = function(error) {
 			console.log(error);
 			failCallBack(error);
@@ -247,7 +245,12 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 			writer.onError = function(){
 				console.log('error write');
 			}
-			writer.write(imageData);
+			
+			if (!window.BlobBuilder && window.WebKitBlobBuilder)
+				window.BlobBuilder = window.WebKitBlobBuilder;
+			var bb = new window.BlobBuilder();
+			bb.append(imageData);
+			writer.write(bb.getBlob('text/plain'));
 		}
 
 		var onFileSystemSuccess = function(fileSytem) {
@@ -267,7 +270,7 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 					}, fail);
 		}
 		
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+		me.requestFileSystem(window.PERSISTENT, 0,
 				onFileSystemSuccess, fail);
 	},
 	
@@ -318,39 +321,49 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 					}, onFail)
 		}
 
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, onFail);
+		window.requestFileSystem(window.PERSISTENT, 0,	onFileSystemSuccess, onFail);
 	},
 	
-	downloadFile: function( fileName, url, callback) {
+	saveDropFile: function(name, data, callback) {
+		var me = this;
 		var onFail = function(error) {
-			console.log("Download file error: " +  error);
+			console.log('Get file data error: ' + error.code);
+		}
+
+		var onFileSystemSuccess = function(fileSystem) {
+			fileSystem.root.getFile(name, {create : true},
+				function(fileEntry) {
+					fileEntry.createWriter(function(writer) {
+						writer.onwriteend = function(evt) {
+							if (typeof callback == 'function') {
+								callback(fileEntry.fullPath);
+							}
+						};
+						
+						if (!window.BlobBuilder && window.WebKitBlobBuilder)
+							window.BlobBuilder = window.WebKitBlobBuilder;
+							
+						var bb = new window.BlobBuilder();
+						bb.append(data);
+						writer.write(bb.getBlob('text/plain'));
+					}, onFail);
+				}, onFail);
 		};
 		
-		var onFileSystemSuccess = function(fileSystem) {
-			fileSystem.root.getFile(fileName, {create : true},
-				function(fileEntry) {
-					var path = fileEntry.fullPath.replace(fileName, "");
-					fileEntry.remove();
-					path = path + fileName + ".pdf";
-					var fileTransfer = new FileTransfer();
-					fileTransfer.download(
-						url,
-						path,
-						function(file) {
-							if (typeof callback == 'function')
-								callback();
-						},
-						function(error) {
-							console.log("Download error: " + error);
-						}
-					);
-				}, onFail);
-		} 
+		me.requestFileSystem(window.PERSISTENT, 0,	onFileSystemSuccess, onFail);
+	},
+	
+	decodeBase64: function(string) {
+		return atob(string);
+	},
+	
+	
+	downloadFile: function( fileName, url, callback) {
 		
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, onFail);
 	},
 	
 	deleteFile: function(path) {
+		var me = this;
 		var onFail = function(error) {
 			console.log('Delete file error: ' + error.code);
 		}
@@ -368,7 +381,6 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 				}, onFail)
 		}
 		
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, onFail);
+		me.requestFileSystem(window.PERSISTENT, 0,	onFileSystemSuccess, onFail);
 	}
-		
 });
