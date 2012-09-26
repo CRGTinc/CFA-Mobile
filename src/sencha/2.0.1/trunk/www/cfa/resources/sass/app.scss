@@ -114,7 +114,12 @@ $active-color: #3f4c68;
   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
 
 }
-
+.x-title .x-innerhtml {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 0em;
+}
 .infoPanel {
   background-color: white;
   padding: 10px 10px 5px 10px;
