@@ -360,26 +360,21 @@ Ext.define('cfa.controller.case.CaseController', {
 					text : 'Via email',
 					handler : function() {
 						
-						if (currentRecord.getData().form['engineClass'].name == 'Photo/Attachment') {
-							Ext.Msg.alert("Export Data", "Please use function Export To iTunes for exporting image.");
-							actionSheet.hide();
-							return;
-						}
-
-						Formpod.exportData(currentRecord.getData().form, false ,function(data) {
-							var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
-							var encodedData = me.getFileUtils().XOREncode(data);
-
-							me.getHelper().saveFile(encodedData, filename, function(path) {
-								if (me.getHelper().fileSizeValidation(filename)) {
-									window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
-								} else {
-									Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
-								}
-							});
-						});
-
-						actionSheet.hide();
+					   Ext.Msg.alert("Export Data", "Images are not included in export via email. To include images, export to iTunes.", function(){
+					       Formpod.exportData(currentRecord.getData().form, false ,function(data) {
+                                var filename = currentRecord.getData().form.engineClass.name.replace(' ', '').replace('/', '') + '-' + Ext.util.Format.date(new Date(), 'Ymd') + "-" + currentRecord.getData().form.id + ".cfadata";
+                                var encodedData = me.getFileUtils().XOREncode(data);
+    
+                                me.getHelper().saveFile(encodedData, filename, function(path) {
+                                    if (me.getHelper().fileSizeValidation(filename)) {
+                                        window.plugins.emailComposer.showEmailComposer("CFA Data", null, filename, null, null, null, null);
+                                    } else {
+                                        Ext.Msg.alert("Export Data", "The data is exported but it is larger than 10MB and reach the maximum total size of an attachment data in an email(10MB).<br>Please use iTunes to get the exported file.");
+                                    }
+                                });
+                           });
+					   });
+					   actionSheet.hide();
 					}
 				}, {
 					text : 'To iTunes',
