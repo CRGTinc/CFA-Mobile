@@ -27,17 +27,40 @@ Ext.define("cfa.view.contact.ContactView", {
 					xtype: 'button',
 					iconMask: true,
 					iconCls: 'refresh',
-					handler: this.reloadContactClick, scope: this
+					handler: this.reloadContactClick, 
+					scope: this
 				},				
 			],
 		};
 		
+		
 		var contactSearchField = {
 			xtype: 'searchfield',
 			id: 'searchcontacinput',
-			docked: 'top',
 			clearIcon: false
 		};
+		
+		var searchOption = {
+		   xtype: 'selectfield',
+		   label: 'By:',
+		   id: 'contact-option',
+		   style: 'width: 120px; font-size: 0.92em',
+           options: [
+              {text: 'Name',  value: 'name'},
+              {text: 'SAC', value: 'sac'},
+              {text: 'RAC',  value: 'rac'}
+           ]
+		}
+		
+		var searchBar = {
+            xtype: 'toolbar',
+            docked: 'top',
+            id: "search-bar",
+            items:[
+                contactSearchField,
+                searchOption
+            ]
+        }
 		
 		var contactsList = {
 			xtype: 'contact_list',
@@ -48,6 +71,29 @@ Ext.define("cfa.view.contact.ContactView", {
         	}
 		};
 		
+		var bottomBar = {
+			xtype: 'toolbar',
+			docked: 'bottom',
+			layout: {
+			    align: 'center',
+			    pack: 'right'
+			},
+			items: [
+    			{
+                        xtype: 'button',
+                        text: 'SAC',
+                        handler: this.onSacGroupClick,
+                        scope: this,
+                        
+                }, {
+					xtype: 'button',
+					text: 'RAC',
+					handler: this.onRacGroupClick,
+					scope: this
+				},
+			]
+		};
+		
 		var leftPanel = {
 			xtype: 'panel',
 			itemId: 'contactleftpanel',
@@ -55,8 +101,9 @@ Ext.define("cfa.view.contact.ContactView", {
 			flex: 1,
 			items: [
 				topTitle,
-				contactSearchField,
-				contactsList
+				searchBar,
+				contactsList,
+				bottomBar
 			]			
 		};
 		
@@ -75,6 +122,18 @@ Ext.define("cfa.view.contact.ContactView", {
 	
 	reloadContactClick: function(){
 		this.fireEvent('reloadContactCommand', this);	
+	},
+	
+	onNameGroupClick: function(){
+		this.fireEvent('nameGroupClick', this);
+	},
+	
+	onSacGroupClick: function(){
+		this.fireEvent('sacGroupClick', this);
+	},
+	
+	onRacGroupClick: function(){
+		this.fireEvent('racGroupClick', this);
 	}
 	
 });

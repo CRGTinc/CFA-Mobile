@@ -120,6 +120,7 @@ $active-color: #3f4c68;
   text-overflow: ellipsis;
   padding: 0 0em;
 }
+
 .infoPanel {
   background-color: white;
   padding: 10px 10px 5px 10px;
@@ -147,4 +148,12 @@ $active-color: #3f4c68;
 #dragpanel .x-docking-vertical {
   border: 0px;
   background: #ffffff 
+}
+
+#search-bar .x-field {
+  width: 10em;
+  margin: .5em;
+  min-height: 0;
+  border-bottom: 0;
+  background: transparent;
 }
