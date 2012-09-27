@@ -44,7 +44,7 @@ Ext.define("cfa.view.contact.ContactView", {
 		   xtype: 'selectfield',
 		   label: 'By:',
 		   id: 'contact-option',
-		   style: 'width: 120px; font-size: 0.92em',
+		   style: 'width: 120px; font-size: 0.9em',
            options: [
               {text: 'Name',  value: 'name'},
               {text: 'SAC', value: 'sac'},
@@ -80,6 +80,15 @@ Ext.define("cfa.view.contact.ContactView", {
 			},
 			items: [
     			{
+                        xtype: 'button',
+                        text: 'Name',
+                        handler: this.onNameGroupClick,
+                        scope: this,
+                        
+                },{
+                        xtype: 'spacer',
+                        
+                },{
                         xtype: 'button',
                         text: 'SAC',
                         handler: this.onSacGroupClick,
