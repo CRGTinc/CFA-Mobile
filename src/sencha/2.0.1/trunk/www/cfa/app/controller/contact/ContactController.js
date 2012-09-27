@@ -85,20 +85,9 @@ Ext.define('cfa.controller.contact.ContactController', {
 			        if (record.getData().RAC.toLowerCase().indexOf(temp) > -1) 
                         return record;
 			    }
-				// var fullname = record.getData().firstname + ' ' + record.getData().lastname;
-				// if (record.getData().firstname.toLowerCase().indexOf(temp) > -1 || record.getData().lastname.toLowerCase().indexOf(temp) > -1)
-					// return record;
-				// else if (fullname.toLowerCase().indexOf(temp) > -1)
-					// return record;
-				// else if (record.getData().SAC.toLowerCase().indexOf(temp) > -1) {
-					// return record;
-				// } else if (record.getData().RAC.toLowerCase().indexOf(temp) > -1) {
-					// return record;
-				// }
 			});
 		}
 	},
-
 
 	openEmailComposer : function() {
 		var emailAddress = this.getContactDetailView().getComponent(0).getComponent('email').getValue();
@@ -107,7 +96,6 @@ Ext.define('cfa.controller.contact.ContactController', {
 			window.plugins.emailComposer.showEmailComposer(null, null, null, emailAddress, null, null, null);
 		else
 			Ext.Msg.alert("Send mail", "Please chose a contact that you want to send mail to.");
-
 	},
 	
 	onNameGroupClick: function(obj){
