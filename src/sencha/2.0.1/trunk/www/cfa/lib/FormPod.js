@@ -75,6 +75,14 @@ var Formpod = {
 									}
 								};
 							}
+							
+							if (finfo.showDatePicker) {
+                                fitem.value = Ext.util.Format.date(new Date(), this.dateFormat),
+                                fitem.listeners = {
+                                    focus: Formpod.FormEngine.Utils.showDatePicker,
+                                    scope: Formpod.FormEngine.Utils
+                                }
+                            }
 						}
 
 						return fitem;
@@ -177,7 +185,26 @@ var Formpod = {
 				inputView.getComponent('inputfield').blur();
 				referenceView.setValue(inputView.getComponent('inputfield').getValue());
 				Ext.Viewport.unmask();
-			}
+			},
+			
+			showDatePicker: function(view, e, eOpts) {
+                referenceView = view;
+                inputView = Ext.create('cfa.view.popup.DatePickerFieldPopup');
+                
+               var date = Ext.Date.parse(view.getValue(),"m/d/Y");
+               
+               if(date != undefined)      
+                   inputView.setValue(date);
+               else
+                   inputView.setValue(new Date());
+               
+               Ext.Viewport.add(inputView);
+               inputView.show();   
+            },
+            
+            onChangeDatePickerPopup: function(picker, value) {
+                referenceView.setValue(Ext.util.Format.date(value, this.dateFormat));
+            }
 		}
 	},
 	FormTypes : {},

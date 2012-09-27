@@ -16,7 +16,7 @@ Ext.define('cfa.profile.Tablet', {
 		'cfa.controller.about.AboutController',
         'cfa.controller.help.HelpController'
 		],
-        views: ['Main', 'cfa.view.popup.InputTextAreaPopup']
+        views: ['Main', 'cfa.view.popup.InputTextAreaPopup', 'cfa.view.popup.DatePickerFieldPopup']
     },
 
     isActive: function() {
