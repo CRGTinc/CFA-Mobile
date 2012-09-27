@@ -1,6 +1,6 @@
 Ext.define('cfa.controller.contact.ContactController', {
 	extend : 'Ext.app.Controller',
-	requires : ['cfa.view.contact.ContactView', 'cfa.view.contact.SearchOption'],
+	requires : ['cfa.view.contact.ContactView'],
 
 	config : {
 		routes : {
