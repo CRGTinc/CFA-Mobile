@@ -80,6 +80,7 @@ var Formpod = {
                                 fitem.value = Ext.util.Format.date(new Date(), this.dateFormat),
                                 fitem.listeners = {
                                     focus: Formpod.FormEngine.Utils.showDatePicker,
+                                    clearicontap: Formpod.FormEngine.Utils.onClearIconTap,
                                     scope: Formpod.FormEngine.Utils
                                 }
                             }
@@ -188,9 +189,8 @@ var Formpod = {
 			},
 			
 			showDatePicker: function(view, e, eOpts) {
-                referenceView = view;
-                inputView = Ext.create('cfa.view.popup.DatePickerFieldPopup');
-                
+               referenceView = view;
+               inputView = Ext.create('cfa.view.popup.DatePickerFieldPopup');
                var date = Ext.Date.parse(view.getValue(),"m/d/Y");
                
                if(date != undefined)      
@@ -203,7 +203,12 @@ var Formpod = {
             },
             
             onChangeDatePickerPopup: function(picker, value) {
+                referenceView.setReadOnly(false);
                 referenceView.setValue(Ext.util.Format.date(value, this.dateFormat));
+            },
+            
+            onClearIconTap: function(textfield, e, eOpts){
+                textfield.setReadOnly(true);
             }
 		}
 	},
