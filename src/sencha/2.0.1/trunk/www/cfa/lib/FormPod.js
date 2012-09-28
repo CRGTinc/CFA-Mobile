@@ -77,10 +77,10 @@ var Formpod = {
 							}
 							
 							if (finfo.showDatePicker) {
-                                fitem.value = Ext.util.Format.date(new Date(), this.dateFormat),
+                                fitem.readOnly = true;
                                 fitem.listeners = {
                                     focus: Formpod.FormEngine.Utils.showDatePicker,
-                                    clearicontap: Formpod.FormEngine.Utils.onClearIconTap,
+                                    painted: Formpod.FormEngine.Utils.onPainted,
                                     scope: Formpod.FormEngine.Utils
                                 }
                             }
@@ -188,27 +188,31 @@ var Formpod = {
 				Ext.Viewport.unmask();
 			},
 			
-			showDatePicker: function(view, e, eOpts) {
-               referenceView = view;
-               inputView = Ext.create('cfa.view.popup.DatePickerFieldPopup');
-               var date = Ext.Date.parse(view.getValue(),"m/d/Y");
-               
-               if(date != undefined)      
-                   inputView.setValue(date);
-               else
-                   inputView.setValue(new Date());
-               
-               Ext.Viewport.add(inputView);
-               inputView.show();   
+            showDatePicker: function(view, e, eOpts) {
+                referenceView = view;
+                inputView = Ext.create('cfa.view.popup.DatePickerFieldPopup');
+                var date = Ext.Date.parse(view.getValue(), "m/d/Y");
+
+                if (date != undefined)
+                    inputView.setValue(date);
+                else
+                    inputView.setValue(new Date());
+
+                Ext.Viewport.add(inputView);
+                inputView.show(); 
+
             },
             
             onChangeDatePickerPopup: function(picker, value) {
-                referenceView.setReadOnly(false);
                 referenceView.setValue(Ext.util.Format.date(value, this.dateFormat));
+                referenceView.element.addCls(Ext.baseCSSPrefix + 'field-clearable');
             },
             
-            onClearIconTap: function(textfield, e, eOpts){
-                textfield.setReadOnly(true);
+            onPainted: function(view, eOpts){
+                if(view.getValue() != ''){
+                    view.setValue(Ext.util.Format.date(new Date(), this.dateFormat));
+                    view.element.addCls(Ext.baseCSSPrefix + 'field-clearable');
+                }
             }
 		}
 	},
