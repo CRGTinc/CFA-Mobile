@@ -49,7 +49,8 @@ Ext.define('cfa.controller.setting.SettingController', {
 		settingView : null,
 		currentImportFile : '',
 		helper: cfa.utils.HelperUtil.getHelper(),
-		fileUtils: cfa.utils.FileUtils
+		fileUtils: cfa.utils.FileUtils,
+		isBindDropEvent: false
 	},
 
 	showSettingPage : function() {
@@ -159,9 +160,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 	},
 
 	importData : function() {
-
 		var me = this;
-
 		var listener = {
 			disclose : {
 				fn : this.onImportListItemDisclosure,
@@ -209,7 +208,11 @@ Ext.define('cfa.controller.setting.SettingController', {
 			}
 			
 			me.getImportListView().showBy(me.getImportDataButton());
-			me.processDataFromDesktop();
+			if(!me.getIsBindDropEvent()) {
+			    me.processDataFromDesktop();
+			    me.setIsBindDropEvent(true);
+			}
+			    
 		}, function() {
 			Ext.Msg.alert('Import Data', 'This may be cause error....', Ext.emptyFn, this);
 		});
@@ -322,6 +325,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 		var me = this;
 		
 		if (window.FileReader) {
+		   
 			var drop = document.getElementById('dragfilefield');
 			function cancel(e) {
 				if (e.preventDefault) {
@@ -414,6 +418,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 
 					if (count == length) {
 						me.getImportStore().add(dataArray);
+						me.getImportStore().sync();
 					} else {
 						me.putFileInToList(files.slice(1, files.length), dataArray);
 					}
@@ -422,5 +427,6 @@ Ext.define('cfa.controller.setting.SettingController', {
 
 			reader.readAsText(files[0]);
 		}
-	}
+	},
+	
 })
