@@ -1,27 +1,10 @@
-<style>
-	.container{
-		border: 1px dashed #999;
-		height: 250px;
-		width: 400px;
-		margin: 0 auto;
-		border-radius: 8px;
-		padding-top: 15px;
-	}
-	.info-panel{
-		margin: 0 auto;
-		width: 320px;
-	}
-	
-	.title{
-		font-family: Verdana, Geneva, sans-serif;
-		font-size:24px;
-		font-weight: bold;
-		text-align:center;
-	}
-</style>
-
-<p class="title">Application Distribution</p></h1>
+<link rel="stylesheet" href="resources/css/management.css"/>
+<div class="gradient-bar title-bar">
+	<div class="title">Application Distribution</div>
+</div>
 <div class="container" >
+<p> Please enter your name and email address. A download link for the CFA Mobile App will be emailed to you. You can open this link in the browser on your iPad to complete the download process.
+</p>
 <form class="info-panel" method="post" action="activate.php" >
 <table width="320" border="0" cellpadding="0" cellspacing="0">
   <tr>
