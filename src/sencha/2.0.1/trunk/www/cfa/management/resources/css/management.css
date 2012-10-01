@@ -44,3 +44,14 @@ body{
 	font-size: 22px	
 }
 
+.notify-panel{
+	margin: 0 auto;
+	width: 800px;
+	height: 150px;
+	margin-top:50px;	
+	padding-top: 50px;
+	text-align:center;
+	border: 2px solid white;
+	border-radius: 8px;	
+}
+

@@ -25,7 +25,7 @@
   </tr>
   <tr>
     <td>Email</td>
-    <td><input type="text" name="email" required/></td>
+    <td><input type="email" name="email" required/></td>
   </tr>
   </tr>
 </table>
