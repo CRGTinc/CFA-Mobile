@@ -30,7 +30,6 @@ Ext.define('cfa.view.setting.ImportDataView', {
 		},{
 			xtype: 'toolbar',
 			itemId: 'actionbar',
-			hidden: true,
 			docked: 'bottom',
 			items: [
 				{

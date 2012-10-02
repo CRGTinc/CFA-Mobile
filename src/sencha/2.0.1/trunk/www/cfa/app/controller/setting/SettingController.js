@@ -50,11 +50,19 @@ Ext.define('cfa.controller.setting.SettingController', {
 		currentImportFile : '',
 		helper: cfa.utils.HelperUtil.getHelper(),
 		fileUtils: cfa.utils.FileUtils,
-		isBindDropEvent: false
+		isBindDropEvent: false,
+		currentListView: undefined
 	},
 
 	showSettingPage : function() {
 		this.setSettingView(Ext.create('cfa.view.setting.SettingView'));
+		
+        if (Ext.os.is.Desktop) {
+            this.getManageDocumentButton().hide();
+        } else {
+            this.getManageDocumentButton().show();
+        }
+
 		this.getMain().push(this.getSettingView());
 		Ext.getStore('Users').load({
 			callback : function(records, e, opt) {
@@ -179,7 +187,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 						}
 					}
 				});
-
+				
 				me.setImportStore(importDataStore);
 				me.getImportStore().load();
 				me.setImportListView(Ext.create('cfa.view.setting.ImportDataView'));
@@ -208,6 +216,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 			}
 			
 			me.getImportListView().showBy(me.getImportDataButton());
+			me.setCurrentListView('importlist');
 			if(!me.getIsBindDropEvent()) {
 			    me.processDataFromDesktop();
 			    me.setIsBindDropEvent(true);
@@ -285,6 +294,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 				me.getDocumentStore().setData(Ext.JSON.decode(result));
 			}
 			me.getDocumentStoreView().showBy(me.getManageDocumentButton());
+			me.setCurrentListView('documentlist');
 		}, function() {
 			Ext.Msg.alert('Manage Document', 'This may be cause error....', Ext.emptyFn, this);
 		});
@@ -293,32 +303,44 @@ Ext.define('cfa.controller.setting.SettingController', {
 	
 	deleteFile: function() {
 		var me = this;
-		var selectedFiles = this.getDocumentStoreView().getComponent('container').getComponent('documentlist').getSelection();
-		var downloadedStore = Ext.getStore('ReferencesDownloaded');
-		var documentStore = this.getDocumentStore();
-	
-		downloadedStore.load({
-			callback : function(records, operation, success) {
-
-				for (var i = 0; i < selectedFiles.length; i++) {
-					documentStore.remove(selectedFiles[i]);
-					var recordToDelete = downloadedStore.findRecord('title',selectedFiles[i].getData().name.replace('.pdf','') );
-					downloadedStore.remove(recordToDelete);
-					me.getHelper().deleteFile(selectedFiles[i].getData().fullPath);
-				}
-
-				downloadedStore.sync({
-					callback : function() {
-						me.getDocumentStoreView().hide();
-						Ext.Msg.alert('Detele File', 'Document deleted');
-						
-					}
-				});
-			},
-			scope : this,
-		}); 
-
-
+		var selectedFiles;
+		if (this.getCurrentListView() == 'importlist') {
+		    selectedFiles = this.getImportListView().getComponent('container').getComponent('importlist').getSelection();
+		    importStore = this.getImportStore();
+		   
+            for (var i = 0; i < selectedFiles.length; i++) {
+                importStore.remove(selectedFiles[i]);
+                me.getHelper().deleteFile(selectedFiles[i].getData().fullPath);
+            }
+            me.getImportListView().hide();
+            Ext.Msg.alert('Detele File', 'File(s) deleted');
+		         
+		} else {
+		    selectedFiles = this.getDocumentStoreView().getComponent('container').getComponent('documentlist').getSelection();
+		    var downloadedStore = Ext.getStore('ReferencesDownloaded');
+            var documentStore = this.getDocumentStore();
+        
+            downloadedStore.load({
+                callback : function(records, operation, success) {
+    
+                    for (var i = 0; i < selectedFiles.length; i++) {
+                        documentStore.remove(selectedFiles[i]);
+                        var recordToDelete = downloadedStore.findRecord('title',selectedFiles[i].getData().name.replace('.pdf','') );
+                        downloadedStore.remove(recordToDelete);
+                        me.getHelper().deleteFile(selectedFiles[i].getData().fullPath);
+                    }
+    
+                    downloadedStore.sync({
+                        callback : function() {
+                            me.getDocumentStoreView().hide();
+                            Ext.Msg.alert('Detele File', 'Document(s) deleted');
+                            
+                        }
+                    });
+                },
+                scope : this,
+            }); 
+		} 
 	},
 	
 	processDataFromDesktop : function() {
@@ -355,7 +377,7 @@ Ext.define('cfa.controller.setting.SettingController', {
 				if (filesArray.length > 0) {
 					me.putFileInToList(filesArray, dataArray);
 				} else {
-					Ext.Msg.alert("File Import", "The file(s) already existed.")
+					Ext.Msg.alert("File Import", "The file(s) already exists." )
 				}
 				
 				return false;
