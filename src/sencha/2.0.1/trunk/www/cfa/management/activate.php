@@ -1,4 +1,5 @@
 <?php
+ require_once 'swift/swift_required.php';
  $logPath = 'Log\Downloaded.log';
  writeLog($logPath);
  sendDownloadLink();
@@ -15,15 +16,33 @@
 	 $protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']), 'https') === FALSE ? 'http' : 'https';
 	 $host = $_SERVER['HTTP_HOST'];
 	 $link = $protocol. "://" . $host. "/distribution/TestFile";
-	 
+	 	 
 	 $to = $_POST['email'];
+	 $cc = "lieukimnhut@gmail.com";
+	 $name =  $_POST['firstname']." ".$_POST['lastname'];
 	 $subject = 'CFA Application Distribution';
-	 $message = 'Please download application by following this <a href=' .$link .' download="TestFile">link</a>';
-	 $header = 'Cc: c3appfeedback@gmail.com' . "\r\n";
-	 $header .= 'MIME-Version: 1.0' . "\r\n";
-	 $header .= 'Content-type: text/html; charset=iso8859-1' . "\r\n";
-	 mail($to, $subject, $message, $header);
- }
+	 $text = 'Please download application by following this <a href=' .$link .' download="TestFile">link</a>';
+	 
+	 
+	 // Create the Transport
+	$transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+	  ->setUsername('c3appdistribution')
+	  ->setPassword('19001560')
+	  ;
+
+	// Create the Mailer using your created Transport
+	$mailer = Swift_Mailer::newInstance($transport);
+	// Create a message
+	$message = Swift_Message::newInstance($subject)
+	  ->setFrom(array('c3appdistribution@gmail.com' => 'c3appdistribution'))
+	  ->setTo(array( $to => $name))
+	  ->setCc(array( $cc => "Administrative"))
+	  ->addPart($text, 'text/html')
+	  ;
+	
+	// Send the message
+	$result = $mailer->send($message);
+}
 ?>
 
 <link rel="stylesheet" href="resources/css/management.css"/>
