@@ -149,9 +149,6 @@ var Formpod = {
 		},
 
 		Utils : {
-			referenceView : null,
-			inputView : null,
-			
 			pascalCase : function(field, newVal, oldVal, opts) {
 				var str = newVal.replace(/(\S)(\S*)/g, function(g0, g1, g2) {
 					return g1.toUpperCase() + g2.toLowerCase();
@@ -165,15 +162,15 @@ var Formpod = {
 			},
 
 			showPopupInput : function(view, e, eOpts) {
-				inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
-				referenceView = view;
-				inputView.getComponent('topbar').setTitle(view.getLabel());
-				Ext.Viewport.setMasked(inputView);
-				inputView.getComponent('inputfield').focus();
-				
-				if (view.getValue() && view.getValue().trim() != '') {
-					inputView.getComponent('inputfield').setValue(view.getValue());
-				}
+                inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
+                referenceView = view;
+                inputView.getComponent('topbar').setTitle(view.getLabel());
+                Ext.Viewport.setMasked(inputView);
+                inputView.getComponent('inputfield').focus();
+
+                if (view.getValue() && view.getValue().trim() != '') {
+                    inputView.getComponent('inputfield').setValue(view.getValue());
+                }
 			},
 			
 			onHidePopup: function(view, eOpts) {
@@ -182,12 +179,6 @@ var Formpod = {
 				Ext.Viewport.unmask();
 			},
 
-			hidePopup : function() {
-				inputView.getComponent('inputfield').blur();
-				referenceView.setValue(inputView.getComponent('inputfield').getValue());
-				Ext.Viewport.unmask();
-			},
-			
             showDatePicker: function(view, e, eOpts) {
                 referenceView = view;
                 inputView = Ext.create('cfa.view.popup.DatePickerFieldPopup');

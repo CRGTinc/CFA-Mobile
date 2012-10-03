@@ -23,21 +23,11 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 				pack:'right',
 				align: 'center'
 			},
-			items : [{
-				xtype : 'button',
-				text : 'Done',
-
-				listeners : {
-					tap : {
-						fn : Formpod.FormEngine.Utils.hidePopup,
-						scope : Formpod.FormEngine.Utils
-					}
-				}
-			}]
 		}, {
 			xtype : 'textareafield',
 			clearIcon : false,
 			maxRows : 20,
+			placeHolder: 'Tap outside the text box to exit',
 			itemId : 'inputfield'
 		}],
 
