@@ -162,11 +162,11 @@ var Formpod = {
 			},
 
 			showPopupInput : function(view, e, eOpts) {
+			    view.setDisabled(true);
+			    referenceView = view;
                 inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
-                referenceView = view;
                 inputView.getComponent('topbar').setTitle(view.getLabel());
                 currentActiveView = Ext.Viewport.getActiveItem();
-                Ext.Viewport.setMasked(true);
                 currentActiveView.setMasked(inputView);
                 inputView.getComponent('inputfield').focus();
 
@@ -179,14 +179,14 @@ var Formpod = {
 				view.getComponent('inputfield').blur();
 				referenceView.setValue(view.getComponent('inputfield').getValue());
 				currentActiveView.unmask();
-				Ext.Viewport.unmask();
+			    referenceView.setDisabled(false);
 			},
 			
 			 hidePopup : function() {
                 inputView.getComponent('inputfield').blur();
                 referenceView.setValue(inputView.getComponent('inputfield').getValue());
                 currentActiveView.unmask();
-                Ext.Viewport.unmask();
+                referenceView.setDisabled(false);
             },
 
             showDatePicker: function(view, e, eOpts) {

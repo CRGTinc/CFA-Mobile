@@ -37,7 +37,6 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 			xtype : 'textareafield',
 			clearIcon : false,
 			maxRows : 20,
-			placeHolder: 'Tap outside the text box to exit',
 			itemId : 'inputfield'
 		}],
 
