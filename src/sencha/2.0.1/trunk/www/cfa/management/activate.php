@@ -1,6 +1,6 @@
 <?php
  require_once 'swift/swift_required.php';
- $logPath = 'Log\Downloaded.log';
+ $logPath = 'Log/Downloaded.log';
  writeLog($logPath);
  sendDownloadLink();
  
