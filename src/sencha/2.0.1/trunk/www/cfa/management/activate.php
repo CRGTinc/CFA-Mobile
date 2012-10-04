@@ -21,7 +21,7 @@
 	 $cc = "lieukimnhut@gmail.com";
 	 $name =  $_POST['firstname']." ".$_POST['lastname'];
 	 $subject = 'CFA Application Distribution';
-	 $text = 'Please download application by following this <a href=' .$link .' download="TestFile">link</a>';
+	 $text = 'Please download application by following this <a href="http://apps.dynagility.net/cfa/">link</a>';
 	 
 	 
 	 // Create the Transport
