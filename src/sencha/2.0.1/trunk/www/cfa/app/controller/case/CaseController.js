@@ -570,6 +570,7 @@ Ext.define('cfa.controller.case.CaseController', {
 			engine.loadForm(data);
 
 			var form = engine.getForm();
+			currentForm = form;
 			this.getCaseFormPanel().removeAll(false);
 			this.getCaseFormPanel().add(form);
 

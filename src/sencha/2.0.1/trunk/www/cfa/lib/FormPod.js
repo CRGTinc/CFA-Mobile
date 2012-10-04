@@ -8,7 +8,7 @@
 if (!window.openDatabase) {
 	throw Error("Local Databases not supported.");
 }
-
+var currentForm;
 var Formpod = {
 	FormEngine : {
 		CodeGenerators : {
@@ -182,7 +182,7 @@ var Formpod = {
 			    referenceView.setDisabled(false);
 			},
 			
-			 hidePopup : function() {
+			hidePopup : function() {
                 inputView.getComponent('inputfield').blur();
                 referenceView.setValue(inputView.getComponent('inputfield').getValue());
                 currentActiveView.unmask();
@@ -199,12 +199,13 @@ var Formpod = {
                 else
                     inputView.setValue(new Date());
 
-                Ext.Viewport.setMasked(true);
+                Ext.Viewport.add(inputView);
                 inputView.show(); 
 
             },
             
             onChangeDatePickerPopup: function(picker, value) {
+                var nextFocus = currentForm.focusNextField();
                 referenceView.setValue(Ext.util.Format.date(value, this.dateFormat));
                 referenceView.element.addCls(Ext.baseCSSPrefix + 'field-clearable');
             },
