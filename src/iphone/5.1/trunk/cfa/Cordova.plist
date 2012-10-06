@@ -26,6 +26,8 @@
 	</array>
 	<key>Plugins</key>
 	<dict>
+		<key>Device</key>
+		<string>CDVDevice</string>
 		<key>EmailComposer</key>
 		<string>EmailComposer</string>
 		<key>ChildBrowserCommand</key>

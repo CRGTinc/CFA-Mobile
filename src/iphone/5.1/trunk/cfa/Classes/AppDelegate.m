@@ -28,15 +28,9 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 
-#ifdef CORDOVA_FRAMEWORK
-    #import <Cordova/CDVPlugin.h>
-    #import <Cordova/CDVURLProtocol.h>
-	#import <Cordova/CDVAvailability.h>
-#else
-    #import "CDVPlugin.h"
-    #import "CDVURLProtocol.h"
-	#import "CDVAvailability.h"
-#endif
+#import <Cordova/CDVPlugin.h>
+#import <Cordova/CDVURLProtocol.h>
+#import <Cordova/CDVAvailability.h>
 
 @implementation AppDelegate
 
