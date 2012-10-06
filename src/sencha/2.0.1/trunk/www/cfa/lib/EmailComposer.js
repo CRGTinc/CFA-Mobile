@@ -5,18 +5,18 @@ function EmailComposer() {
 }
 
 EmailComposer.ComposeResultType = {
-Cancelled:0,
-Saved:1,
-Sent:2,
-Failed:3,
-NotSent:4
+	Cancelled:0,
+	Saved:1,
+	Sent:2,
+	Failed:3,
+	NotSent:4
 }
 
 
 
 // showEmailComposer : all args optional
 
-EmailComposer.prototype.showEmailComposer = function(subject,body,attachment,toRecipients,ccRecipients,bccRecipients,bIsHTML) {
+EmailComposer.prototype.showEmailComposer = function(subject,body,toRecipients,ccRecipients,bccRecipients,bIsHTML) {
 	var args = {};
 	if(toRecipients)
 		args.toRecipients = toRecipients;
@@ -30,16 +30,14 @@ EmailComposer.prototype.showEmailComposer = function(subject,body,attachment,toR
 		args.body = body;
 	if(bIsHTML)
 		args.bIsHTML = bIsHTML;
-	if(attachment)
-		args.attachment = attachment;
-	
-	cordova.exec(null, null, "EmailComposer", "showEmailComposer", [args]);
+
+	PhoneGap.exec("com.phonegap.emailComposer.showEmailComposer",args);
 }
 
 // this will be forever known as the orch-func -jm
 EmailComposer.prototype.showEmailComposerWithCB = function(cbFunction,subject,body,toRecipients,ccRecipients,bccRecipients,bIsHTML) {
-	this.resultCallback = cbFunction;
-	this.showEmailComposer.apply(this,[subject,body,toRecipients,ccRecipients,bccRecipients,bIsHTML]);
+  this.resultCallback = cbFunction;
+  this.showEmailComposer.apply(this,[subject,body,toRecipients,ccRecipients,bccRecipients,bIsHTML]);
 }
 
 EmailComposer.prototype._didFinishWithResult = function(res) {
@@ -48,16 +46,10 @@ EmailComposer.prototype._didFinishWithResult = function(res) {
 
 
 
-cordova.addConstructor(function()  {
-					   if(!window.plugins)
-					   {
-					   window.plugins = {};
-					   }
-					   
-					   // shim to work in 1.5 and 1.6
-					   if (!window.Cordova) {
-					   window.Cordova = cordova;
-					   };
-					   
-					   window.plugins.emailComposer = new EmailComposer();
-					   });
+PhoneGap.addConstructor(function()  {
+	if(!window.plugins)
+	{
+		window.plugins = {};
+	}
+	window.plugins.emailComposer = new EmailComposer();
+});
