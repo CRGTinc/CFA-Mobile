@@ -89,18 +89,16 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 									for (var i = 0; i < entries.length; i++) {
 										if (entries[i].isFile) {
 											var data = "";
-											if (entries[i].name.toUpperCase()
-													.indexOf('CASE') === 0) {
-												data += '{"type": "Case",';
-											} else {
-												data += '{"type": "Device",';
+											if (entries[i].name.toUpperCase().indexOf('CFADATA') > -1) {
+												if (entries[i].name.toUpperCase().indexOf('CASE') === 0) {
+													data += '{"type": "Case",';
+												} else {
+													data += '{"type": "Device",';
+												}
+												data += '"name": "' + entries[i].name + '",';
+												data += '"fullPath":"' + entries[i].fullPath + '"}';
+												result += data + ",";
 											}
-											data += '"name": "'
-													+ entries[i].name + '",';
-											data += '"fullPath":"'
-													+ entries[i].fullPath
-													+ '"}';
-											result += data + ",";
 										}
 									}
 									if (result[result.length - 1] == ',') {
@@ -116,6 +114,45 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
 				onFileSystemSuccess, fail);
+	},
+	
+	loadDownloadedDocuments : function(successCallBack, failCallBack) {
+		var result = "[";
+		var fail = function(error) {
+			console.log(error);
+			failCallBack(error);
+		}
+
+		var onFileSystemSuccess = function(fileSytem) {
+			var importDataPath = "/";
+			fileSytem.root.getDirectory(importDataPath, {
+						create : true
+					}, function(directory) {
+						var directoryReader = directory.createReader();
+						directoryReader.readEntries(function(entries) {
+									for (var i = 0; i < entries.length; i++) {
+										if (entries[i].isFile) {
+											var data = "";
+											if (entries[i].name.toUpperCase().indexOf('PDF') > -1) {
+												data += '{"type": "DOCUMENT",';
+												data += '"name": "' + entries[i].name + '",';
+												data += '"fullPath":"' + entries[i].fullPath + '"}';
+												result += data + ",";
+											}
+										}
+									}
+									if (result[result.length - 1] == ',') {
+										result = result.slice(0, -1) + "]";
+									}else{
+										result += "]";
+									}
+									successCallBack(result);
+								}, fail)
+					}, fail);
+
+		}
+
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, fail);
 	},
 	
 	getImagesByFormId : function(formId, successCallBack, failCallBack) {
@@ -258,6 +295,80 @@ Ext.define("cfa.helper.PhoneGapHelper", {
 			}
 		};
 		saveData(0);
+	},
+	
+	getFileData : function(path, callback) {
+		var onFail = function(error) {
+			console.log('Get file data error: ' + error.code);
+		}
+
+		var onFileSystemSuccess = function(fileSystem) {
+			fileSystem.root.getFile(path, {	create : false},
+					function(fileEntry) {
+						fileEntry.file(
+							function(file) {
+							var reader = new FileReader();
+								reader.onloadend = function(evt) {
+									if (typeof callback == 'function') {
+										callback(evt.target.result);
+									}
+								};
+								reader.readAsText(file);
+							});
+					}, onFail)
+		}
+
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, onFail);
+	},
+	
+	downloadFile: function( fileName, url, callback) {
+		var onFail = function(error) {
+			console.log("Download file error: " +  error);
+		};
+		
+		var onFileSystemSuccess = function(fileSystem) {
+			fileSystem.root.getFile(fileName, {create : true},
+				function(fileEntry) {
+					var path = fileEntry.fullPath.replace(fileName, "");
+					fileEntry.remove();
+					path = path + fileName + ".pdf";
+					var fileTransfer = new FileTransfer();
+					fileTransfer.download(
+						url,
+						path,
+						function(file) {
+							if (typeof callback == 'function')
+								callback();
+						},
+						function(error) {
+							console.log("Download error: " + error);
+						}
+					);
+				}, onFail);
+		} 
+		
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, onFail);
+	},
+	
+	deleteFile: function(path) {
+		var onFail = function(error) {
+			console.log('Delete file error: ' + error.code);
+		}
+		
+		var onFileSystemSuccess =  function(fileSystem) {
+			fileSystem.root.getFile(path, {create: false}, 
+				function(fileEntry) {
+					fileEntry.remove(
+						function(){
+							console.log("File deleted");
+						}, 						
+						function(error){
+							console.log("File delete error: " + error);
+						});
+				}, onFail)
+		}
+		
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,	onFileSystemSuccess, onFail);
 	}
 		
 });

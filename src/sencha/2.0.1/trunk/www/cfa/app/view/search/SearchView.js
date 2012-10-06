@@ -31,7 +31,12 @@ Ext.define('cfa.view.search.SearchView', {
 	pop: function() {
 		this.callParent(arguments);
 		Ext.getCmp("searchinputfield").setValue('');
-	}
+	},
+	
+	initialize: function() {
+        this.callParent(arguments);
+        cfa.app.helpUrl = "SearchHelp";
+    }
 
 });
 

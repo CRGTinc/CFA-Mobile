@@ -24,16 +24,15 @@ Ext.define('cfa.view.popup.InputTextAreaPopup', {
 				align: 'center'
 			},
 			items : [{
-				xtype : 'button',
-				text : 'Done',
-
-				listeners : {
-					tap : {
-						fn : Formpod.FormEngine.Utils.hidePopup,
-						scope : Formpod.FormEngine.Utils
-					}
-				}
-			}]
+                xtype : 'button',
+                text : 'Done',
+                listeners : {
+                    tap : {
+                        fn : Formpod.FormEngine.Utils.hidePopup,
+                        scope : Formpod.FormEngine.Utils
+                    }
+                }
+            }]
 		}, {
 			xtype : 'textareafield',
 			clearIcon : false,

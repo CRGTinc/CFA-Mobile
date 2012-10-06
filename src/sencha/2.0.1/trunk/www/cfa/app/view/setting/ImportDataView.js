@@ -7,22 +7,38 @@ Ext.define('cfa.view.setting.ImportDataView', {
 		hideOnMaskTap : true,
 		hidden : true,
 		centered: true,
-		width : '50%',
+		width : '40%',
 		height :' 60%',
-		scrollable : true,
 		fullScreen: true,
-		items : [{
+		items : [
+		{
 			xtype : 'navigationview',
-			itemId: 'importlistcontainer',
-			items : [{
-				xtype : 'list',
-				mode: 'MULTI',
-				title: 'Import List',
-				id: 'importlist',
-				itemTpl : "{name}",
-				onItemDisclosure: true,
-				grouped : true
+			itemId: 'container',
+		}, {
+			xtype: 'panel',
+			id: 'dragpanel',
+			docked: 'bottom',
+			items: [{
+				xtype: 'textareafield',
+				hidden: true,
+				id: 'dragfilefield',
+				docked: 'bottom',
+				margin: 5,
+				placeHolder: 'Drag import file in here'
 			}]
+			
+		},{
+			xtype: 'toolbar',
+			itemId: 'actionbar',
+			docked: 'bottom',
+			items: [
+				{
+					xtype: 'button',
+					text: 'Delete',
+					action: 'deletefile'
+				}
+			]
+			
 		}]
 
 	}

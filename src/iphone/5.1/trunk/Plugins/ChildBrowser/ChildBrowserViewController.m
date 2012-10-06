@@ -145,12 +145,30 @@
         NSString* htmlText = @"<html><body style='background-color:#333;margin:0px;padding:0px;'><img style='min-height:200px;margin:0px;padding:0px;width:100%;height:auto;' alt='' src='IMGSRC'/></body></html>";
         htmlText = [htmlText stringByReplacingOccurrencesOfString:@"IMGSRC" withString:url];
 
-        [self.webView loadHTMLString:htmlText baseURL:[NSURL URLWithString:@""]];
-    } else {
-        self.imageURL = @"";
-        self.isImage = NO;
-        NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        [self.webView loadRequest:request];
+        [webView loadHTMLString:htmlText baseURL:[NSURL URLWithString:@""]];
+
+    }else if([url hasPrefix:@"file://"]) {
+        NSError *error = NULL;
+        
+        //Create the regular expression to match against
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"file://.*/Documents/" options:NSRegularExpressionCaseInsensitive error:&error];
+        
+        // Create the new string by replacing the matching of the regex pattern with the template pattern(empty string)
+        NSString *relativeUri = [regex stringByReplacingMatchesInString:url options:0 range:NSMakeRange(0, [url length]) withTemplate:@""];
+        NSLog(@"New string: %@", relativeUri);
+        
+        NSURL *documentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+        NSURL *url = [documentsDirectory URLByAppendingPathComponent:relativeUri];
+        NSLog(@"New string: %@", url);
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        [webView loadRequest:request];
+    }
+    else
+    {
+        imageURL = @"";
+        isImage = NO;
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+        [webView loadRequest:request];
     }
     self.webView.hidden = NO;
 }

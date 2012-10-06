@@ -18,7 +18,7 @@ FD_Forms ['Case Form'] =
 			{name: "fs", type: "fieldset", title: "Case Information", instructions: "Case Information"},
                 {name: "fs", type: "fieldset", title: "General", instructions: "General Case Information"},
                     {name: "CaseTitle", type: "textfield", textType: "allcap", label: "Case Title", value: "", required: true, source: "CaseTitle", helpText: "Help"},
-                    {name: "CreationDate", type: "datepickerfield", label: "Case Creation Date", value: new Date(), required: false, source: "CaseCreationDate", helpText: "Help"},
+                    {name: "CreationDate", type: "textfield", showDatePicker: true, label: "Case Creation Date", value: new Date(), required: false, source: "CaseCreationDate", helpText: "Help"},
                     {name: "ICENo", type: "textfield", textType: "allcap", label: "ICE Case No.", value: "", required: false, source: "ICENo", helpText: "Help"},
                     {name: "CaseAgent", type: "textfield", textType: "pascalcase", label: "Case Agent", value: "", required: false, source: "CaseAgent", helpText: "Help"},
                     {name: "AgentPhone", type: "textfield", label: "Agent Phone No.", placeHolder: "(###) ###-####", required: false, source: "AgentPhone", helpText: "Help"},

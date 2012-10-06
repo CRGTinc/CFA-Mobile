@@ -1,0 +1,57 @@
+/* CSS Document */
+body{
+	background-image: url("../images/background.png");
+	background-repeat: repeat;
+	color: white;
+	font-family: "Helvetica Neue",HelveticaNeue,"Helvetica-Neue",Helvetica,"BBAlpha Sans",sans-serif;
+	margin: 0px;
+	padding: 0px;
+	
+}
+.gradient-bar{
+	background-image: linear-gradient(top, rgb(53,64,89) 14%, rgb(35,42,58) 88%);
+	background-image: -moz-linear-gradient(top, rgb(53,64,89) 14%, rgb(35,42,58) 88%);
+	background-image: -webkit-linear-gradient(top, rgb(53,64,89) 14%, rgb(35,42,58) 88%);	
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		color-stop(0.14, rgb(53,64,89)),
+		color-stop(0.88, rgb(35,42,58))
+	);
+}
+
+.title-bar{
+	height: 50px;
+	width:100%;
+	padding-top: 5px;
+}
+.container{
+		height: 300px;
+		width: 600px;
+		margin: 0 auto;
+		padding-top: 15px;
+	}
+.info-panel{
+	margin: 0 auto;
+	width: 320px;
+}
+	
+.title{
+	margin-top: 10px;
+	text-align:center;
+	color: white;
+	font-size: 22px	
+}
+
+.notify-panel{
+	margin: 0 auto;
+	width: 800px;
+	height: 150px;
+	margin-top:50px;	
+	padding-top: 50px;
+	text-align:center;
+	border: 2px solid white;
+	border-radius: 8px;	
+}
+
