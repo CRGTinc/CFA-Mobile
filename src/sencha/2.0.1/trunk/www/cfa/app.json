@@ -32,8 +32,18 @@
      *      }
      */
     "js": [
+        
         {
             "path": "sdk/sencha-touch-all.js"
+        },       
+        {
+            "path": "lib/cordova-2.1.0.js"
+        },
+        {
+            "path": "lib/ChildBrowser.js"
+        },
+        {
+            "path": "lib/EmailComposer.js"
         },
         {
             "path": "app.js",
@@ -71,9 +81,6 @@
          */
         "cache": [
             "index.html",
-            "lib/cordova-1.7.0.js",
-            "lib/ChildBrowser.js",
-            "lib/EmailComposer.js",
             "lib/FormDefinitions.js",
             "lib/Formpod.js",
 			"resources/icons/cases.png",
@@ -120,9 +127,6 @@
      * Extra resources to be copied along when build
      */
     "resources": [
-        "lib/cordova-1.7.0.js",
-        "lib/ChildBrowser.js",
-        "lib/EmailComposer.js",
         "lib/FormDefinitions.js",
         "lib/Formpod.js",
         "resources/images",

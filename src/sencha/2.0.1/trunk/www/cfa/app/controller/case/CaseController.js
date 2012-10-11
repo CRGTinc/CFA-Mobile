@@ -617,7 +617,9 @@ Ext.define('cfa.controller.case.CaseController', {
 
 			this.setImageList(imageList);
 			this.getCaseFormPanel().add(this.getImageList());
-			this.processImageDesktop();
+			if(this.getIsDesktop()){
+                this.processImageDesktop();
+            }
 		}
 	},
 
