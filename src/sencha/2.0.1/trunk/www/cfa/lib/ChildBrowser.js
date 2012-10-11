@@ -2,13 +2,11 @@
 // (c) 2010 Jesse MacFadyen, Nitobi
 
 
-(function() {
-
-var cordovaRef = window.PhoneGap || window.Cordova || window.cordova; // old to new fallbacks
-
 function ChildBrowser() {
     // Does nothing
 }
+
+var cordovaRef = window.PhoneGap || window.Cordova || window.cordova; // old to new fallbacks
 
 // Callback when the location of the page changes
 // called from native
@@ -75,13 +73,17 @@ ChildBrowser.install = function()
 
 };
 
-
-if (cordovaRef && cordovaRef.addConstructor) {
-    cordovaRef.addConstructor(ChildBrowser.install);
-} else {
-    console.log("ChildBrowser Cordova Plugin could not be installed.");
-    return null;
-}
-
-
-})();
+cordova.addConstructor(function()  {
+                       if(!window.plugins) {
+                        window.plugins = {};
+                       }
+                       
+                       // shim to work in 1.5 and 1.6
+                       if (!window.Cordova) {
+                            window.Cordova = cordova;
+                       };
+                       
+                       if ( ! window.plugins.childBrowser ) {
+                            window.plugins.childBrowser = new ChildBrowser();
+                       }
+});

@@ -33,7 +33,7 @@ EmailComposer.prototype.showEmailComposer = function(subject,body,attachment,toR
 	if(attachment)
 		args.attachment = attachment;
 	
-	cordova.exec(null, null, "EmailComposer", "showEmailComposer", [args]);
+	cordova.exec(undefined, undefined, "EmailComposer", "showEmailComposer", [args]);
 }
 
 // this will be forever known as the orch-func -jm
