@@ -47,6 +47,7 @@
 		973678D3162684CE00005676 /* ChildBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 973678CF162684CE00005676 /* ChildBrowserViewController.xib */; };
 		973678DB1626854900005676 /* EmailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = 973678D71626854900005676 /* EmailComposer.m */; };
 		973678E0162685B900005676 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 973678DF162685B900005676 /* MessageUI.framework */; };
+		97DB45421628174000840855 /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97017F361627C02800ABF137 /* libCordova.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				97DB45421628174000840855 /* libCordova.a in Frameworks */,
 				973678E0162685B900005676 /* MessageUI.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
