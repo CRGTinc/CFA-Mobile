@@ -21,8 +21,8 @@
 //  MainViewController.h
 //  cfa
 //
-//  Created by Tin Thai on 5/18/12.
-//  Copyright __MyCompanyName__ 2012. All rights reserved.
+//  Created by ___FULLUSERNAME___ on ___DATE___.
+//  Copyright ___ORGANIZATIONNAME___ ___YEAR___. All rights reserved.
 //
 
 #import "MainViewController.h"
@@ -48,10 +48,22 @@
 
 #pragma mark - View lifecycle
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    UIView* rootView =[[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
+    CGRect webViewFrame = [[[rootView subviews] objectAtIndex:0] frame];  // first subview is the UIWebView
+    if (CGRectEqualToRect(webViewFrame, CGRectZero)) { // UIWebView is sized according to its parent, here it hasn't been sized yet
+        self.view.frame = [[UIScreen mainScreen] applicationFrame]; // size UIWebView's parent according to application frame, which will in turn resize the UIWebView
+    }
+     
+    [super viewWillAppear:animated];
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.webView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
 }
 
 - (void) viewDidUnload
@@ -64,7 +76,9 @@
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight || interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ;
+    //return YES;
+     //return (interfaceOrientation == UIInterfaceOrientationLandscapeRight || interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    return UIInterfaceOrientationLandscapeRight;
 }
 
 /* Comment out the block below to over-ride */
@@ -108,6 +122,7 @@
      if (self.invokeString)
      {
         // this is passed before the deviceready event is fired, so you can access it in js when you receive deviceready
+		NSLog(@"DEPRECATED: window.invokeString - use the window.handleOpenURL(url) function instead, which is always called when the app is launched through a custom scheme url.");
         NSString* jsString = [NSString stringWithFormat:@"var invokeString = \"%@\";", self.invokeString];
         [theWebView stringByEvaluatingJavaScriptFromString:jsString];
      }
