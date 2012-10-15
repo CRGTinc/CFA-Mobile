@@ -889,19 +889,27 @@ var Formpod = {
                                     callback(jsonString);
                             }
                         });
-                    } else {
+                    } else {                       
                         if (child['engineClass'].name == 'Photo/Attachment') {
                             if (length == 1) {
-                                if ( typeof callback === 'function')
+                                
+                                if ( typeof callback === 'function'){
                                     callback(jsonString);
+                                }
+                                    
                             } else {
                                 imageCount++;
-                                if ( imageCount == length);
-                                    if ( typeof callback === 'function')
+                                
+                                if ( imageCount == length) {
+                                    if ( typeof callback === 'function'){
                                         callback(jsonString);
+                                    }
+                                }
+                                   
                             }
                         } else if (child['engineClass'].name != 'Photo/Attachment') {
                             Formpod.exportData(child, includePhoto, function(data) {
+                                force = true;
                                 childData.push(data);
                                 processed++;
                                 
@@ -909,8 +917,10 @@ var Formpod = {
                                     jsonString = jsonString.slice(0, -1);
                                     jsonString = jsonString.concat(', "children": [' + childData + ']}');
 
-                                    if ( typeof callback === 'function')
+                                    if ( typeof callback === 'function'){
                                         callback(jsonString);
+                                    }
+                                        
                                 }
                             }); 
                         }
