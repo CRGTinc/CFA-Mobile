@@ -8,7 +8,6 @@
 if (!window.openDatabase) {
 	throw Error("Local Databases not supported.");
 }
-var currentForm;
 var Formpod = {
 	FormEngine : {
 		CodeGenerators : {
@@ -205,7 +204,6 @@ var Formpod = {
             },
             
             onChangeDatePickerPopup: function(picker, value) {
-                var nextFocus = currentForm.focusNextField();
                 referenceView.setValue(Ext.util.Format.date(value, this.dateFormat));
                 referenceView.element.addCls(Ext.baseCSSPrefix + 'field-clearable');
             },
