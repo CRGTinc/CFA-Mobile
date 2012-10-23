@@ -114,6 +114,12 @@ $active-color: #3f4c68;
   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
 
 }
+.x-title .x-innerhtml {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 0em;
+}
 
 .infoPanel {
   background-color: white;
@@ -130,4 +136,24 @@ $active-color: #3f4c68;
 #imagelist .x-list-item-label{
   border-top: 0px;
   border-bottom: 0px;
+}
+
+#dragfilefield .x-input-text {
+  border: 1px;
+  border-radius: 4px;
+  border-style: dashed;
+  background: #E6E7E2;
+}
+
+#dragpanel .x-docking-vertical {
+  border: 0px;
+  background: #ffffff 
+}
+
+#search-bar .x-field {
+  width: 10em;
+  margin: .5em;
+  min-height: 0;
+  border-bottom: 0;
+  background: transparent;
 }

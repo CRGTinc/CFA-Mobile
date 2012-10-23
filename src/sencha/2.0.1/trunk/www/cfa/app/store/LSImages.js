@@ -5,9 +5,9 @@ Ext.define('cfa.store.LSImages',{
 		
 	config:{	
 		model : "cfa.model.Image",
-		proxy:{
-			type: 'file'
-		}			
+		proxy :	{
+			type : Ext.os.is.Desktop?"chromefile":"file"
+		}
 	}
 	
 });

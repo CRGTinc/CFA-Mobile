@@ -32,9 +32,10 @@
      *      }
      */
     "js": [
+        
         {
             "path": "sdk/sencha-touch-all.js"
-        },
+        },       
         {
             "path": "app.js",
             "bundle": true,  /* Indicates that all class dependencies are concatenated into this file when build */
@@ -71,9 +72,9 @@
          */
         "cache": [
             "index.html",
-            "lib/cordova-1.7.0.js",
-            "lib/ChildBrowser.js",
+            "lib/cordova-2.1.0.js",
             "lib/EmailComposer.js",
+            "lib/ChildBrowser.js",
             "lib/FormDefinitions.js",
             "lib/Formpod.js",
 			"resources/icons/cases.png",
@@ -120,9 +121,9 @@
      * Extra resources to be copied along when build
      */
     "resources": [
-        "lib/cordova-1.7.0.js",
-        "lib/ChildBrowser.js",
+        "lib/cordova-2.1.0.js",
         "lib/EmailComposer.js",
+        "lib/ChildBrowser.js",
         "lib/FormDefinitions.js",
         "lib/Formpod.js",
         "resources/images",
@@ -135,7 +136,10 @@
 		"data/HelpPages/HomeHelp.html",
 		"data/HelpPages/CaseHelp.html",
 		"data/HelpPages/ContactHelp.html",
-		"data/HelpPages/EventHelp.html"
+		"data/HelpPages/EventHelp.html",
+		"data/HelpPages/ReferenceHelp.html",
+		"data/HelpPages/SearchHelp.html",
+		"data/HelpPages/SettingHelp.html"
     ],
 
     /**

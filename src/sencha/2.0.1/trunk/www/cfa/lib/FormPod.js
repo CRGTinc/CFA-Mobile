@@ -8,7 +8,6 @@
 if (!window.openDatabase) {
 	throw Error("Local Databases not supported.");
 }
-
 var Formpod = {
 	FormEngine : {
 		CodeGenerators : {
@@ -75,6 +74,15 @@ var Formpod = {
 									}
 								};
 							}
+							
+							if (finfo.showDatePicker) {
+                                fitem.readOnly = true;
+                                fitem.listeners = {
+                                    focus: Formpod.FormEngine.Utils.showDatePicker,
+                                    painted: Formpod.FormEngine.Utils.onPainted,
+                                    scope: Formpod.FormEngine.Utils
+                                }
+                            }
 						}
 
 						return fitem;
@@ -140,10 +148,6 @@ var Formpod = {
 		},
 
 		Utils : {
-			referenceView : null,
-			inputView : null,
-			currentActiveView: null,
-
 			pascalCase : function(field, newVal, oldVal, opts) {
 				var str = newVal.replace(/(\S)(\S*)/g, function(g0, g1, g2) {
 					return g1.toUpperCase() + g2.toLowerCase();
@@ -157,29 +161,59 @@ var Formpod = {
 			},
 
 			showPopupInput : function(view, e, eOpts) {
-				inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
-				referenceView = view;
-				inputView.getComponent('topbar').setTitle(view.getLabel());
-				currentActiveView = Ext.Viewport.getActiveItem();
-				currentActiveView.setMasked(inputView);
-				inputView.getComponent('inputfield').focus();
-				
-				if (view.getValue() && view.getValue().trim() != '') {
-					inputView.getComponent('inputfield').setValue(view.getValue());
-				}
+			    view.setDisabled(true);
+			    referenceView = view;
+                inputView = Ext.create('cfa.view.popup.InputTextAreaPopup');
+                inputView.getComponent('topbar').setTitle(view.getLabel());
+                currentActiveView = Ext.Viewport.getActiveItem();
+                currentActiveView.setMasked(inputView);
+                inputView.getComponent('inputfield').focus();
+
+                if (view.getValue() && view.getValue().trim() != '') {
+                    inputView.getComponent('inputfield').setValue(view.getValue());
+                }
 			},
 			
 			onHidePopup: function(view, eOpts) {
 				view.getComponent('inputfield').blur();
 				referenceView.setValue(view.getComponent('inputfield').getValue());
 				currentActiveView.unmask();
+			    referenceView.setDisabled(false);
 			},
-
+			
 			hidePopup : function() {
-				inputView.getComponent('inputfield').blur();
-				referenceView.setValue(inputView.getComponent('inputfield').getValue());
-				currentActiveView.unmask();
-			}
+                inputView.getComponent('inputfield').blur();
+                referenceView.setValue(inputView.getComponent('inputfield').getValue());
+                currentActiveView.unmask();
+                referenceView.setDisabled(false);
+            },
+
+            showDatePicker: function(view, e, eOpts) {
+                referenceView = view;
+                inputView = Ext.create('cfa.view.popup.DatePickerFieldPopup');
+                var date = Ext.Date.parse(view.getValue(), "m/d/Y");
+
+                if (date != undefined)
+                    inputView.setValue(date);
+                else
+                    inputView.setValue(new Date());
+
+                Ext.Viewport.add(inputView);
+                inputView.show(); 
+
+            },
+            
+            onChangeDatePickerPopup: function(picker, value) {
+                referenceView.setValue(Ext.util.Format.date(value, this.dateFormat));
+                referenceView.element.addCls(Ext.baseCSSPrefix + 'field-clearable');
+            },
+            
+            onPainted: function(view, eOpts){
+                if(view.getValue() != ''){
+                    view.setValue(Ext.util.Format.date(new Date(), this.dateFormat));
+                    view.element.addCls(Ext.baseCSSPrefix + 'field-clearable');
+                }
+            }
 		}
 	},
 	FormTypes : {},
@@ -816,13 +850,14 @@ var Formpod = {
 	},
 
 	saveInstanceWithImages : function(importData, callback) {
+		var helper = cfa.utils.HelperUtil.getHelper();
 		var me = this;
 		var fail = function(error) {
 			console.log(error);
 		}
 		me.saveInstance(importData, function(obj) {
 			if (obj && obj.dataimg && obj.dataimg.length > 0) {
-				cfa.helper.PhoneGapHelper.saveImagesByJsonObjs(obj.dataimg, function() {
+				helper.saveImagesByJsonObjs(obj.dataimg, function() {
 					callback(obj);
 				}, fail)
 			} else {
@@ -831,35 +866,75 @@ var Formpod = {
 		});
 	},
 
-	exportData : function(form, callback) {
-		Formpod.getFormInstanceData(form, function(jsonString) {
-			Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {
-				var childData = [], processed = 0, length = objs.length, i;
+	exportData : function(form, includePhoto, callback) {
+        Formpod.getFormInstanceData(form, function(jsonString) {
+            Formpod.findRelatedObjectsWithType(form, 'hasChild', true, function(objs) {
+                var childData = [], processed = 0, length = objs.length, i;
+                var imageCount = 0;
+                
+                for ( i = 0; i < length; i++) {
+                    var child = objs[i];
+                    if (includePhoto) {
+                        Formpod.exportData(child, includePhoto,function(data) {
+                            childData.push(data);
+                            processed++;
+    
+                            if (processed == length) {
+                                jsonString = jsonString.slice(0, -1);
+                                jsonString = jsonString.concat(', "children": [' + childData + ']}');
+    
+                                if ( typeof callback === 'function')
+                                    callback(jsonString);
+                            }
+                        });
+                    } else {                       
+                        if (child['engineClass'].name == 'Photo/Attachment') {
+                            if (length == 1) {
+                                
+                                if ( typeof callback === 'function'){
+                                    callback(jsonString);
+                                }
+                                    
+                            } else {
+                                imageCount++;
+                                
+                                if ( imageCount == length) {
+                                    if ( typeof callback === 'function'){
+                                        callback(jsonString);
+                                    }
+                                }
+                                   
+                            }
+                        } else if (child['engineClass'].name != 'Photo/Attachment') {
+                            Formpod.exportData(child, includePhoto, function(data) {
+                                force = true;
+                                childData.push(data);
+                                processed++;
+                                
+                                if (processed == length-imageCount) {
+                                    jsonString = jsonString.slice(0, -1);
+                                    jsonString = jsonString.concat(', "children": [' + childData + ']}');
 
-				for ( i = 0; i < length; i++) {
-					Formpod.exportData(objs[i], function(data) {
-						childData.push(data);
-						processed++;
+                                    if ( typeof callback === 'function'){
+                                        callback(jsonString);
+                                    }
+                                        
+                                }
+                            }); 
+                        }
+                    }
+                }
 
-						if (processed == length) {
-							jsonString = jsonString.slice(0, -1);
-							jsonString = jsonString.concat(', "children": [' + childData + ']}');
+                if (length == 0 && typeof callback === 'function') {
+                    callback(jsonString);
+                }
+            });
+        });
 
-							if ( typeof callback === 'function')
-								callback(jsonString);
-						}
-					});
-				}
-
-				if (length == 0 && typeof callback === 'function') {
-					callback(jsonString);
-				}
-			});
-		});
-
-	},
-
+    },
+    
 	getFormInstanceData : function(formInstance, successCallBack) {
+		var helper = cfa.utils.HelperUtil.getHelper();
 		var me = this;
 		var newPhotoId = "";
 		var formdata = '{', engine = formInstance.engineClass, definition = engine.definition, index;
@@ -899,7 +974,7 @@ var Formpod = {
 				console.log('error:' + error);
 			}
 			//images can be added here to json string
-			cfa.helper.PhoneGapHelper.getJsonStringFromImages(formInstance['PhotoId'], newPhotoId, function(result) {
+			helper.getJsonStringFromImages(formInstance['PhotoId'], newPhotoId, function(result) {
 				formdata = formdata.concat('"dataimg":' + result + '}');
 				successCallBack(formdata);
 			}, fail)
